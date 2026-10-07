@@ -12,7 +12,7 @@ The `downloads` permission permits more than this extension needs in practice. T
 
 The fixed Buy Me a Coffee link opens only when you click it. No conversation text, title, identifier, query parameter or referrer is sent by the extension with the link. The destination then receives ordinary web connection information, such as your IP address, and applies its own privacy practices. No payment widget or payment credentials are embedded in the extension. Help in the extension is local.
 
-The planned public website may generate ordinary hosting/security logs at its hosting provider. Hosting configuration and retention must be reviewed before deployment; do not claim the website has no logs. If you choose to contact support, the email provider processes the message and the project owner receives what you send. Do not include private transcripts or credentials.
+The public website is hosted by Cloudflare. It has no analytics scripts or remote fonts; automatic beacon injection is prevented for these pages. Cloudflare may process ordinary connection information and maintain hosting/security logs under its own policies. Disabling Worker observability does not eliminate provider network logs. If you choose to contact support, the email provider processes the message and the project owner receives what you send. Do not include private transcripts or credentials.
 
 Before live export is enabled, this policy must be updated to describe the observed ChatGPT retrieval method and any transient authentication handling. Conversation processing must remain local; only ChatGPT may be contacted to retrieve the current conversation.
 

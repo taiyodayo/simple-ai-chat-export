@@ -1,6 +1,6 @@
 # Cloudflare hosting
 
-Status: page and policy tested locally. First publication is pending the personal Cloudflare connection's Worker Scripts permission; the initial deployment attempt was denied before uploading the site.
+Status: deployed and verified over HTTPS on 8 October 2026 (Japan time). Worker version: `7493a16d-a9b4-486f-abea-6a1b5b1cc087`. The original homepage and `/seatdesigner` remain intact.
 
 Website: `https://ongaku.co.uk/simple-chatgpt-exporter`. Privacy policy: `https://ongaku.co.uk/simple-chatgpt-exporter/privacy`. The owner authorised publishing this pre-release website separately from the extension. Keep the development notice until the extension's release gate passes.
 
@@ -10,7 +10,7 @@ Use the named Wrangler profile `taiyodayo-personal`, bound locally to this repos
 
 Validated with Wrangler 4.148.0. Run `pnpm dlx --allow-build esbuild --allow-build workerd wrangler@4.148.0 whoami` to verify the active identity, then `pnpm dlx --allow-build esbuild --allow-build workerd wrangler@4.148.0 deploy --config deployment/wrangler.jsonc`. Use `--dry-run` to check the upload first. Assets use `html_handling: none` so internal HTML requests do not redirect visitors away from the project path.
 
-Check the website, privacy URL, CSS and security headers over HTTPS after deployment, and verify the original homepage and `/seatdesigner` route remain intact. Do not upload the repository: only the three static files in `site/` and the Worker handler are published. Worker observability is disabled, but Cloudflare can still process network information to serve and protect the site, as disclosed in the privacy policy.
+Check the website, privacy URL, CSS and security headers over HTTPS after deployment, and verify the original homepage and `/seatdesigner` route remain intact. Do not upload the repository: only the three static files in `site/` and the Worker handler are published. `Cache-Control: public, max-age=0, must-revalidate, no-transform` prevents Cloudflare from injecting its automatic analytics beacon into these pages. Live Chromium checks confirmed zero scripts and zero third-party requests. Worker observability is disabled, but Cloudflare can still process network information to serve and protect the site, as disclosed in the privacy policy.
 
 Email setup: create `chat-simple-export@ongaku.co.uk` as a receive-only forwarding alias only after the owner confirms the destination. Cloudflare Email Routing needs a verified destination and suitable mail DNS; never replace existing MX records without first determining whether that would interrupt the domain's current email. Keep destination addresses and API credentials outside Git. Do not configure a catch-all. Verify inbound delivery before listing the address as active.
 

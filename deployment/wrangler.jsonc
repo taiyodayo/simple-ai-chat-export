@@ -1,5 +1,6 @@
 {
   "name": "simple-chatgpt-export-support",
+  "account_id": "a0388be982be6bdf5e178b28a6e25a1c",
   "main": "worker.js",
   "compatibility_date": "2026-10-07",
   "workers_dev": false,

@@ -22,6 +22,12 @@ export default {
       new Request(url, { method: request.method }),
     );
     const response = new Response(asset.body, asset);
+    // Prevent Cloudflare from adding its automatic analytics beacon here.
+    // This applies only to this Worker's responses, not the rest of the domain.
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=0, must-revalidate, no-transform",
+    );
     response.headers.set("Referrer-Policy", "no-referrer");
     response.headers.set("X-Content-Type-Options", "nosniff");
     response.headers.set(

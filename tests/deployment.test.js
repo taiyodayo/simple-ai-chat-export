@@ -20,6 +20,7 @@ test("support worker serves only its known paths with restrictive headers", asyn
   );
   assert.equal(page.status, 200);
   assert.equal(page.headers.get("referrer-policy"), "no-referrer");
+  assert.match(page.headers.get("cache-control"), /no-transform/);
   assert.match(
     page.headers.get("content-security-policy"),
     /default-src 'none'/,

@@ -10,6 +10,6 @@
 - Chrome Web Store must use the owner's dedicated app-publishing account, supplied privately in the conversation. It is distinct from the personal Cloudflare account that owns the domain. Do not put either login email in public files.
 - Coffee: visible on GitHub, support page and store listing; in the extension only after confirmed success. Fixed URL: `https://buymeacoffee.com/taiyodayo`.
 - Owner requires attribution to @taiyodayo. Exact visible-credit/copyleft preference is pending. MIT is not assumed.
-- Cloudflare: personal identity and access to `ongaku.co.uk` are verified through the separate `taiyodayo-personal` Wrangler profile. The owner has authorised publishing the pre-release website. Initial deployment was denied because the connection lacked Worker Scripts permission; refreshed consent is pending. No DNS or email changes have been made.
+- Cloudflare: personal identity and access to `ongaku.co.uk` are verified through the separate `taiyodayo-personal` Wrangler profile. The owner has authorised publishing the pre-release website. Deployment completed after refreshed consent. The website and dedicated privacy policy are live; the extension and GitHub repository remain private. No DNS or email changes have been made.
 
-Pending owner inputs: attribution/licence choice; forwarding-alias destination confirmation; refreshed Cloudflare deployment consent; live test profile once the prototype is reviewed.
+Pending owner inputs: attribution/licence choice; forwarding-alias destination confirmation; live test profile once the prototype is reviewed.
