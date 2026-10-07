@@ -20,7 +20,7 @@ pnpm exec playwright install chromium
 pnpm preview
 ```
 
-Open <http://127.0.0.1:4173>. Choose a scenario beneath the preview to try success, omissions, cancellation or failure. This preview **simulates saving**; it never accesses your chats. The support-page draft is at <http://127.0.0.1:4173/simple-chatgpt-exporter>.
+Open the **Preview** URL printed in your terminal (normally <http://127.0.0.1:4173>). If that port is already in use, the preview automatically chooses the next available port. Press **Ctrl+C** when finished. Choose a scenario beneath the preview to try success, omissions, cancellation or failure. This preview **simulates saving**; it never accesses your chats. The support-page draft is at `/simple-chatgpt-exporter` on the same preview address.
 
 To inspect the actual extension, open `chrome://extensions`, turn on **Developer mode**, choose **Load unpacked**, and select this repository’s `extension` directory. No build is needed. Open a saved ChatGPT conversation, then choose **Simple Chat Export** from the browser’s Extensions menu. The prototype clearly explains that live export is not ready.
 

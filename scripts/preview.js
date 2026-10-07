@@ -10,7 +10,7 @@ const types = {
   ".css": "text/css; charset=utf-8",
   ".svg": "image/svg+xml",
 };
-createServer(async (req, res) => {
+const server = createServer(async (req, res) => {
   try {
     let path = new URL(req.url, "http://127.0.0.1").pathname;
     if (path === "/") path = "/dev/index.html";
@@ -44,6 +44,31 @@ createServer(async (req, res) => {
   } catch {
     res.writeHead(404).end("Not found");
   }
-}).listen(4173, "127.0.0.1", () =>
-  console.log("Preview: http://127.0.0.1:4173"),
-);
+});
+
+const requestedPort = Number(process.env.PREVIEW_PORT ?? 4173);
+let port = requestedPort;
+let retries = 0;
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE" && retries < 10 && port < 65535) {
+    if (retries === 0)
+      console.log(`Port ${port} is in use; finding an available preview port.`);
+    retries++;
+    server.listen(++port, "127.0.0.1");
+    return;
+  }
+  console.error(
+    error.code === "EADDRINUSE"
+      ? "No preview port is available. Try PREVIEW_PORT=4200 pnpm preview."
+      : `Could not start the preview (${error.code ?? "unknown error"}). Try a different PREVIEW_PORT.`,
+  );
+  process.exitCode = 1;
+});
+server.on("listening", () => {
+  console.log(`Preview: http://127.0.0.1:${server.address().port}`);
+  console.log("Press Ctrl+C to stop.");
+});
+if (!Number.isInteger(port) || port < 0 || port > 65535) {
+  console.error("PREVIEW_PORT must be a whole number between 0 and 65535.");
+  process.exitCode = 1;
+} else server.listen(port, "127.0.0.1");
