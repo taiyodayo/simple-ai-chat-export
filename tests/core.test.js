@@ -1,13 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
 import {
   validateConversation,
   conversationLocation,
   createExport,
   safeFilename,
 } from "../extension/core.js";
-import { archiveBytes, exportArchive } from "../extension/archive.js";
 import { retrieveCurrentConversation } from "../extension/retrieval.js";
 import { fixture, identity, conversationId } from "./fixtures.js";
 
@@ -140,24 +138,36 @@ test("filenames cannot escape their directory or use Windows reserved names", ()
     assert(!/^(con|nul)(\.|$)/i.test(clean));
   }
 });
-test("ZIP is readable by an independent implementation and has valid CRCs", async () => {
-  const data = fixture(),
-    result = createExport(validateConversation(data, identity(data)), "md");
-  const bytes = Buffer.from(await exportArchive(result, "md").arrayBuffer());
-  const python = spawnSync(
-    "python3",
-    [
-      "-c",
-      'import io,json,sys,zipfile; z=zipfile.ZipFile(io.BytesIO(sys.stdin.buffer.read())); assert z.testzip() is None; print(json.dumps({n:z.read(n).decode("utf-8") for n in z.namelist()}))',
-    ],
-    { input: bytes },
-  );
-  assert.equal(python.status, 0, python.stderr.toString());
-  const contents = JSON.parse(python.stdout);
-  assert.deepEqual(Object.keys(contents), ["conversation.md", "metadata.json"]);
-  assert.equal(contents["conversation.md"], result.transcript);
-  assert.deepEqual(JSON.parse(contents["metadata.json"]), result.metadata);
-  assert.throws(() => archiveBytes([["../evil", "no"]]));
+test("one UTF-8 file starts with complete metadata and preserves the transcript", () => {
+  const data = fixture({ omission: true });
+  data.title = '日本語 "quoted"\n```\n# Not a header';
+  const conversation = validateConversation(data, identity(data));
+  for (const format of ["md", "txt"]) {
+    const result = createExport(conversation, format);
+    const prefix =
+      format === "md"
+        ? "# Export metadata\n\n```json\n"
+        : "Export metadata\n\n";
+    assert(result.content.startsWith(prefix));
+    const header = result.content.slice(
+      prefix.length,
+      result.content.indexOf("\n\n---\n\n"),
+    );
+    const json = format === "md" ? header.slice(0, -4) : header;
+    assert.deepEqual(JSON.parse(json), result.metadata);
+    assert(result.content.endsWith(result.transcript));
+    assert(result.filename.endsWith(`.${format}`));
+    assert(!result.filename.endsWith(".zip"));
+    assert(
+      result.mimeType.startsWith(
+        format === "md" ? "text/markdown" : "text/plain",
+      ),
+    );
+    assert.equal(
+      new TextDecoder().decode(new TextEncoder().encode(result.content)),
+      result.content,
+    );
+  }
 });
 test("live retrieval is explicitly gated, never a partial DOM fallback", async () => {
   await assert.rejects(

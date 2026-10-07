@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { saveArchive } from "../extension/save.js";
+import { saveFile } from "../extension/save.js";
 
 function api(mode) {
   const listeners = new Set(),
@@ -38,7 +38,7 @@ for (const mode of ["complete", "early", "already-complete"])
   test(`save confirms ${mode} and cleans listeners`, async () => {
     const downloads = api(mode);
     assert.equal(
-      await saveArchive(new Blob(["test"]), "test.zip", { downloads }),
+      await saveFile(new Blob(["test"]), "test.txt", { downloads }),
       42,
     );
     assert.equal(downloads.listeners.size, 0);
@@ -48,7 +48,7 @@ for (const mode of ["interrupted", "reject"])
   test(`save rejects ${mode} without leaking raw browser errors`, async () => {
     const downloads = api(mode);
     await assert.rejects(
-      saveArchive(new Blob(["test"]), "test.zip", { downloads }),
+      saveFile(new Blob(["test"]), "test.txt", { downloads }),
       { code: "save-interrupted" },
     );
     assert.equal(downloads.listeners.size, 0);
@@ -56,7 +56,7 @@ for (const mode of ["interrupted", "reject"])
 test("save timeout cancels its own download", async () => {
   const downloads = api("pending");
   await assert.rejects(
-    saveArchive(new Blob(["test"]), "test.zip", { downloads, timeout: 5 }),
+    saveFile(new Blob(["test"]), "test.txt", { downloads, timeout: 5 }),
     { code: "save-timeout" },
   );
   assert(downloads.cancelled.includes(42));
@@ -65,7 +65,7 @@ test("save timeout cancels its own download", async () => {
 test("cancellation cancels a download that starts after the window closes", async () => {
   const downloads = api("late"),
     controller = new AbortController();
-  const saving = saveArchive(new Blob(["test"]), "test.zip", {
+  const saving = saveFile(new Blob(["test"]), "test.txt", {
     downloads,
     signal: controller.signal,
   });

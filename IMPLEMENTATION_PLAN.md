@@ -1,4 +1,4 @@
-# ChatGPT Simple Secure Exporter
+# Simple ChatGPT Export
 
 Status: implementation authorised by the owner. Private GitHub development authorised; public release requires live verification and security review. Build a synthetic-data prototype before the owner provides a dedicated live testing profile.
 
@@ -24,6 +24,7 @@ All export processing happens on the user's device. Never send conversation cont
 
 - Export the currently open, saved ChatGPT conversation only.
 - Offer UTF-8 TXT and Markdown.
+- Put metadata at the beginning of the output file. Do not ZIP conversation exports or create companion metadata files.
 - Preserve speaker labels, paragraphs, Unicode, code indentation, readable tables, and source links where available.
 - Follow the branch the user is viewing, including edited prompts and regenerated replies. Do not combine alternative branches.
 - Show the exported message count.

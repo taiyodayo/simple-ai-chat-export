@@ -3,16 +3,19 @@ import { mkdtemp, rm, readFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { execFileSync } from "node:child_process";
+import { fixture } from "../fixtures.js";
 
-test("the extracted package loads with its CSP and saves a valid synthetic archive", async () => {
-  const temporary = await mkdtemp(join(tmpdir(), "simple-chat-export-test-"));
+test("the extracted package loads with its CSP and saves readable TXT and Markdown files", async () => {
+  const temporary = await mkdtemp(
+    join(tmpdir(), "simple-chatgpt-export-test-"),
+  );
   let context;
   try {
     const extension = join(temporary, "extension");
     execFileSync("python3", [
       "-c",
       "import sys,zipfile; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])",
-      resolve("dist/simple-chat-export-0.1.0-prototype.zip"),
+      resolve("dist/simple-chatgpt-export-0.1.0-prototype.zip"),
       extension,
     ]);
     context = await chromium.launchPersistentContext(
@@ -41,48 +44,50 @@ test("the extracted package loads with its CSP and saves a valid synthetic archi
     await expect(
       page.getByRole("link", { name: "Buy me a coffee" }),
     ).toBeHidden();
-    const destination = join(temporary, "synthetic.zip");
-    const result = await page.evaluate(async (destination) => {
-      const { archiveBytes } = await import("./archive.js");
-      const { saveArchive } = await import("./save.js");
-      const blob = new Blob(
-        [
-          archiveBytes([
-            ["conversation.txt", "You\n\nSynthetic only: 日本語 ☕\n"],
-            ["metadata.json", '{"synthetic":true}\n'],
-          ]),
-        ],
-        { type: "application/zip" },
+    for (const format of ["txt", "md"]) {
+      const result = await page.evaluate(
+        async ({ data, format }) => {
+          const { validateConversation, createExport } =
+            await import("./core.js");
+          const { saveFile } = await import("./save.js");
+          const conversation = validateConversation(data, {
+            id: data.id,
+            selectedNode: data.selectedNode,
+          });
+          const output = createExport(conversation, format);
+          const blob = new Blob([output.content], { type: output.mimeType });
+          let requestedFilename;
+          const downloads = {
+            onChanged: chrome.downloads.onChanged,
+            search: (query) => chrome.downloads.search(query),
+            cancel: (id) => chrome.downloads.cancel(id),
+            // Native OS dialogue requires manual testing; use the real save lifecycle here.
+            download: (options) => {
+              requestedFilename = options.filename;
+              return chrome.downloads.download({ ...options, saveAs: false });
+            },
+          };
+          const id = await saveFile(blob, output.filename, { downloads });
+          const [item] = await chrome.downloads.search({ id });
+          return {
+            state: item.state,
+            filename: item.filename,
+            requestedFilename,
+            expected: output.content,
+          };
+        },
+        { data: fixture(), format },
       );
-      const downloads = {
-        onChanged: chrome.downloads.onChanged,
-        search: (query) => chrome.downloads.search(query),
-        cancel: (id) => chrome.downloads.cancel(id),
-        // Native OS dialogue cannot be driven by Playwright. Exercise the real
-        // download lifecycle without it; manual dialogue tests remain required.
-        download: (options) =>
-          chrome.downloads.download({ ...options, saveAs: false }),
-      };
-      const id = await saveArchive(blob, "simple-chat-export-synthetic.zip", {
-        downloads,
-      });
-      const [item] = await chrome.downloads.search({ id });
-      return { state: item.state, filename: item.filename };
-    }, destination);
-    expect(result.state).toBe("complete");
-    const bytes = await readFile(result.filename);
-    expect(bytes.subarray(0, 4).toString("hex")).toBe("504b0304");
-    const content = execFileSync(
-      "python3",
-      [
-        "-c",
-        'import sys,zipfile; z=zipfile.ZipFile(sys.argv[1]); assert z.testzip() is None; print(z.read("conversation.txt").decode())',
-        result.filename,
-      ],
-      { encoding: "utf8" },
-    );
-    expect(content).toContain("日本語 ☕");
-    await rm(result.filename, { force: true });
+      expect(result.state).toBe("complete");
+      // Playwright stores downloads under temporary UUIDs, independent of the
+      // filename supplied to Chrome for the user's save dialogue.
+      expect(result.requestedFilename).toMatch(new RegExp(`\\.${format}$`));
+      const content = await readFile(result.filename, "utf8");
+      expect(content).toEqual(result.expected);
+      expect(content).toContain("日本語 ☕");
+      expect(content).toMatch(/^#? ?Export metadata/);
+      await rm(result.filename, { force: true });
+    }
     expect(errors).toEqual([]);
     await page.getByRole("link", { name: "Help & privacy" }).click();
     await expect(

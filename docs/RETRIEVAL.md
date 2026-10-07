@@ -19,7 +19,7 @@ Never ask the owner to paste a token. Avoid raw token handling. If unavoidable, 
 
 A browser anchor download does not provide reliable completion/cancellation confirmation. The File System Access API would require supported picker behaviour and a second action after asynchronous retrieval, and does not provide the same portability across target Chromium browsers. Use `downloads`, with `saveAs: true`, and observe only the returned download ID. Confirm only `complete`; treat `interrupted`, rejected saves and timeouts as non-success. An event-driven service worker opens a small window so a toolbar popup closing does not discard the job. Closing the window aborts unfinished work; a file that already completed may remain.
 
-One ZIP contains the editable transcript and a separate metadata file. This avoids two save dialogues and keeps the archive together. ZIP uses stored UTF-8 entries and fixed safe names. No conversation-derived paths are accepted.
+One UTF-8 TXT or Markdown file contains a metadata header followed by the transcript. Metadata uses escaped JSON, inside a fenced code block for Markdown, so titles cannot inject additional header structure. No ZIP or separate metadata download. ZIP creation is development-only tooling for the Chrome Web Store installation package.
 
 ## Current references checked 7 October 2026
 

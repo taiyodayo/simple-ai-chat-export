@@ -2,11 +2,11 @@
 
 Applies to private prototype 0.1.0. Updated 7 October 2026.
 
-Simple Chat Export is an independent project by @taiyodayo. The prototype checks the selected tab’s address after you open the extension, but does not retrieve live ChatGPT messages. The browser preview uses synthetic conversations.
+Simple ChatGPT Export is an independent project by @taiyodayo. The prototype checks the selected tab’s address after you open the extension, but does not retrieve live ChatGPT messages. The browser preview uses synthetic conversations.
 
-Formatting and archive creation run on your device. There is no analytics, advertising, error upload, developer backend, remote configuration or retained conversation cache. The extension does not use localStorage, IndexedDB or Chrome extension storage. Temporary data is released after use; JavaScript memory cannot be guaranteed securely erased.
+Formatting and file creation run on your device. There is no analytics, advertising, error upload, developer backend, remote configuration or retained conversation cache. The extension does not use localStorage, IndexedDB or Chrome extension storage. Temporary data is released after use; JavaScript memory cannot be guaranteed securely erased.
 
-Your saved files and the browser’s download history remain under your control. The ZIP is not encrypted. Its metadata includes a conversation URL and message identifiers, which may be sensitive even though they do not grant someone your ChatGPT session. Deleting the extension does not delete your downloaded files.
+Your saved files and the browser’s download history remain under your control. The exported text file is not encrypted. Its metadata header includes a conversation URL and message identifiers, which may be sensitive even though they do not grant someone your ChatGPT session. Deleting the extension does not delete your downloaded files.
 
 The `downloads` permission permits more than this extension needs in practice. The implementation starts the requested export, checks only its download identifier, and cancels it if requested or interrupted. It does not enumerate other downloads.
 

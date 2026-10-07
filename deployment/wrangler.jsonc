@@ -1,5 +1,5 @@
 {
-  "name": "simple-chat-export-support",
+  "name": "simple-chatgpt-export-support",
   "main": "worker.js",
   "compatibility_date": "2026-10-07",
   "workers_dev": false,

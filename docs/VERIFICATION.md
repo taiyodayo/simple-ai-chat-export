@@ -2,9 +2,9 @@
 
 Tested 7 October 2026 on the local macOS environment with Node 26.9.0, Playwright 1.63.0 and bundled Chromium 153.0.8010.12.
 
-- 34 Node tests pass: internal branch completeness and ordering, alternative branches, Unicode/code/tables/sources, omitted content, wrong origin, invalid graph/response states, ZIP interoperability through Python's independent reader, safe filenames, download completion/cancellation races and the narrow support-page worker handler.
+- 36 Node tests pass: internal branch completeness and ordering, alternative branches, Unicode/code/tables/sources, omitted content, wrong origin, invalid graph/response states, single-file metadata preservation, safe filenames, download completion/cancellation races, preview startup/port collisions and the narrow support-page worker handler.
 - 15 Playwright tests pass: first use, both format controls, omission consent, success/coffee, retry, cancellation, changing branches, offline/sign-out states, 2,000-message counts, keyboard/narrow-screen use, untrusted HTML, support-page honesty and an extracted-extension download.
-- The extracted 15-file prototype ZIP loads in a fresh Chromium profile. A synthetic archive completes through the actual downloads API and is independently readable. Native OS save dialogues are bypassed in this test and still require manual verification.
+- The extracted 14-file extension installation ZIP loads in a fresh Chromium profile. Synthetic TXT and Markdown exports complete through the actual downloads API; the downloaded text matches the expected metadata header and transcript. Conversation exports are not ZIP files. Native OS save dialogues are bypassed in this test and still require manual verification.
 - Synthetic success and support-page screenshots were visually inspected outside Git. The compact success state fits a 420 × 600 viewport. No real chat screenshots were captured.
 - `pnpm check` passes JavaScript syntax, manifest-access, prohibited runtime-pattern and common secret-pattern checks. The owner's private Gmail does not occur in the staged source. This is not an external audit or an exhaustive secret detector.
 

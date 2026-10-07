@@ -12,7 +12,7 @@ test("welcoming first use, format choice, success and a deliberate coffee click"
       external.push(request.url());
   });
   await expect(
-    page.getByRole("heading", { name: "Your conversation. A copy to keep." }),
+    page.getByRole("heading", { name: "Save this chatGPT conversation." }),
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Buy me a coffee" }),
@@ -22,7 +22,7 @@ test("welcoming first use, format choice, success and a deliberate coffee click"
   await expect(
     page.getByRole("heading", { name: "Export saved." }),
   ).toBeVisible();
-  await expect(page.getByText("2 messages. Unzip")).toBeVisible();
+  await expect(page.getByText("2 messages. Ready")).toBeVisible();
   const coffee = page.getByRole("link", { name: "Buy me a coffee" });
   await expect(coffee).toHaveAttribute(
     "href",
@@ -95,7 +95,7 @@ test("long conversation count comes from the validated branch", async ({
 }) => {
   await page.getByLabel("Preview scenario").selectOption("long");
   await page.getByRole("button", { name: /Export conversation/ }).click();
-  await expect(page.getByText("2000 messages. Unzip")).toBeVisible();
+  await expect(page.getByText("2000 messages. Ready")).toBeVisible();
 });
 test("success fits the export window and another copy restores the format choice", async ({
   page,

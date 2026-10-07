@@ -5,14 +5,13 @@ import {
   createExport,
 } from "./core.js";
 import { retrieveCurrentConversation } from "./retrieval.js";
-import { exportArchive } from "./archive.js";
-import { saveArchive } from "./save.js";
+import { saveFile } from "./save.js";
 
 const $ = (id) => document.getElementById(id);
 const errors = {
   "wrong-page": [
     "Open a saved ChatGPT conversation",
-    "Then open Simple Chat Export from your browser’s Extensions menu.",
+    "Then open Simple ChatGPT Export from your browser’s Extensions menu.",
   ],
   "verification-pending": [
     "Live export is not ready yet",
@@ -141,17 +140,17 @@ export function mount(adapter) {
       signal.throwIfAborted();
       status(
         "Choose where to save",
-        "Your ZIP contains the conversation and its metadata.",
+        "Your file includes metadata at the beginning.",
       );
       await adapter.save(
-        exportArchive(result, format),
-        `${result.basename}.zip`,
+        new Blob([result.content], { type: result.mimeType }),
+        result.filename,
         { signal },
       );
       signal.throwIfAborted();
       status(
         "Export saved.",
-        `${result.metadata.messageCount} messages${result.omissions.length ? " · text-only copy" : ""}. Unzip the file to read or edit your conversation.`,
+        `${result.metadata.messageCount} messages${result.omissions.length ? " · text-only copy" : ""}. Ready to read or edit.`,
       );
       $("success").hidden = false;
       $("export-form").hidden = true;
@@ -196,6 +195,6 @@ if (globalThis.chrome?.runtime?.id) {
       // from observed evidence before this path can ever save real data.
       throw new ExportError("verification-pending");
     },
-    save: saveArchive,
+    save: saveFile,
   });
 }

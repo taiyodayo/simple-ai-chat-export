@@ -1,6 +1,6 @@
 import { ExportError } from "./core.js";
 
-export async function saveArchive(
+export async function saveFile(
   blob,
   filename,
   { signal, timeout = 120000, downloads = chrome.downloads } = {},

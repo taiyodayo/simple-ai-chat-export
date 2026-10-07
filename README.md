@@ -1,10 +1,10 @@
-# Simple Chat Export
+# Simple ChatGPT Export
 
-**Your conversation. A copy to keep.**
+**Save this chatGPT conversation.**
 
-Save the ChatGPT conversation you’re viewing as Markdown or plain text, ready for archiving or a quick edit. Made by **@taiyodayo**. Independent of OpenAI.
+Save the ChatGPT conversation you’re viewing as Markdown or plain text, ready for archiving or a quick edit. Made by **@taiyodayo**. Not affiliated with OpenAI.
 
-**Private prototype — not ready for live exports or public installation.** The interface, formatting, archive and save flow are implemented. ChatGPT retrieval is deliberately disabled until a live investigation can establish complete, selected-branch extraction. The browser preview uses synthetic conversations only.
+**Private prototype — not ready for live exports or public installation.** The interface, formatting and save flow are implemented. ChatGPT retrieval is deliberately disabled until a live investigation can establish complete, selected-branch extraction. The browser preview uses synthetic conversations only.
 
 [![Buy me a coffee](docs/coffee.svg)](https://buymeacoffee.com/taiyodayo)
 
@@ -12,7 +12,7 @@ Support the project, entirely optionally.
 
 ## Try the prototype
 
-Use a current Node.js release and pnpm. Python 3 is used by one independent ZIP verification test.
+Use a current Node.js release and pnpm. Python 3 is used to verify the extension installation package.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -22,17 +22,17 @@ pnpm preview
 
 Open the **Preview** URL printed in your terminal (normally <http://127.0.0.1:4173>). If that port is already in use, the preview automatically chooses the next available port. Press **Ctrl+C** when finished. Choose a scenario beneath the preview to try success, omissions, cancellation or failure. This preview **simulates saving**; it never accesses your chats. The support-page draft is at `/simple-chatgpt-exporter` on the same preview address.
 
-To inspect the actual extension, open `chrome://extensions`, turn on **Developer mode**, choose **Load unpacked**, and select this repository’s `extension` directory. No build is needed. Open a saved ChatGPT conversation, then choose **Simple Chat Export** from the browser’s Extensions menu. The prototype clearly explains that live export is not ready.
+To inspect the actual extension, open `chrome://extensions`, turn on **Developer mode**, choose **Load unpacked**, and select this repository’s `extension` directory. No build is needed. Open a saved ChatGPT conversation, then choose **Simple ChatGPT Export** from the browser’s Extensions menu. The prototype clearly explains that live export is not ready.
 
 ## Intended everyday use
 
 1. Open the conversation and branch you want to keep.
-2. Open Simple Chat Export. Choose Markdown or plain text, then **Export conversation**.
-3. Choose where to save. Unzip the download to find `conversation.md` or `conversation.txt`, plus `metadata.json`.
+2. Open Simple ChatGPT Export. Choose Markdown or plain text, then **Export conversation**.
+3. Choose where to save your `.md` or `.txt` file. Metadata appears at the beginning, followed by the conversation.
 
 The transcript keeps speaker labels and the original text, including paragraphs, Unicode, code and table syntax. Plain text retains readable Markdown-style notation where present rather than attempting lossy conversion. Metadata holds the title, conversation URL, branch/message identifiers, export date, format, count and omissions. It does not contain authentication data. No donation message is added to your files.
 
-One ZIP keeps the transcript and metadata together without two save dialogues. Keep the export window open until saving finishes. A cancelled or interrupted save never displays success. The success screen shows the message count and an optional coffee link.
+One editable file keeps the metadata and transcript together. No ZIP or companion file. Keep the export window open until saving finishes. A cancelled or interrupted save never displays success. The success screen shows the message count and an optional coffee link.
 
 ## Scope and limits
 
@@ -40,7 +40,7 @@ One ZIP keeps the transcript and metadata together without two save dialogues. K
 - Non-text files are not downloaded. Known omissions require an explicit **Export text only** action and are recorded in the transcript and metadata. Unknown content or uncertain completeness blocks export.
 - Current URL recognition is deliberately limited to `https://chatgpt.com/c/<conversation-id>`. Projects, custom GPT routes, shared links and temporary chats are unverified, not promised.
 - Desktop Chrome on macOS, Windows and Linux is the target. Edge, Brave and other Chromium browsers are candidates for verification, not yet certified. There is no mobile support claim.
-- The archive is not encrypted. Conversation text is untrusted; a Markdown editor’s handling of embedded links, images or HTML is outside the extension’s control.
+- The exported file is not encrypted. Conversation text is untrusted; a Markdown editor’s handling of embedded links, images or HTML is outside the extension’s control.
 
 ## Permissions and privacy
 

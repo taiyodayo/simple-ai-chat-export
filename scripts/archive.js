@@ -1,5 +1,5 @@
-// Minimal ZIP writer: UTF-8, stored entries, no compression or dependencies.
-// Two fixed relative entry names; conversation content cannot supply paths.
+// Development-only ZIP writer for the extension installation package.
+// Stored UTF-8 entries, no compression or dependencies. Not shipped in the app.
 const encoder = new TextEncoder();
 const table = Uint32Array.from({ length: 256 }, (_, n) => {
   for (let i = 0; i < 8; i++) n = n & 1 ? 0xedb88320 ^ (n >>> 1) : n >>> 1;
@@ -71,15 +71,4 @@ export function archiveBytes(entries) {
     position += part.length;
   }
   return result;
-}
-export function exportArchive(result, format) {
-  return new Blob(
-    [
-      archiveBytes([
-        [`conversation.${format}`, result.transcript],
-        ["metadata.json", JSON.stringify(result.metadata, null, 2) + "\n"],
-      ]),
-    ],
-    { type: "application/zip" },
-  );
 }

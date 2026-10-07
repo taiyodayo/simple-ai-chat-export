@@ -1,11 +1,10 @@
 import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { archiveBytes } from "../extension/archive.js";
+import { archiveBytes } from "./archive.js";
 
 const root = new URL("../", import.meta.url);
 const inventory = [
-  "archive.js",
   "core.js",
   "help.html",
   "help.js",
@@ -43,7 +42,7 @@ const dirty =
     encoding: "utf8",
   }).trim().length > 0;
 await mkdir(new URL("dist/", root), { recursive: true });
-const name = "simple-chat-export-0.1.0-prototype.zip";
+const name = "simple-chatgpt-export-0.1.0-prototype.zip";
 await writeFile(new URL(`dist/${name}`, root), zip);
 await writeFile(new URL(`dist/${name}.sha256`, root), `${sha256}  ${name}\n`);
 await writeFile(

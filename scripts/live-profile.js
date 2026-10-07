@@ -5,7 +5,7 @@ import { resolve, relative, isAbsolute } from "node:path";
 const root = resolve(import.meta.dirname, "..");
 const profile = resolve(
   homedir(),
-  ".local/share/simple-chat-export/live-browser-profile",
+  ".local/share/simple-chatgpt-export/live-browser-profile",
 );
 await mkdir(profile, { recursive: true, mode: 0o700 });
 const actualProfile = await realpath(profile),

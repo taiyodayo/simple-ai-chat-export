@@ -177,7 +177,7 @@ export function createExport(conversation, format, now = new Date()) {
   const metadata = {
     schemaVersion: 1,
     exporter: {
-      name: "Simple Chat Export",
+      name: "Simple ChatGPT Export",
       version: "0.1.0",
       author: "@taiyodayo",
     },
@@ -198,7 +198,18 @@ export function createExport(conversation, format, now = new Date()) {
       "Original message timestamps are not available in this prototype.",
     ],
   };
+  const metadataText = JSON.stringify(metadata, null, 2);
+  const header =
+    format === "md"
+      ? `# Export metadata\n\n\`\`\`json\n${metadataText}\n\`\`\`\n\n---\n\n`
+      : `Export metadata\n\n${metadataText}\n\n---\n\n`;
   return {
+    content: header + transcript,
+    filename: `${safeFilename(conversation.title)}.${format}`,
+    mimeType:
+      format === "md"
+        ? "text/markdown;charset=utf-8"
+        : "text/plain;charset=utf-8",
     transcript,
     metadata,
     basename: safeFilename(conversation.title),

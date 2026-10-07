@@ -45,7 +45,7 @@ test("preview starts and serves the app at its printed URL", async (t) => {
   const { url, errors } = await launch(t, 0);
   const response = await fetch(url);
   assert.equal(response.status, 200);
-  assert.match(await response.text(), /Simple Chat Export/);
+  assert.match(await response.text(), /Simple ChatGPT Export/);
   assert.equal((await fetch(`${url}/simple-chatgpt-exporter`)).status, 200);
   assert.equal(errors, "");
 });
@@ -60,7 +60,7 @@ test("an occupied port selects another port without disrupting its owner", async
   assert.notEqual(new URL(url).port, String(port));
   assert.match(output, /is in use/);
   assert.equal(errors, "");
-  assert.match(await (await fetch(url)).text(), /Simple Chat Export/);
+  assert.match(await (await fetch(url)).text(), /Simple ChatGPT Export/);
   assert.equal(
     await (await fetch(`http://127.0.0.1:${port}`)).text(),
     "Existing application",

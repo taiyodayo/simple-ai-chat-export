@@ -8,7 +8,7 @@ Private prototype 0.1.0. Live retrieval is disabled. No external security audit 
 
 Protect private conversation content, authentication, and the user's expectation of a complete selected branch. Treat page data, conversation text, links and filenames as untrusted. Defend against wrong-origin access, mixed branches, missing nodes, cycles, unexpected content, silent truncation, executable UI injection, unsafe filenames, misleading save confirmation and third-party data transfer.
 
-The prototype uses exact origin/path checks, bounded schema validation, a verified internal parent chain, explicit omission records, text-only DOM updates, fixed archive entry names, restricted filenames, a local-only CSP, and a fixed no-referrer support link. The source has no runtime dependencies. The CSP applies to extension pages, not ChatGPT itself or another application opening exported Markdown.
+The prototype uses exact origin/path checks, bounded schema validation, a verified internal parent chain, explicit omission records, text-only DOM updates, escaped metadata headers, restricted filenames, a local-only CSP, and a fixed no-referrer support link. The source has no runtime dependencies. The CSP applies to extension pages, not ChatGPT itself or another application opening exported Markdown.
 
 The current internal model is not an authenticated statement from ChatGPT. Its completeness flags must eventually be derived from observed retrieval evidence by a reviewed adapter, never trusted merely because a remote response supplies a similarly named field.
 
@@ -16,7 +16,7 @@ The current internal model is not an authenticated statement from ChatGPT. Its c
 
 ## Verification
 
-Run `pnpm test`, `pnpm test:browser`, and `pnpm check`. The unit suite checks branch validation, omitted content, multilingual output, ZIP interoperability, filenames and save lifecycle races. Browser tests exercise the synthetic user journey; they do not replace live ChatGPT checks. Packaging uses an explicit inventory and records SHA-256 and source commit. Inspect every packaged file and test the extracted artifact before release.
+Run `pnpm test`, `pnpm test:browser`, and `pnpm check`. The unit suite checks branch validation, omitted content, multilingual output, single-file metadata preservation, filenames and save lifecycle races. Browser tests exercise the synthetic user journey; they do not replace live ChatGPT checks. Packaging uses an explicit inventory and records SHA-256 and source commit. Inspect every packaged file and test the extracted artifact before release.
 
 Do not retain real conversations, credentials, profile files, screenshots, network captures or traces in Git. Browser tracing is disabled. Use an external dedicated profile for manually signed-in testing. Never request pasted authentication tokens. Do not print raw browser/network errors that may contain private data.
 
