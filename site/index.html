@@ -9,6 +9,7 @@
       content="A simple way to keep the ChatGPT conversation you’re viewing, ready to archive or edit. By @taiyodayo."
     />
     <title>Simple ChatGPT Export</title>
+    <link rel="canonical" href="https://ongaku.co.uk/simple-chatgpt-exporter" />
     <link rel="stylesheet" href="/simple-chatgpt-exporter/styles.css" />
   </head>
   <body>
@@ -87,8 +88,8 @@
           </article>
         </div>
         <p class="quiet">
-          This describes the planned release. The private prototype does not yet
-          export live ChatGPT conversations.
+          This describes the planned release. The extension is not available to
+          install yet.
         </p>
       </section>
       <section class="principles">
@@ -132,8 +133,16 @@
           </p>
           <p>
             After installation, open your saved conversation and choose Simple
-            Chat Export from the browser’s Extensions menu. Pin it there if
+            ChatGPT Export from the browser’s Extensions menu. Pin it there if
             you’d like it close to hand. No onboarding tour required.
+          </p>
+        </details>
+        <details>
+          <summary>What if I open it on another website?</summary>
+          <p>
+            Export checks for a saved conversation at chatgpt.com. On an
+            unsupported page, it asks you to open a saved ChatGPT conversation.
+            Nothing is read or saved.
           </p>
         </details>
         <details>
@@ -213,39 +222,27 @@
       <section id="privacy" class="privacy">
         <h2>Privacy, plainly.</h2>
         <p>
-          This is a pre-release support-page draft. The current extension
-          prototype does not retrieve live chats. Its preview uses synthetic
-          conversations. Processing runs locally, with no analytics,
-          conversation cache or developer backend.
+          Conversation processing happens in your browser. No analytics,
+          conversation cache or developer backend. The current prototype uses
+          sample conversations; live ChatGPT export is still being verified.
         </p>
         <p>
-          The planned export will retrieve the current conversation from ChatGPT
-          using your existing session. No conversation content will be sent to
-          the developer, a payment provider or another processing service. Saved
-          files and browser download history remain until you remove them.
-          Temporary JavaScript memory cannot be guaranteed securely erased.
+          This website has no tracking scripts or remote fonts. Cloudflare
+          serves and protects the site and may process connection information
+          for those purposes.
         </p>
         <p>
           Coffee links open Buy Me a Coffee only after a deliberate click,
-          without conversation data or a referrer. That site receives normal web
-          connection information and uses its own privacy practices. This page
-          has no tracking scripts or remote fonts; hosting and security
-          providers may retain ordinary connection logs. Hosting retention must
-          be confirmed before publication.
+          without conversation data or a referrer. Support is entirely optional.
         </p>
         <p>
-          If you email support once it is available, the email provider
-          processes your message and the project owner receives what you choose
-          to send. Do not include sensitive conversation content or credentials.
-        </p>
-        <p class="quiet">
-          Draft updated 7 October 2026. The final policy will describe the
-          verified retrieval method and active support contact.
+          <a href="/simple-chatgpt-exporter/privacy">Read the privacy policy</a>
         </p>
       </section>
     </main>
     <footer>
-      <span>© 2026 @taiyodayo</span><a href="#privacy">Privacy</a
+      <span>© 2026 @taiyodayo</span
+      ><a href="/simple-chatgpt-exporter/privacy">Privacy</a
       ><span>Not affiliated with or endorsed by OpenAI.</span>
     </footer>
   </body>

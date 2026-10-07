@@ -21,6 +21,11 @@ const server = createServer(async (req, res) => {
       path = "/site/index.html";
     if (path === "/simple-chatgpt-exporter/styles.css")
       path = "/site/styles.css";
+    if (
+      path === "/simple-chatgpt-exporter/privacy" ||
+      path === "/simple-chatgpt-exporter/privacy/"
+    )
+      path = "/site/privacy.html";
     const target = resolve(root, `.${decodeURIComponent(path)}`);
     if (!allowed.some((dir) => target.startsWith(resolve(root, dir) + sep))) {
       res.writeHead(404).end();

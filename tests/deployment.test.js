@@ -25,6 +25,12 @@ test("support worker serves only its known paths with restrictive headers", asyn
     /default-src 'none'/,
   );
   assert.deepEqual(fetched, ["/index.html"]);
+  const privacy = await worker.fetch(
+    new Request("https://ongaku.co.uk/simple-chatgpt-exporter/privacy"),
+    env,
+  );
+  assert.equal(privacy.status, 200);
+  assert.equal(fetched.at(-1), "/privacy.html");
   for (const path of [
     "/",
     "/some-other-project",
@@ -49,5 +55,5 @@ test("support worker serves only its known paths with restrictive headers", asyn
     ).status,
     405,
   );
-  assert.equal(fetched.length, 1);
+  assert.equal(fetched.length, 2);
 });

@@ -8,7 +8,7 @@ test("welcoming first use, format choice, success and a deliberate coffee click"
 }) => {
   const external = [];
   page.on("request", (request) => {
-    if (!request.url().startsWith("http://127.0.0.1:4173"))
+    if (!request.url().startsWith(new URL(page.url()).origin))
       external.push(request.url());
   });
   await expect(

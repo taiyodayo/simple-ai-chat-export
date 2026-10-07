@@ -6,6 +6,8 @@ export default {
       ["/simple-chatgpt-exporter", "/index.html"],
       ["/simple-chatgpt-exporter/", "/index.html"],
       ["/simple-chatgpt-exporter/styles.css", "/styles.css"],
+      ["/simple-chatgpt-exporter/privacy", "/privacy.html"],
+      ["/simple-chatgpt-exporter/privacy/", "/privacy.html"],
     ]);
     if (!["GET", "HEAD"].includes(request.method))
       return new Response("Method not allowed", {

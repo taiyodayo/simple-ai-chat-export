@@ -282,6 +282,16 @@ footer {
   outline: 3px solid #ab791c;
   outline-offset: 5px;
 }
+.privacy-page {
+  max-width: 780px;
+  padding: 60px 0;
+  font-size: 15px;
+}
+.privacy-page h2 {
+  font-size: 26px;
+  margin-top: 34px;
+  margin-bottom: 12px;
+}
 @media (max-width: 800px) {
   header,
   main,

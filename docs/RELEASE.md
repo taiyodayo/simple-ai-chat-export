@@ -12,7 +12,7 @@ Public release is blocked until the owner confirms working behaviour and the fol
 - [ ] Activate and verify receive-only support email; preserve existing domain mail settings. Establish a way to reply from a public identity without exposing private Gmail.
 - [ ] Deploy and verify `https://ongaku.co.uk/simple-chatgpt-exporter`, privacy information and support links. Preserve the existing website and routes.
 - [ ] Change prototype-only UI/copy only when evidence supports the resulting claims. Install screenshots must show the real verified product.
-- [ ] Confirm personal Chrome Web Store publisher identity. Complete data-use disclosures and accurate permission justifications. Review current donation-link and branding policy; listing URLs may be plain text.
+- [ ] Confirm the owner's dedicated app-publishing Chrome Web Store identity, supplied privately. Do not use the Cloudflare login or employer account. Complete data-use disclosures and accurate permission justifications. Review current donation-link and branding policy; listing URLs may be plain text.
 - [ ] Obtain owner's working confirmation before public launch. Change the GitHub repository to public only after the security/history review.
 - [ ] Commit the final source, tag it, package that clean tag, inspect its inventory and test the extracted ZIP. Publish commit, inventory and SHA-256 alongside the release. Checksums establish identity, not safety.
 - [ ] Add the actual store URL to the support page and README. Never present an invented install link.

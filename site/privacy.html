@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta
+      name="description"
+      content="How Simple ChatGPT Export handles conversation data, local files and privacy."
+    />
+    <title>Privacy · Simple ChatGPT Export</title>
+    <link
+      rel="canonical"
+      href="https://ongaku.co.uk/simple-chatgpt-exporter/privacy"
+    />
+    <link rel="stylesheet" href="/simple-chatgpt-exporter/styles.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="/simple-chatgpt-exporter"
+        ><span aria-hidden="true">↧</span> Simple ChatGPT Export</a
+      >
+      <nav aria-label="Main">
+        <a href="/simple-chatgpt-exporter#help">Help</a
+        ><a href="/simple-chatgpt-exporter">Back to the project</a>
+      </nav>
+    </header>
+    <main class="privacy-page">
+      <p class="eyebrow">Privacy policy · Updated 7 October 2026</p>
+      <h1>Privacy, plainly.</h1>
+      <p>
+        Simple ChatGPT Export is an independent project by @taiyodayo. It is not
+        affiliated with OpenAI.
+      </p>
+      <h2>Current availability</h2>
+      <p>
+        The extension is in private development and is not available from the
+        Chrome Web Store yet. The current prototype checks the selected tab’s
+        address when you request an export, but does not retrieve live ChatGPT
+        messages. Its demonstration uses sample conversations.
+      </p>
+      <h2>Conversation data</h2>
+      <p>
+        Formatting and file creation run in your browser. The extension has no
+        analytics, advertising, error uploads, remote configuration or developer
+        backend. It does not keep a conversation cache or use browser storage to
+        retain conversation content.
+      </p>
+      <p>
+        The planned release will retrieve only the saved conversation you choose
+        from ChatGPT using your existing session, then process it locally.
+        Conversation content will not be sent to the developer, payment
+        providers or other processing services. This policy will be updated with
+        the verified retrieval method before live export becomes available.
+      </p>
+      <h2>Your saved files</h2>
+      <p>
+        Exports are plain text or Markdown, with metadata at the beginning.
+        Metadata includes the title, original conversation link, selected
+        message identifiers, export date, message count and any omissions. Files
+        are not encrypted. They stay wherever you save them until you remove
+        them; uninstalling the extension does not remove your files or browser
+        download history.
+      </p>
+      <p>
+        Temporary conversation data is held in memory during export and released
+        afterwards. JavaScript cannot guarantee secure erasure of memory.
+      </p>
+      <h2>Browser permissions</h2>
+      <p>
+        <strong>Current tab:</strong> after you deliberately open the extension,
+        it can check whether the chosen tab contains a supported saved
+        conversation. This permission does not itself enforce a
+        single-conversation boundary.
+      </p>
+      <p>
+        <strong>Downloads:</strong> the extension saves the file you request and
+        checks completion or interruption for that download. The browser grants
+        a broader permission, but the extension does not search through your
+        other downloads.
+      </p>
+      <h2>This website</h2>
+      <p>
+        This site uses no analytics, tracking cookies, embedded payment widgets
+        or remote fonts. Cloudflare hosts and protects it. Cloudflare may
+        process ordinary connection information, such as IP addresses, requested
+        URLs and browser information, to deliver and secure the site. Provider
+        logs are subject to Cloudflare’s policies; we do not promise that
+        visiting a website leaves no network records.
+      </p>
+      <p>
+        <a
+          href="https://www.cloudflare.com/privacypolicy/"
+          target="_blank"
+          rel="noopener noreferrer"
+          referrerpolicy="no-referrer"
+          >Cloudflare’s privacy policy</a
+        >
+      </p>
+      <h2>Optional support</h2>
+      <p>
+        Buy Me a Coffee opens only when you choose its link. The link contains
+        no conversation text, titles, identifiers or tracking parameters and
+        sends no referrer. The payment provider receives ordinary connection
+        information and applies its own privacy practices. We do not handle your
+        card details.
+      </p>
+      <p>
+        The email support address will be published once it is ready. If you
+        choose to contact support, the email provider processes your message and
+        the project owner receives what you send. Never include passwords,
+        authentication tokens or private conversation files.
+      </p>
+      <h2>Limited use</h2>
+      <p>
+        Any user data handled by Simple ChatGPT Export is used only to provide
+        the export you request. It is not sold, used for advertising, or used to
+        build profiles. Our use of user data adheres to the Chrome Web Store
+        User Data Policy, including its Limited Use requirements.
+      </p>
+      <h2>Changes</h2>
+      <p>
+        This page will be updated as the verified product develops. Material
+        changes to the extension’s data handling will be explained before they
+        take effect. Check the date above for the latest revision.
+      </p>
+    </main>
+    <footer>
+      <span>© 2026 @taiyodayo</span
+      ><a href="/simple-chatgpt-exporter">Simple ChatGPT Export</a
+      ><span>Not affiliated with OpenAI.</span>
+    </footer>
+  </body>
+</html>

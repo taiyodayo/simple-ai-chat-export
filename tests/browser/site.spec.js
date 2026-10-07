@@ -20,7 +20,7 @@ test("support page is honest about availability, private source and support setu
   await page.getByText("How will I install it?", { exact: true }).click();
   await expect(page.getByText(/No store listing is live yet/)).toBeVisible();
   expect(
-    requests.every((url) => url.startsWith("http://127.0.0.1:4173/")),
+    requests.every((url) => url.startsWith(new URL(page.url()).origin + "/")),
   ).toBe(true);
   await page.setViewportSize({ width: 320, height: 800 });
   expect(

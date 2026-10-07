@@ -4,6 +4,7 @@ import { spawnSync } from "node:child_process";
 const root = resolve(import.meta.dirname, "..");
 const ignored = new Set([
   ".git",
+  ".wrangler",
   "node_modules",
   "dist",
   "test-results",

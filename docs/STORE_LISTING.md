@@ -27,6 +27,10 @@ Entirely optional. Every export works without it.
 
 Help and privacy: https://ongaku.co.uk/simple-chatgpt-exporter
 
+**Website/support URL:** https://ongaku.co.uk/simple-chatgpt-exporter
+
+**Privacy policy URL:** https://ongaku.co.uk/simple-chatgpt-exporter/privacy
+
 **Single purpose:** Save the currently displayed, saved ChatGPT conversation's selected branch to a local text file with a metadata header.
 
 **Permission explanations:**
