@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Help &amp; privacy · Simple Chat Export</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="help">
+      <a href="#" id="back">Back to export</a>
+      <h1>A copy, without the fuss.</h1>
+      <p>
+        <strong>Private prototype.</strong> Live ChatGPT export is awaiting
+        verification. This version will not read or export your real
+        conversations.
+      </p>
+      <h2>How export will work</h2>
+      <ol>
+        <li>Open the saved ChatGPT conversation you want to keep.</li>
+        <li>
+          Open Simple Chat Export from your browser’s Extensions menu. Pin it
+          there if you use it often.
+        </li>
+        <li>
+          Choose Markdown or plain text, then select
+          <strong>Export conversation</strong>.
+        </li>
+        <li>
+          Choose where to save the ZIP. Open it to find your transcript and
+          metadata.
+        </li>
+      </ol>
+      <p>
+        Keep the export window open until saving finishes. Closing it cancels an
+        unfinished export; check Downloads if a save had already started.
+      </p>
+      <h2>What’s in the file?</h2>
+      <p>
+        The transcript contains messages in the selected branch’s order. The
+        metadata file holds the title, original conversation link, message
+        identifiers, export date and any omissions. The ZIP is not encrypted;
+        keep it somewhere suitable for its contents.
+      </p>
+      <p>
+        Text exports cannot include image, audio, video or attachment files.
+        Known omissions are marked. If the full branch cannot be verified,
+        export stops.
+      </p>
+      <h2>Your privacy</h2>
+      <p>
+        Processing happens on your device. The extension has no analytics,
+        conversation storage or developer backend. Your saved files and browser
+        download history remain until you remove them.
+      </p>
+      <p>
+        The current prototype checks the selected tab’s address and can save
+        synthetic test archives. It does not retrieve ChatGPT content. A future
+        verified version will retrieve the current conversation from ChatGPT
+        using your existing session.
+      </p>
+      <h2>Permissions</h2>
+      <p>
+        <strong>Current tab:</strong> checks whether you opened a saved ChatGPT
+        conversation, only after you click the extension.
+      </p>
+      <p>
+        <strong>Downloads:</strong> saves your export and checks whether that
+        download finished or was interrupted. The browser permission is broader
+        than this use; the extension queries only the download it starts.
+      </p>
+      <h2>If something goes wrong</h2>
+      <p>
+        Wait for a reply to finish, check that you’re signed in, and reopen the
+        extension on the conversation you want. An unsupported or incomplete
+        conversation is never quietly exported as complete.
+      </p>
+      <p>
+        Support details will be activated before public release. Please never
+        send passwords, session tokens or private conversation files.
+      </p>
+      <footer>
+        Made by @taiyodayo. Independent of OpenAI.
+        <p>
+          Support is optional and opens Buy Me a Coffee only when you choose its
+          link after a successful export. No conversation content is sent with
+          that link.
+        </p>
+      </footer>
+    </main>
+    <script src="help.js"></script>
+  </body>
+</html>

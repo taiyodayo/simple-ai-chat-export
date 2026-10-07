@@ -1,0 +1,19 @@
+{
+  "name": "simple-chat-export-support",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-07",
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {
+    "directory": "../site",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+  },
+  "routes": [
+    {
+      "pattern": "ongaku.co.uk/simple-chatgpt-exporter*",
+      "zone_name": "ongaku.co.uk",
+    },
+  ],
+  "observability": { "enabled": false },
+}

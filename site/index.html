@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <meta
+      name="description"
+      content="A simple way to keep the ChatGPT conversation you’re viewing, ready to archive or edit. By @taiyodayo."
+    />
+    <title>Simple Chat Export · A copy to keep</title>
+    <link rel="stylesheet" href="/simple-chatgpt-exporter/styles.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="/simple-chatgpt-exporter"
+        ><span aria-hidden="true">↧</span> Simple Chat Export</a
+      >
+      <nav aria-label="Main">
+        <a href="#how">How it works</a><a href="#help">Help</a
+        ><a
+          class="support-link"
+          href="https://buymeacoffee.com/taiyodayo"
+          target="_blank"
+          rel="noopener noreferrer"
+          referrerpolicy="no-referrer"
+          >Buy me a coffee ↗</a
+        >
+      </nav>
+    </header>
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">For the conversations worth keeping</p>
+          <h1>A good conversation.<br />A copy of your own.</h1>
+          <p class="lead">
+            Save the ChatGPT conversation you’re viewing. Keep it for later,
+            make a quick edit, or carry on somewhere else.
+          </p>
+          <p class="release-note">
+            <strong>In development.</strong> We’re checking complete, reliable
+            exports before opening the doors.
+          </p>
+          <p class="quiet">By @taiyodayo · Independent of OpenAI</p>
+        </div>
+        <div
+          class="paper"
+          aria-label="Illustration of an exported conversation"
+        >
+          <span class="file-label">conversation.md</span>
+          <p class="speaker">You</p>
+          <p>Let’s keep this for later.</p>
+          <hr />
+          <p class="speaker">ChatGPT</p>
+          <p>A little room to think.<br />A useful place to begin.</p>
+          <div class="paper-foot">
+            <span>2 messages</span><span>Yours to edit</span>
+          </div>
+          <span class="metadata"
+            >+ metadata.json <span>Context included.</span></span
+          >
+        </div>
+      </section>
+      <section id="how">
+        <p class="eyebrow">Small by design</p>
+        <h2>From chat to file, without the ceremony.</h2>
+        <div class="steps">
+          <article>
+            <span class="number">01</span>
+            <h3>Open your conversation</h3>
+            <p>Choose the chat and the branch you want to keep.</p>
+          </article>
+          <article>
+            <span class="number">02</span>
+            <h3>Choose a format</h3>
+            <p>
+              Markdown for formatted editing. Plain text for any text editor.
+            </p>
+          </article>
+          <article>
+            <span class="number">03</span>
+            <h3>Save your copy</h3>
+            <p>
+              One ZIP with your transcript and metadata. Unzip, and it’s yours
+              to work with.
+            </p>
+          </article>
+        </div>
+        <p class="quiet">
+          This describes the planned release. The private prototype does not yet
+          export live ChatGPT conversations.
+        </p>
+      </section>
+      <section class="principles">
+        <div>
+          <h2>Only what helps.</h2>
+          <p>
+            One conversation at a time. No account to create, no dashboard to
+            learn, no subscription to remember.
+          </p>
+        </div>
+        <div>
+          <h3>Your device does the work</h3>
+          <p>
+            Local processing. No analytics or developer backend. The planned
+            release will contact ChatGPT to retrieve the conversation you
+            choose.
+          </p>
+          <h3>Clear about what’s included</h3>
+          <p>
+            Non-text files are not downloaded. Known omissions are marked; an
+            uncertain or incomplete conversation won’t be quietly called
+            complete.
+          </p>
+          <h3>Code you can inspect</h3>
+          <p>
+            The source will be published after security review and licence
+            confirmation. Readable code helps scrutiny; it is not a security
+            guarantee.
+          </p>
+        </div>
+      </section>
+      <section id="help" class="faq">
+        <p class="eyebrow">A little practical help</p>
+        <h2>Before you export.</h2>
+        <details>
+          <summary>How will I install it?</summary>
+          <p>
+            The Chrome Web Store will be the main installation route. Once the
+            verified release is available, this page will link directly to its
+            listing. No store listing is live yet.
+          </p>
+          <p>
+            After installation, open your saved conversation and choose Simple
+            Chat Export from the browser’s Extensions menu. Pin it there if
+            you’d like it close to hand. No onboarding tour required.
+          </p>
+        </details>
+        <details>
+          <summary>Which browsers will it support?</summary>
+          <p>
+            We’re targeting desktop Chrome on macOS, Windows and Linux. Other
+            Chromium browsers will be listed once tested. Mobile browsers are
+            outside the initial scope.
+          </p>
+        </details>
+        <details>
+          <summary>What will be in my download?</summary>
+          <p>
+            An editable Markdown or plain-text transcript and a separate
+            metadata file, together in a ZIP. Metadata records the title,
+            original conversation link, export date, selected message
+            identifiers, message count and omissions. The archive is not
+            encrypted.
+          </p>
+          <p>
+            Images, audio, video and attachment files are not downloaded. A
+            text-only export marks their places. The original conversation
+            remains unchanged.
+          </p>
+        </details>
+        <details>
+          <summary>What if an export cannot be completed?</summary>
+          <p>
+            The extension will explain the problem and avoid claiming success.
+            Wait for ChatGPT to finish replying, check your connection, and try
+            again on the branch you want. If saving was interrupted, check
+            Downloads before retrying.
+          </p>
+        </details>
+        <details>
+          <summary>Do I need to pay?</summary>
+          <p>
+            No. The coffee link is an optional way to support the project. It
+            never unlocks features or blocks an export.
+          </p>
+        </details>
+        <details>
+          <summary>How do updates work?</summary>
+          <p>
+            A store installation may update automatically through your browser.
+            A manually loaded copy updates when you replace its local files.
+            Release notes and matching source will accompany public releases.
+          </p>
+        </details>
+        <details>
+          <summary>How can I get help or report a security issue?</summary>
+          <p>
+            The support address is being set up before public release. When
+            active, it will be listed here. Please include your browser,
+            operating system, extension version and the message you saw. Never
+            send passwords, authentication tokens or private conversation files.
+          </p>
+        </details>
+      </section>
+      <section class="coffee-section">
+        <div>
+          <p class="eyebrow">Made by @taiyodayo</p>
+          <h2>Useful little things take a little care.</h2>
+          <p>
+            If this project saves you some copying and pasting, a coffee is
+            always welcome. Entirely optional, naturally.
+          </p>
+        </div>
+        <a
+          class="coffee-button"
+          href="https://buymeacoffee.com/taiyodayo"
+          target="_blank"
+          rel="noopener noreferrer"
+          referrerpolicy="no-referrer"
+          >Buy me a coffee <span aria-hidden="true">↗</span></a
+        >
+      </section>
+      <section id="privacy" class="privacy">
+        <h2>Privacy, plainly.</h2>
+        <p>
+          This is a pre-release support-page draft. The current extension
+          prototype does not retrieve live chats. Its preview uses synthetic
+          conversations. Processing runs locally, with no analytics,
+          conversation cache or developer backend.
+        </p>
+        <p>
+          The planned export will retrieve the current conversation from ChatGPT
+          using your existing session. No conversation content will be sent to
+          the developer, a payment provider or another processing service. Saved
+          files and browser download history remain until you remove them.
+          Temporary JavaScript memory cannot be guaranteed securely erased.
+        </p>
+        <p>
+          Coffee links open Buy Me a Coffee only after a deliberate click,
+          without conversation data or a referrer. That site receives normal web
+          connection information and uses its own privacy practices. This page
+          has no tracking scripts or remote fonts; hosting and security
+          providers may retain ordinary connection logs. Hosting retention must
+          be confirmed before publication.
+        </p>
+        <p>
+          If you email support once it is available, the email provider
+          processes your message and the project owner receives what you choose
+          to send. Do not include sensitive conversation content or credentials.
+        </p>
+        <p class="quiet">
+          Draft updated 7 October 2026. The final policy will describe the
+          verified retrieval method and active support contact.
+        </p>
+      </section>
+    </main>
+    <footer>
+      <span>© 2026 @taiyodayo</span><a href="#privacy">Privacy</a
+      ><span>Not affiliated with or endorsed by OpenAI.</span>
+    </footer>
+  </body>
+</html>

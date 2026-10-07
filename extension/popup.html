@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Simple Chat Export</title>
+    <link rel="stylesheet" href="popup.css" />
+    <script type="module" src="popup.js"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <span class="mark" aria-hidden="true">↧</span
+        ><span>Simple Chat Export<small>by @taiyodayo</small></span>
+      </header>
+      <p id="prototype" class="badge">Private prototype</p>
+      <h1>Your conversation.<br />A copy to keep.</h1>
+      <p class="intro">Save the chat you’re viewing, ready to keep or edit.</p>
+      <form id="export-form">
+        <fieldset id="formats">
+          <legend>File format</legend>
+          <label class="choice"
+            ><input type="radio" name="format" value="md" checked /><span
+              ><strong>Markdown</strong
+              ><small>For editing, with formatting intact</small></span
+            ><span class="suffix">.md</span></label
+          >
+          <label class="choice"
+            ><input type="radio" name="format" value="txt" /><span
+              ><strong>Plain text</strong
+              ><small>Opens in any text editor</small></span
+            ><span class="suffix">.txt</span></label
+          >
+        </fieldset>
+        <p class="file-note">
+          One ZIP with your conversation and a metadata file. Unzip it to start
+          editing.
+        </p>
+        <section id="notice" hidden aria-labelledby="notice-title">
+          <h2 id="notice-title">A text-only copy</h2>
+          <p>
+            Images, files or other non-text material won’t be included. Their
+            places will be marked in your export.
+          </p>
+        </section>
+        <button id="export" type="submit">
+          Export conversation <span aria-hidden="true">↓</span>
+        </button>
+        <button id="cancel" type="button" class="secondary" hidden>
+          Cancel
+        </button>
+      </form>
+      <section id="feedback" aria-live="polite" aria-atomic="true">
+        <h2 id="status-title" tabindex="-1"></h2>
+        <p id="status-body"></p>
+      </section>
+      <section id="success" hidden>
+        <p class="saved-note">A little less copying and pasting.</p>
+        <a
+          class="coffee"
+          href="https://buymeacoffee.com/taiyodayo"
+          target="_blank"
+          rel="noopener noreferrer"
+          referrerpolicy="no-referrer"
+          >Buy me a coffee <span aria-hidden="true">↗</span></a
+        >
+        <p class="optional">Entirely optional. Thank you either way.</p>
+        <button id="again" type="button" class="secondary">
+          Export another copy
+        </button>
+      </section>
+      <footer>
+        <p>Processed on your device. No analytics.</p>
+        <nav aria-label="Help">
+          <a href="help.html">Help &amp; privacy</a
+          ><span>Independent of OpenAI</span>
+        </nav>
+      </footer>
+    </main>
+  </body>
+</html>
