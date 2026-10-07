@@ -1,6 +1,6 @@
 # Cloudflare hosting
 
-Status: deployed and verified over HTTPS on 8 October 2026 (Japan time). Worker version: `7493a16d-a9b4-486f-abea-6a1b5b1cc087`. The original homepage and `/seatdesigner` remain intact.
+Status: deployed and verified over HTTPS on 8 October 2026 (Japan time). Worker version: `4d324e0b-50fb-4044-9f67-653aadf9acd1`. The original homepage and `/seatdesigner` remain intact.
 
 Website: `https://ongaku.co.uk/simple-chatgpt-exporter`. Privacy policy: `https://ongaku.co.uk/simple-chatgpt-exporter/privacy`. The owner authorised publishing this pre-release website separately from the extension. Keep the development notice until the extension's release gate passes.
 

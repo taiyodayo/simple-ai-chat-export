@@ -1,6 +1,6 @@
 # Privacy
 
-Applies to private prototype 0.1.0. Updated 7 October 2026.
+Applies to private prototype 0.1.0. Updated 8 October 2026.
 
 Simple ChatGPT Export is an independent project by @taiyodayo. The prototype checks the selected tab’s address after you open the extension, but does not retrieve live ChatGPT messages. The browser preview uses synthetic conversations.
 
@@ -15,5 +15,7 @@ The fixed Buy Me a Coffee link opens only when you click it. No conversation tex
 The public website is hosted by Cloudflare. It has no analytics scripts or remote fonts; automatic beacon injection is prevented for these pages. Cloudflare may process ordinary connection information and maintain hosting/security logs under its own policies. Disabling Worker observability does not eliminate provider network logs. If you choose to contact support, the email provider processes the message and the project owner receives what you send. Do not include private transcripts or credentials.
 
 Before live export is enabled, this policy must be updated to describe the observed ChatGPT retrieval method and any transient authentication handling. Conversation processing must remain local; only ChatGPT may be contacted to retrieve the current conversation.
+
+The extension does not upload your conversation data anywhere. Processing happens in-browser, and the implementation can be checked in the [source code on GitHub](https://github.com/taiyodayo/simple-chatgpt-export). The repository is currently private during security review; it will be publicly inspectable before the extension is released. Conversation data is not sold, used for advertising or used to build profiles. Our use of user data adheres to the Chrome Web Store User Data Policy, including its Limited Use requirements.
 
 Planned contact: `chat-simple-export@ongaku.co.uk` (not yet verified). Public release is blocked until contact works.
