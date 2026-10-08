@@ -19,7 +19,7 @@
 - [x] Dedicated app-publishing account registered/authenticated. The owner selected Non-trader for a personal hobby; public publisher name is @taiyo32.
 - [x] Google contact email `chat-simple-export@ongaku.co.uk` supplied and verified; submission is enabled. The private login address is not published.
 - [x] Inbound contact delivery confirmed by Google email verification through the existing domain forwarding. Existing rules and catch-all preserved.
-- [ ] Optional dedicated alias route to the authorised publishing mailbox: Cloudflare destination verification is pending. The existing contact remains reachable.
+- [x] Cloudflare destination verified and dedicated exact alias route enabled to the authorised publishing mailbox. API read-back confirmed the destination; existing rules, catch-all and DNS were preserved.
 - [x] ZIP, description, icon, screenshots and promotional tile uploaded; privacy, permission and test fields completed. Public/free distribution selected.
 - [x] Submitted on **8 October 2026 at 06:10 UTC** (**15:10 JST**) with automatic publication after approval selected. Dashboard confirms **Pending review** for item `hnolfghceldfcghkcfnfafainiiodkhl`.
 - [ ] Google approval confirmed; add the actual store installation URL to README and website.
