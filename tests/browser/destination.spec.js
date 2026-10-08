@@ -108,7 +108,8 @@ test("the folder selected in the UI receives the export and repeated saves keep 
       return { name: savedName, content: await (await file.getFile()).text() };
     });
     expect(result.content).toContain("日本語 ☕");
-    expect(result.content).toMatch(/^# Export metadata/);
+    expect(result.content.startsWith("Export metadata\n\n")).toBe(true);
+    expect(result.name.endsWith(".txt")).toBe(true);
     filenames.push(result.name);
     await page.getByRole("button", { name: "Export another copy" }).click();
     await expect(page.locator("#destination-name")).toHaveText(
