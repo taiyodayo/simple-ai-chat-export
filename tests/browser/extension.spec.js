@@ -52,7 +52,18 @@ test("the extracted package loads with its CSP and saves readable TXT and Markdo
     await expect(
       page.getByRole("link", { name: "Buy me a coffee" }),
     ).toBeHidden();
+    const runtime = await page.evaluate(() => ({
+      permissions: chrome.runtime.getManifest().permissions,
+      version: chrome.runtime.getManifest().version,
+      csp: chrome.runtime.getManifest().content_security_policy.extension_pages,
+      downloadApi: typeof chrome.downloads,
+    }));
+    expect(runtime.permissions).toEqual(["activeTab", "scripting"]);
+    expect(runtime.version).toBe("0.2.1");
+    expect(runtime.downloadApi).toBe("undefined");
+    expect(runtime.csp).toContain("connect-src 'none'");
     for (const format of ["txt", "md"]) {
+      const downloading = page.waitForEvent("download");
       const result = await page.evaluate(
         async ({ data, format }) => {
           const { validateConversation, createExport } =
@@ -63,39 +74,65 @@ test("the extracted package loads with its CSP and saves readable TXT and Markdo
             selectedNode: data.selectedNode,
           });
           const output = createExport(conversation, format);
-          const blob = new Blob([output.content], { type: output.mimeType });
-          let requestedFilename;
-          const downloads = {
-            onChanged: chrome.downloads.onChanged,
-            search: (query) => chrome.downloads.search(query),
-            cancel: (id) => chrome.downloads.cancel(id),
-            // Native OS dialogue requires manual testing; use the real save lifecycle here.
-            download: (options) => {
-              requestedFilename = options.filename;
-              return chrome.downloads.download({ ...options, saveAs: false });
-            },
-          };
-          const id = await saveFile(blob, output.filename, { downloads });
-          const [item] = await chrome.downloads.search({ id });
+          const outcome = await saveFile(
+            new Blob([output.content], { type: output.mimeType }),
+            output.filename,
+          );
           return {
-            state: item.state,
-            filename: item.filename,
-            requestedFilename,
+            outcome,
             expected: output.content,
+            filename: output.filename,
           };
         },
         { data: fixture(), format },
       );
-      expect(result.state).toBe("complete");
-      // Playwright stores downloads under temporary UUIDs, independent of the
-      // filename supplied to Chrome for the user's save dialogue.
-      expect(result.requestedFilename).toMatch(new RegExp(`\\.${format}$`));
-      const content = await readFile(result.filename, "utf8");
+      const download = await downloading;
+      expect(result.outcome).toEqual({
+        status: "download-started",
+        filename: result.filename,
+      });
+      expect(download.suggestedFilename()).toBe(result.filename);
+      expect(await download.failure()).toBeNull();
+      const content = await readFile(await download.path(), "utf8");
       expect(content).toEqual(result.expected);
       expect(content).toContain("日本語 ☕");
       expect(content).toMatch(/^#? ?Export metadata/);
-      await rm(result.filename, { force: true });
+      await download.delete();
     }
+    // Exercise the shipped mounted UI with synthetic retrieval only. Replace
+    // the form to remove its earlier wrong-page listener before mounting it.
+    await page.evaluate(async (data) => {
+      const { mount } = await import("./popup.js");
+      const { saveFile } = await import("./save.js");
+      const form = document.getElementById("export-form");
+      form.replaceWith(form.cloneNode(true));
+      mount({
+        retrieve: async () => ({
+          data,
+          identity: { id: data.id, selectedNode: data.selectedNode },
+        }),
+        confirmUnchanged: async () => {},
+        save: saveFile,
+      });
+    }, fixture());
+    const uiDownload = page.waitForEvent("download");
+    await page.getByRole("button", { name: /Export conversation/ }).click();
+    await expect(
+      page.getByRole("heading", { name: "Download started" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Export saved." }),
+    ).toHaveCount(0);
+    await expect(page.locator("#status-body")).toContainText(
+      "Open Chrome’s Downloads",
+    );
+    await expect(page.locator("#status-body")).toContainText(
+      "Completion isn’t confirmed here",
+    );
+    await expect(
+      page.getByRole("link", { name: "Buy me a coffee" }),
+    ).toBeVisible();
+    await (await uiDownload).delete();
     expect(errors).toEqual([]);
     await page.getByRole("link", { name: "Help & privacy" }).click();
     await expect(

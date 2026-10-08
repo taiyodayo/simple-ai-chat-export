@@ -45,3 +45,51 @@ for (const [message, code] of [
       globalThis.chrome = previous;
     }
   });
+
+test("cancelling an unresolved injected reader releases the caller", async () => {
+  const previous = globalThis.chrome;
+  const controller = new AbortController();
+  let resolveInjection;
+  try {
+    globalThis.chrome = {
+      scripting: {
+        executeScript: () =>
+          new Promise((resolve) => {
+            resolveInjection = resolve;
+          }),
+      },
+    };
+    const reading = retrieveCurrentConversation(tab, {
+      signal: controller.signal,
+    });
+    controller.abort();
+    await assert.rejects(reading, { code: "cancelled" });
+    // A late page result must not become a conversation or continue to saving.
+    resolveInjection([{ result: { error: "unsupported" } }]);
+  } finally {
+    globalThis.chrome = previous;
+  }
+});
+
+test("an unresolved injected reader has a bounded deadline", async () => {
+  const previous = globalThis.chrome;
+  let rejectInjection;
+  try {
+    globalThis.chrome = {
+      scripting: {
+        executeScript: () =>
+          new Promise((_, reject) => {
+            rejectInjection = reject;
+          }),
+      },
+    };
+    await assert.rejects(retrieveCurrentConversation(tab, { timeout: 5 }), {
+      code: "read-timeout",
+    });
+    // The race has a rejection handler for an operation settling after timeout.
+    rejectInjection(new Error("private late browser error"));
+    await new Promise((resolve) => setImmediate(resolve));
+  } finally {
+    globalThis.chrome = previous;
+  }
+});

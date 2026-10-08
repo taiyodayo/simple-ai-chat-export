@@ -60,7 +60,9 @@ async function customPicker(page, cancelled = false) {
       confirmUnchanged: async () => {},
       save: async (blob, name, options) => {
         window.destinationTest.saves++;
-        window.destinationTest.savedName = await saveFile(blob, name, options);
+        const outcome = await saveFile(blob, name, options);
+        window.destinationTest.savedName = outcome.filename;
+        return outcome;
       },
     });
   }, cancelled);
@@ -142,3 +144,131 @@ test("a long folder name stays within a narrow window and supports keyboard sele
   ).toBe(true);
   await expect(page.locator("#choose-directory")).toBeFocused();
 });
+
+test("two same-origin windows serialize real folder saves before probing names", async ({
+  context,
+  page,
+}) => {
+  const second = await context.newPage();
+  const folderName = `concurrent-${Date.now()}`;
+  for (const window of [page, second]) {
+    await window.goto("/extension/popup.html");
+    await window.evaluate(async (name) => {
+      const root = await navigator.storage.getDirectory();
+      window.sharedDirectory = await root.getDirectoryHandle(name, {
+        create: true,
+      });
+    }, folderName);
+  }
+  try {
+    // Hold the actual origin-wide Web Lock so both callers are queued together.
+    await page.evaluate(async () => {
+      let acquired;
+      const entered = new Promise((resolve) => {
+        acquired = resolve;
+      });
+      window.holder = navigator.locks.request(
+        "simple-ai-chat-export-custom-save",
+        async () => {
+          acquired();
+          await new Promise((resolve) => {
+            window.releaseSaveLock = resolve;
+          });
+        },
+      );
+      await entered;
+    });
+    for (const [index, window] of [page, second].entries()) {
+      await window.evaluate(async (index) => {
+        const { saveFile } = await import("/extension/save.js");
+        window.pendingSave = saveFile(
+          new Blob([`Window ${index + 1} 日本語 ☕`]),
+          "Human title.md",
+          { directoryHandle: window.sharedDirectory },
+        );
+      }, index);
+    }
+    await page.evaluate(() => window.releaseSaveLock());
+    const results = await Promise.all(
+      [page, second].map((window) => window.evaluate(() => window.pendingSave)),
+    );
+    expect(new Set(results.map((result) => result.filename))).toEqual(
+      new Set(["Human title.md", "Human title (1).md"]),
+    );
+    for (const [index, result] of results.entries()) {
+      expect(result.status).toBe("saved");
+      const content = await page.evaluate(async (name) => {
+        const handle = await window.sharedDirectory.getFileHandle(name);
+        return (await handle.getFile()).text();
+      }, result.filename);
+      expect(content).toBe(`Window ${index + 1} 日本語 ☕`);
+    }
+  } finally {
+    await page.evaluate(async (name) => {
+      window.releaseSaveLock?.();
+      await window.holder;
+      const root = await navigator.storage.getDirectory();
+      await root.removeEntry(name, { recursive: true });
+    }, folderName);
+    await second.close();
+  }
+});
+
+for (const mode of ["cancelled", "save-timeout"])
+  test(`a ${mode} window queued behind a real Web Lock never touches its folder`, async ({
+    context,
+    page,
+  }) => {
+    const second = await context.newPage();
+    await page.goto("/extension/popup.html");
+    await second.goto("/extension/popup.html");
+    try {
+      await page.evaluate(async () => {
+        let acquired;
+        const entered = new Promise((resolve) => {
+          acquired = resolve;
+        });
+        window.holder = navigator.locks.request(
+          "simple-ai-chat-export-custom-save",
+          async () => {
+            acquired();
+            await new Promise((resolve) => {
+              window.releaseSaveLock = resolve;
+            });
+          },
+        );
+        await entered;
+      });
+      const result = await second.evaluate(async (mode) => {
+        const { saveFile } = await import("/extension/save.js");
+        const controller = new AbortController();
+        window.folderCalls = 0;
+        const pending = saveFile(new Blob(["Should never write"]), "Chat.md", {
+          directoryHandle: {
+            getFileHandle() {
+              window.folderCalls++;
+              throw new Error("Unexpected folder access");
+            },
+          },
+          signal: controller.signal,
+          timeout: mode === "save-timeout" ? 20 : 1000,
+        });
+        if (mode === "cancelled") controller.abort();
+        try {
+          await pending;
+          return "unexpected-success";
+        } catch (error) {
+          return error.code;
+        }
+      }, mode);
+      expect(result).toBe(mode);
+      await page.evaluate(async () => {
+        window.releaseSaveLock();
+        await window.holder;
+      });
+      expect(await second.evaluate(() => window.folderCalls)).toBe(0);
+    } finally {
+      await page.evaluate(() => window.releaseSaveLock?.());
+      await second.close();
+    }
+  });

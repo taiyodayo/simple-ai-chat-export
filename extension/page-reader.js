@@ -56,6 +56,7 @@ export async function readConversationPage(expectedUrl, reports = []) {
     scroller ??= document.scrollingElement;
     originalTop = scroller.scrollTop;
     const safeLink = (value) => {
+      if (typeof value !== "string" || value.length > 10000) return null;
       try {
         const url = new URL(value);
         return /^(http|https):$/.test(url.protocol) &&
@@ -67,8 +68,31 @@ export async function readConversationPage(expectedUrl, reports = []) {
         return null;
       }
     };
-    function markdown(node) {
-      if (node.nodeType === Node.TEXT_NODE) return node.textContent;
+    let textSize = 0,
+      treeSize = 0;
+    function boundedText(text) {
+      textSize += text.length;
+      if (textSize > 20_000_000) fail("too-large");
+      return text;
+    }
+    function checkTree(node) {
+      const walker = document.createTreeWalker(node, NodeFilter.SHOW_ALL);
+      do {
+        if (++treeSize > 100000) fail("too-large");
+      } while (walker.nextNode());
+    }
+    function codeFence(text, minimum) {
+      let width = minimum;
+      for (const match of text.matchAll(/`+/g))
+        width = Math.max(width, match[0].length + 1);
+      // Bound generated fences as well as the input, before allocating them.
+      if (text.length + width * 2 > 20_000_000) fail("too-large");
+      return "`".repeat(width);
+    }
+    function markdown(node, depth = 0) {
+      if (depth > 100) fail("too-large");
+      if (node.nodeType === Node.TEXT_NODE)
+        return boundedText(node.textContent);
       if (node.nodeType !== Node.ELEMENT_NODE) return "";
       const tag = node.tagName;
       if (
@@ -86,10 +110,8 @@ export async function readConversationPage(expectedUrl, reports = []) {
         node.getAttribute("data-markdown-copy") === "code-block"
       ) {
         const code = node.querySelector("code") ?? node;
-        const text = code.textContent;
-        const fence = "`".repeat(
-          Math.max(3, ...[...text.matchAll(/`+/g)].map((m) => m[0].length + 1)),
-        );
+        const text = boundedText(code.textContent);
+        const fence = codeFence(text, 3);
         return (
           "\n\n" +
           fence +
@@ -104,23 +126,25 @@ export async function readConversationPage(expectedUrl, reports = []) {
         tag === "CODE" ||
         node.getAttribute("data-markdown-copy") === "inline-code"
       ) {
-        const text = node.textContent;
-        const fence = "`".repeat(
-          Math.max(1, ...[...text.matchAll(/`+/g)].map((m) => m[0].length + 1)),
-        );
+        const text = boundedText(node.textContent);
+        const fence = codeFence(text, 1);
         return fence + " " + text + " " + fence;
       }
       if (tag === "TABLE") {
         const rows = [...node.querySelectorAll("tr")].map((row) =>
           [...row.querySelectorAll("th,td")].map((cell) =>
-            markdownChildren(cell)
+            markdownChildren(cell, depth + 1)
               .trim()
               .replace(/\|/g, "\\|")
               .replace(/\n/g, " "),
           ),
         );
         if (!rows.length) return "";
-        const width = Math.max(...rows.map((r) => r.length));
+        const width = rows.reduce(
+          (maximum, row) => Math.max(maximum, row.length),
+          0,
+        );
+        if (rows.length * width > 100000) fail("too-large");
         const line = (r) =>
           "| " +
           Array.from({ length: width }, (_, i) => r[i] ?? "").join(" | ") +
@@ -135,7 +159,7 @@ export async function readConversationPage(expectedUrl, reports = []) {
           "\n\n"
         );
       }
-      const text = markdownChildren(node);
+      const text = markdownChildren(node, depth);
       if (tag === "A") {
         const url = safeLink(node.href);
         return url ? text + " (" + url + ")" : text;
@@ -164,20 +188,22 @@ export async function readConversationPage(expectedUrl, reports = []) {
       }
       return text;
     }
-    function markdownChildren(node) {
+    function markdownChildren(node, depth = 0) {
       // Merge separators only at HTML-node boundaries. Never normalise the
       // interior of a code block or a user message.
-      return [...node.childNodes].map(markdown).reduce((text, next) => {
-        const trailing = /\n+$/.exec(text)?.[0].length ?? 0;
-        const leading = /^\n+/.exec(next)?.[0].length ?? 0;
-        if (trailing && leading)
-          return (
-            text.slice(0, -trailing) +
-            "\n".repeat(Math.min(2, trailing + leading)) +
-            next.slice(leading)
-          );
-        return text + next;
-      }, "");
+      return [...node.childNodes]
+        .map((child) => markdown(child, depth + 1))
+        .reduce((text, next) => {
+          const trailing = /\n+$/.exec(text)?.[0].length ?? 0;
+          const leading = /^\n+/.exec(next)?.[0].length ?? 0;
+          if (trailing && leading)
+            return (
+              text.slice(0, -trailing) +
+              "\n".repeat(Math.min(2, trailing + leading)) +
+              next.slice(leading)
+            );
+          return text + next;
+        }, "");
     }
     const contentParts = (e, content, text) => {
       if (!text.trim()) fail("unsupported");
@@ -195,9 +221,16 @@ export async function readConversationPage(expectedUrl, reports = []) {
         .flatMap((node) => [...node.querySelectorAll("a[href]")])
         .map((a) => ({ title: a.textContent.trim(), url: safeLink(a.href) }))
         .filter((source) => source.url);
+      if (sources.length > 1000) fail("too-large");
+      for (const source of sources) {
+        if (source.title.length > 2000) fail("too-large");
+        boundedText(source.title + source.url);
+      }
       return { parts, sources };
     };
     const snapshot = async () => {
+      textSize = 0;
+      treeSize = 0;
       if (canonical() !== expectedUrl) fail("changed");
       if (
         [
@@ -208,8 +241,11 @@ export async function readConversationPage(expectedUrl, reports = []) {
       )
         fail("generating");
       const occurrences = new Map();
+      const selected = elements();
+      if (selected.length > 10000) fail("too-large");
+      for (const element of selected) checkTree(element);
       const messages = await Promise.all(
-        elements().map(async (e) => {
+        selected.map(async (e) => {
           if (external) {
             const claude = provider === "claude.ai";
             const role = (
@@ -252,7 +288,9 @@ export async function readConversationPage(expectedUrl, reports = []) {
               fail("generating");
             const text = roots
               .map((node) =>
-                role === "user" ? node.innerText : markdown(node).trim(),
+                role === "user"
+                  ? boundedText(node.innerText)
+                  : markdown(node).trim(),
               )
               .join("\n\n");
             const body = contentParts(e, roots, text);
@@ -375,7 +413,9 @@ export async function readConversationPage(expectedUrl, reports = []) {
                 );
           if (!content) fail("unsupported");
           const text =
-            role === "user" ? content.innerText : markdown(content).trim();
+            role === "user"
+              ? boundedText(content.innerText)
+              : markdown(content).trim();
           const { parts, sources } = contentParts(e, [content], text);
           return {
             id,
@@ -396,11 +436,11 @@ export async function readConversationPage(expectedUrl, reports = []) {
     let previous = initial;
     // Require retained, overlapping messages; never quietly lose virtualised history.
     const retains = (before, after) => {
-      const ids = after.map((m) => m.id);
+      const indices = new Map(after.map((m, index) => [m.id, index]));
       let index = -1;
       for (const m of before) {
-        const next = ids.indexOf(m.id);
-        if (next <= index) fail("incomplete");
+        const next = indices.get(m.id);
+        if (next === undefined || next <= index) fail("incomplete");
         if (JSON.stringify(m) !== JSON.stringify(after[next])) fail("changed");
         index = next;
       }

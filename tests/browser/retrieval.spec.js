@@ -132,7 +132,6 @@ for (const provider of ["ChatGPT", "Claude", "Gemini"])
             await import("./retrieval.js");
           const { validateConversation, createExport } =
             await import("./core.js");
-          const { saveFile } = await import("./save.js");
           const [tab] = await chrome.tabs.query({ url: `${origin}/*` });
           const { data, identity } = await retrieveCurrentConversation(tab);
           await confirmConversationUnchanged(tab.id, identity);
@@ -142,22 +141,9 @@ for (const provider of ["ChatGPT", "Claude", "Gemini"])
             const result = createExport(conversation, format);
             if (result.metadata.provider !== provider)
               throw new Error("Incorrect speaker");
-            const downloads = {
-              onChanged: chrome.downloads.onChanged,
-              search: (q) => chrome.downloads.search(q),
-              cancel: (id) => chrome.downloads.cancel(id),
-              download: (o) =>
-                chrome.downloads.download({ ...o, saveAs: false }),
-            };
-            const id = await saveFile(
-              new Blob([result.content], { type: result.mimeType }),
-              result.filename,
-              { downloads },
-            );
-            const [item] = await chrome.downloads.search({ id });
             files.push({
-              path: item.filename,
-              state: item.state,
+              filename: result.filename,
+              mimeType: result.mimeType,
               expected: result.content,
             });
           }
@@ -166,10 +152,23 @@ for (const provider of ["ChatGPT", "Claude", "Gemini"])
         { origin, provider },
       );
       for (const file of output) {
-        expect(file.state).toBe("complete");
-        expect(await readFile(file.path, "utf8")).toBe(file.expected);
+        const [download, outcome] = await Promise.all([
+          popup.waitForEvent("download"),
+          popup.evaluate(async (file) => {
+            const { saveFile } = await import("./save.js");
+            return saveFile(
+              new Blob([file.expected], { type: file.mimeType }),
+              file.filename,
+            );
+          }, file),
+        ]);
+        expect(outcome.status).toBe("download-started");
+        expect(await download.failure()).toBeNull();
+        expect(await readFile(await download.path(), "utf8")).toBe(
+          file.expected,
+        );
         expect(file.expected).toContain("日本語 ☕");
-        await rm(file.path, { force: true });
+        await download.delete();
       }
     } finally {
       await context?.close();

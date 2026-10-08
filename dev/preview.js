@@ -43,8 +43,12 @@ mount({
   confirmUnchanged: async () => {
     if (scenario === "changed") throw new ExportError("changed");
   },
-  save: async () => {
+  save: async (_blob, filename, { directoryHandle }) => {
     if (scenario === "save-interrupted")
       throw new ExportError("save-interrupted");
+    return {
+      status: directoryHandle ? "saved" : "download-started",
+      filename,
+    };
   },
 });

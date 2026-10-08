@@ -1,13 +1,13 @@
-# Chrome Web Store submission — 0.2.0
+# Chrome Web Store submission — 0.2.1
 
-The owner authorised production release and store publication. The app is a production release; Google review and store availability are separate statuses. Google accepted the upload and created item `hnolfghceldfcghkcfnfafainiiodkhl`. Its status is **Pending review**, submitted on 8 October 2026 at 06:10 UTC with automatic publication after approval selected. No approved store install URL is live yet.
+Replacement version **0.2.1** is prepared for existing item `hnolfghceldfcghkcfnfafainiiodkhl` after the 0.2.0 Purple Potassium rejection. The replacement removes `downloads` entirely. The owner operates the store dashboard and resubmission. No approved install URL is live yet.
 
 ## Listing fields
 
 | Field                | Value                                                                                                                |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | Name                 | Simple AI-Chat export for ChatGPT, Claude, Gemini                                                                    |
-| Version              | 0.2.0                                                                                                                |
+| Version              | 0.2.1                                                                                                                |
 | Short description    | Save the displayed ChatGPT, Claude or Gemini conversation as plain text or Markdown. Local processing. No analytics. |
 | Detailed description | Paste [store/description.txt](../store/description.txt).                                                             |
 | Language             | English (United Kingdom), if that locale is offered; otherwise English.                                              |
@@ -38,9 +38,9 @@ Temporary access to the tab where the user clicks the extension. The exporter va
 
 Inject the packaged DOM reader into the selected tab to read the displayed conversation and check its stability. The script briefly scrolls and restores the page position. A second read detects changes before saving. Scripts are included in the ZIP; no code is downloaded.
 
-**downloads**
+**No downloads permission**
 
-Create the user's requested local export in Chrome's download destination and confirm whether that specific download completed, was cancelled or was interrupted. The extension queries only downloads it starts; it does not enumerate the user's download history. Custom-folder writes use a user-selected File System Access directory handle instead.
+The manifest no longer requests downloads. Standard exports use a local Blob and normal browser download link; Chrome manages its Downloads list. The UI reports Download started without claiming completion. Selected folders use the native File System Access picker and confirm only after writer close. Remove the old downloads justification from the dashboard if it remains after upload.
 
 **Optional host permission: https://_.web-sandbox.oaiusercontent.com/_**
 
@@ -66,7 +66,7 @@ Certify the three Limited Use declarations: data is not sold/transferred to thir
 
 ## Reviewer test instructions
 
-Google’s Additional instructions field currently allows 500 characters. Paste [store/reviewer-instructions.txt](../store/reviewer-instructions.txt) (490 characters); leave username and password blank. The full scenarios below are linked from that text.
+Google’s Additional instructions field currently allows 500 characters. Paste [store/reviewer-instructions.txt](../store/reviewer-instructions.txt) (under 500 characters); leave username and password blank. The full scenarios below are linked from that text.
 
 ### Full test scenarios
 
@@ -82,7 +82,7 @@ Google’s Additional instructions field currently allows 500 characters. Paste 
 
 ## Upload files
 
-- ZIP: `dist/simple-ai-chat-export-0.2.0.zip` (manifest at ZIP root, full LICENSE included).
+- ZIP: `dist/simple-ai-chat-export-0.2.1.zip` (manifest at ZIP root, full LICENSE included).
 - Store icon: `store/assets/icon-128.png` (128 × 128 PNG, transparent outer padding).
 - Screenshots: `store/assets/01-export.png` and `02-saved.png` (1280 × 800 PNG).
 - Required small promotional tile: `store/assets/promo-440x280.png`.

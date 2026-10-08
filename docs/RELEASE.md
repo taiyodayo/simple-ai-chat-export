@@ -1,5 +1,11 @@
 # Production release and Chrome Web Store publication
 
+## Replacement release 0.2.1
+
+Version 0.2.0 was rejected with Purple Potassium for requesting downloads. Version 0.2.1 removes that permission/API and uses normal local Blob downloads; the owner will upload and resubmit the existing item. Standard downloads are labelled Download started; only custom-folder writer close confirms Export saved. The local-processing data declarations remain Personal communications, Web history and Website content, with all three Limited Use certifications.
+
+The update also serializes same-origin custom-folder saves, bounds extraction waits/cancellation and hardens adversarial rendered input. See SECURITY.md and the independent audit record. Store approval and an install URL are still pending. The earlier submission record below is historical.
+
 **Version: 0.2.0.** The owner authorised production status, public source for security inspection, MIT + Commons Clause v1.0 and Chrome Web Store publication. Store status: **Pending review; automatic publication after approval selected**. Item ID: `hnolfghceldfcghkcfnfafainiiodkhl`. Google review/publication is not yet completed; no approved store install URL is live.
 
 ## Release preparation
