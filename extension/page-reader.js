@@ -82,9 +82,12 @@ export async function readConversationPage(expectedUrl, reports = []) {
       } while (walker.nextNode());
     }
     function codeFence(text, minimum) {
-      let width = minimum;
-      for (const match of text.matchAll(/`+/g))
-        width = Math.max(width, match[0].length + 1);
+      let width = minimum,
+        run = 0;
+      for (const character of text) {
+        run = character === "`" ? run + 1 : 0;
+        width = Math.max(width, run + 1);
+      }
       // Bound generated fences as well as the input, before allocating them.
       if (text.length + width * 2 > 20_000_000) fail("too-large");
       return "`".repeat(width);
@@ -132,12 +135,16 @@ export async function readConversationPage(expectedUrl, reports = []) {
       }
       if (tag === "TABLE") {
         const rows = [...node.querySelectorAll("tr")].map((row) =>
-          [...row.querySelectorAll("th,td")].map((cell) =>
-            markdownChildren(cell, depth + 1)
+          [...row.querySelectorAll("th,td")].map((cell) => {
+            const text = boundedText(cell.innerText)
               .trim()
-              .replace(/\|/g, "\\|")
-              .replace(/\n/g, " "),
-          ),
+              .replaceAll("\n", " ");
+            if (!text) return "";
+            const fence = codeFence(text, 1);
+            // GFM consumes one escape before each table pipe. Code spans keep
+            // backslashes literal; escaping those would change the cell value.
+            return `${fence} ${text.replaceAll("|", "\\|")} ${fence}`;
+          }),
         );
         if (!rows.length) return "";
         const width = rows.reduce(

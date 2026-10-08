@@ -61,3 +61,29 @@ test("a ragged table cannot allocate an excessive rectangular Markdown result", 
     "too-large",
   );
 });
+
+test("table cells fence literal backslashes, pipes, backticks and HTML-like text", async ({
+  page,
+}) => {
+  await conversation(
+    page,
+    '<table><tr><th>Literal</th><th>Code</th></tr><tr><td></td><td><code></code></td></tr></table><a href="https://example.org/source">Source</a>',
+  );
+  await page
+    .locator("td")
+    .nth(0)
+    .evaluate((element) => {
+      element.textContent = "a \\| b 日本語";
+    });
+  await page.locator("td code").evaluate((element) => {
+    element.textContent = "`C:\\Users|<img>`";
+  });
+  const result = await page.evaluate(readConversationPage, chatUrl);
+  expect(result.error).toBeUndefined();
+  const text = result.messages[1].parts[0].text;
+  expect(text).toContain(
+    "| ` a \\\\| b 日本語 ` | `` `C:\\Users\\|<img>` `` |",
+  );
+  expect(result.messages[1].sources[0].url).toBe("https://example.org/source");
+  expect(await page.locator("img").count()).toBe(0);
+});

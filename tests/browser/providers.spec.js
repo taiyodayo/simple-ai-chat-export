@@ -39,7 +39,7 @@ for (const provider of ["Claude", "Gemini"]) {
     expect(text).toContain("日本語 ☕");
     expect(text).toContain("**bold** *emphasis*");
     expect(text).toContain("  first\n\n\n  second");
-    expect(text).toContain("| Tea | 2 |");
+    expect(text).toContain("| ` Tea ` | ` 2 ` |");
     expect(text).not.toContain("DO NOT EXPORT");
     expect(result.messages[1].sources[0].url).toBe(
       "https://example.org/source",
