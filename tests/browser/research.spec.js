@@ -106,7 +106,7 @@ test("a research permission refusal never saves, and a later approval retries fr
       confirmUnchanged: async () => {},
       save: async () => {
         window.researchTest.saves++;
-        return { status: "saved", filename: "synthetic.md" };
+        return { status: "download-started", filename: "synthetic.txt" };
       },
       requestResearchPermission: () => {
         window.researchTest.requests++;
@@ -135,7 +135,7 @@ test("a research permission refusal never saves, and a later approval retries fr
     .getByRole("button", { name: "Allow Deep Research and export" })
     .click();
   await expect(
-    page.getByRole("heading", { name: "Export saved." }),
+    page.getByRole("heading", { name: "Download started" }),
   ).toBeVisible();
   expect(await page.evaluate(() => window.researchTest)).toMatchObject({
     requests: 2,
