@@ -65,7 +65,7 @@ const manifest = JSON.parse(
 );
 if (
   JSON.stringify(manifest.permissions) !==
-    JSON.stringify(["activeTab", "downloads"]) ||
+    JSON.stringify(["activeTab", "scripting", "downloads"]) ||
   manifest.host_permissions ||
   manifest.content_scripts ||
   manifest.web_accessible_resources

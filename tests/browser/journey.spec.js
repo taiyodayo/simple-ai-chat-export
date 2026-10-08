@@ -42,19 +42,18 @@ test("welcoming first use, format choice, success and a deliberate coffee click"
   await support.waitForLoadState();
   expect(await support.evaluate(() => window.opener)).toBeNull();
 });
-test("known omissions require a second explicit text-only action", async ({
+test("one export click downloads text with omissions without a second confirmation", async ({
   page,
 }) => {
   await page.getByLabel("Preview scenario").selectOption("omission");
   await page.getByRole("button", { name: /Export conversation/ }).click();
   await expect(
-    page.getByRole("heading", { name: "A text-only copy" }),
+    page.getByRole("heading", { name: "Export saved." }),
   ).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: "Buy me a coffee" }),
-  ).toBeHidden();
-  await page.getByRole("button", { name: /Export text only/ }).click();
   await expect(page.getByText("2 messages · text-only copy.")).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Export text only/ }),
+  ).toHaveCount(0);
 });
 for (const [scenario, heading] of [
   ["incomplete", "We couldn’t confirm the whole conversation"],

@@ -14,7 +14,7 @@
         <span class="mark" aria-hidden="true">↧</span
         ><span>Simple ChatGPT Export<small>by @taiyodayo</small></span>
       </header>
-      <p id="prototype" class="badge">Private prototype</p>
+      <p id="prototype" class="badge">Development build</p>
       <h1>Save this chatGPT conversation.</h1>
       <p class="intro">
         OpenAI won't let you directly save a conversation, now you can.<br />
@@ -37,15 +37,9 @@
           >
         </fieldset>
         <p class="file-note">
-          One file, ready to edit. Metadata is included at the beginning.
+          Saves rendered messages from this chat. Earlier unloaded history
+          cannot be verified. Metadata is included at the beginning.
         </p>
-        <section id="notice" hidden aria-labelledby="notice-title">
-          <h2 id="notice-title">A text-only copy</h2>
-          <p>
-            Images, files or other non-text material won’t be included. Their
-            places will be marked in your export.
-          </p>
-        </section>
         <button id="export" type="submit">
           Export conversation <span aria-hidden="true">↓</span>
         </button>
@@ -58,7 +52,9 @@
         <p id="status-body"></p>
       </section>
       <section id="success" hidden>
-        <p class="saved-note">A little less copying and pasting.</p>
+        <p class="saved-note">
+          ChatGPT’s layout keeps changing. A little caffeine helps me keep up.
+        </p>
         <a
           class="coffee"
           href="https://buymeacoffee.com/taiyodayo"

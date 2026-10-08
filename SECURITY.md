@@ -2,7 +2,7 @@
 
 ## Current status
 
-Private prototype 0.1.0. Live retrieval is disabled. No external security audit has been completed. Passing tests of synthetic conversations does not establish that ChatGPT retrieval works, that every browser behaves identically, or that the extension is universally safe.
+Private prototype 0.1.0. Rendered-page extraction is implemented; server-side history completeness is not established. No external security audit has been completed. Passing tests of synthetic conversations does not establish that ChatGPT retrieval works, that every browser behaves identically, or that the extension is universally safe.
 
 ## Threat model
 

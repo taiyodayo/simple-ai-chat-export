@@ -22,7 +22,7 @@ All export processing happens on the user's device. Never send conversation cont
 
 ## V1 scope
 
-- Export the currently open, saved ChatGPT conversation only.
+- Export the currently open ChatGPT conversation only, whether signed in or using a guest session. Signing in must not be an export requirement.
 - Offer UTF-8 TXT and Markdown.
 - Put metadata at the beginning of the output file. Do not ZIP conversation exports or create companion metadata files.
 - Preserve speaker labels, paragraphs, Unicode, code indentation, readable tables, and source links where available.

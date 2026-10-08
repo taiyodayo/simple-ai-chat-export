@@ -1,31 +1,15 @@
-# Retrieval decision gate
+# Retrieval implementation
 
-Status: **not passed**. The owner requested a prototype before providing a manually signed-in test profile. This supersedes the original timing of Phase 1, not its evidence requirement.
+The extension reads the current ChatGPT page in an isolated script after a toolbar click. It supports the observed guest message attributes and the signed-in message attributes, without private API requests or authentication-token access. `activeTab` plus `scripting` grants temporary access to the clicked tab.
 
-No private ChatGPT endpoint, DOM selector, raw token path or assumed `current_node` has been implemented. `extension/retrieval.js` validates the route and returns `verification-pending`. The schema in `core.js` is an internal contract tested with synthetic fixtures, not an assertion about ChatGPT's server format. There is no production fallback strategy.
+It scrolls to the start and end, waits for stable message snapshots, and requires every previously observed message to remain present in order. Virtualised content that disappears, changing replies, navigation, loading indicators, missing IDs, and unknown message shapes stop export. The original scroll position is restored. The transcript is read twice before saving to catch changes, without requiring a second user action. Omissions are marked in the output; export downloads directly with `saveAs: false`.
 
-## Required live evidence
+This establishes a stable rendered transcript, not a server-side history proof. Export metadata identifies the rendered scope and does not assert full-history completeness. Citation labels are preserved; only source URLs actually present in message content are included. Attachments are marked as omissions. Long or virtualised layouts that cannot retain a stable transcript fail explicitly. Signed-in live verification remains required before release.
 
-1. Open a long synthetic conversation and observe retrieval as earlier messages load. Record request shapes and pagination behaviour without retaining credentials or private content.
-2. Identify the saved conversation and the branch actually displayed. Change an edited prompt and a regenerated answer independently. Prove that the selected leaf tracks the visible choice, not just a server default.
-3. Demonstrate full data retrieval including any continuation pages. Establish the root and leaf, unbroken parent chain, stable state, no missing links and resolved pagination.
-4. Observe in-progress generation, same-conversation branch changes, navigation, sign-out, permission loss, missing/overlapping chunks and interruption. A changed snapshot must be rejected before saving.
-5. Decide the single supported extraction strategy and document required permissions, authentication, redirect restrictions, bounds and cancellation. If safe complete retrieval is unavailable, leave export blocked.
-6. Implement the adapter only after the decision is documented. Revalidate branch and navigation after retrieval and again after an omission-confirmation pause.
+Guest DOM evidence: the owner supplied six messages at `/uc/<UUID>`. Messages use `data-message-role`, user text uses `data-user-message-copy`, assistant content uses `data-assistant-markdown`, and completed answers have `data-message-complete`. Ads may be inside the message container but outside its content; only message content is converted. Boot-time JSON may contain no rows even when the page contains messages, so it is not used as a history source.
 
-Never ask the owner to paste a token. Avoid raw token handling. If unavoidable, document the transient path and review it before implementation. Do not save response dumps in the repository.
+## Current history renderer — 8 October 2026
 
-## Save decision
+Live inspection of the owner-provided history chat established a third message layout: `data-chatgpt-search-message-ids` identifies visible message units, `data-user-message-bubble` contains user text, and `data-chatgpt-selection-message-id` identifies the displayed assistant answer. Search units may reference several internal message IDs; the exporter uses the selected answer ID and its `data-markdown-text-style` content, not every referenced internal record. Conversation identity and complete turn state are checked.
 
-A browser anchor download does not provide reliable completion/cancellation confirmation. The File System Access API would require supported picker behaviour and a second action after asynchronous retrieval, and does not provide the same portability across target Chromium browsers. Use `downloads`, with `saveAs: true`, and observe only the returned download ID. Confirm only `complete`; treat `interrupted`, rejected saves and timeouts as non-success. An event-driven service worker opens a small window so a toolbar popup closing does not discard the job. Closing the window aborts unfinished work; a file that already completed may remain.
-
-One UTF-8 TXT or Markdown file contains a metadata header followed by the transcript. Metadata uses escaped JSON, inside a fenced code block for Markdown, so titles cannot inject additional header structure. No ZIP or separate metadata download. ZIP creation is development-only tooling for the Chrome Web Store installation package.
-
-## Current references checked 7 October 2026
-
-- [Chrome activeTab](https://developer.chrome.com/docs/extensions/develop/concepts/activeTab)
-- [Chrome downloads](https://developer.chrome.com/docs/extensions/reference/api/downloads)
-- [Playwright extensions](https://playwright.dev/docs/chrome-extensions)
-- [Chrome Web Store policies](https://developer.chrome.com/docs/webstore/program-policies/policies)
-
-These document browser capabilities, not ChatGPT's private interfaces. The release must be checked against then-current store policy.
+The scrolling container uses `column-reverse` and negative scroll offsets. Both ends are now checked with that geometry, and the original position is restored. Code blocks use `data-markdown-copy="code-block"` with a CODE element rather than PRE; controls marked `exclude` are removed. Tests use hand-written synthetic markup only. Live inspection recognised eight messages without retaining or logging their text.

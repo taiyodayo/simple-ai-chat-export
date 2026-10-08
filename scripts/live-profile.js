@@ -25,6 +25,6 @@ const closed = new Promise((resolve) => context.on("close", resolve));
 const page = context.pages()[0] ?? (await context.newPage());
 await page.goto("https://chatgpt.com");
 console.log(
-  "Dedicated test browser opened. Sign in manually. Use synthetic conversations; do not share tokens. Close this browser when finished.",
+  "Dedicated test browser opened. Guest chats need no sign-in. For signed-in testing, sign in manually. Use synthetic conversations; do not share tokens. Leave the browser open for inspection.",
 );
 await closed;

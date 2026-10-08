@@ -12,13 +12,15 @@
       <a href="#" id="back">Back to export</a>
       <h1>A copy, without the fuss.</h1>
       <p>
-        <strong>Private prototype.</strong> Live ChatGPT export is awaiting
-        verification. This version will not read or export your real
-        conversations.
+        Save the conversation displayed in your ChatGPT tab. Guest chats need no
+        sign-in. The page may scroll briefly while messages are checked.
       </p>
       <h2>How export will work</h2>
       <ol>
-        <li>Open the saved ChatGPT conversation you want to keep.</li>
+        <li>
+          Open the ChatGPT conversation you want to keep. Guest chats are
+          included; no sign-in is required.
+        </li>
         <li>
           Open Simple ChatGPT Export from your browser’s Extensions menu. Pin it
           there if you use it often.
@@ -28,8 +30,8 @@
           <strong>Export conversation</strong>.
         </li>
         <li>
-          Choose where to save the file. Open it to read or edit your
-          conversation.
+          Find your file in your browser’s Downloads. Open it to read or edit
+          your conversation.
         </li>
       </ol>
       <p>
@@ -38,15 +40,16 @@
       </p>
       <h2>What’s in the file?</h2>
       <p>
-        The transcript contains messages in the selected branch’s order. The
-        metadata header holds the title, original conversation link, message
+        The transcript contains the rendered messages in their displayed order.
+        The metadata header holds the title, original conversation link, message
         identifiers, export date and any omissions. The file is not encrypted;
         keep it somewhere suitable for its contents.
       </p>
       <p>
         Text exports cannot include image, audio, video or attachment files.
-        Known omissions are marked. If the full branch cannot be verified,
-        export stops.
+        Known omissions are marked. Changing or disappearing messages stop
+        export. Server-side history completeness cannot be verified; this
+        limitation is recorded in the metadata.
       </p>
       <h2>Your privacy</h2>
       <p>
@@ -55,15 +58,15 @@
         download history remain until you remove them.
       </p>
       <p>
-        The current prototype checks the selected tab’s address and can save
-        synthetic test files. It does not retrieve ChatGPT content. A future
-        verified version will retrieve the current conversation from ChatGPT
-        using your existing session.
+        The extension reads text from the current page only after you choose
+        Export. It does not access authentication tokens or make API requests.
+        Only source links present in the message content are included.
       </p>
       <h2>Permissions</h2>
       <p>
-        <strong>Current tab:</strong> checks whether you opened a saved ChatGPT
-        conversation, only after you click the extension.
+        <strong>Current tab and scripting:</strong> checks whether you opened a
+        ChatGPT conversation and reads its displayed messages after you choose
+        Export.
       </p>
       <p>
         <strong>Downloads:</strong> saves your export and checks whether that
@@ -72,9 +75,9 @@
       </p>
       <h2>If something goes wrong</h2>
       <p>
-        Wait for a reply to finish, check that you’re signed in, and reopen the
-        extension on the conversation you want. An unsupported or incomplete
-        conversation is never quietly exported as complete.
+        Wait for a reply to finish, then reopen the extension on the
+        conversation you want. An unsupported or incomplete conversation is
+        never quietly exported as complete.
       </p>
       <p>
         Support details will be activated before public release. Please never

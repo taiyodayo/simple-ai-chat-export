@@ -18,7 +18,7 @@ Simple ChatGPT Export saves the ChatGPT conversation you’re viewing for archiv
 • Tells you when something cannot be included. It won’t quietly call an incomplete conversation complete.
 • Processes the export on your device. No analytics, extension account or subscription.
 
-Open a saved conversation at chatgpt.com to begin. Image, audio, video and attachment files are not downloaded. Known omissions are marked in a text-only export. Some conversation types may be unsupported. Keep the export window open until saving finishes.
+Open a conversation at chatgpt.com to begin. Guest chats are included; no sign-in is required. Image, audio, video and attachment files are not downloaded. Known omissions are marked in a text-only export. Some conversation types may be unsupported. Keep the export window open until saving finishes.
 
 Created by @taiyodayo. Not affiliated with OpenAI; not an official ChatGPT product.
 
@@ -31,7 +31,7 @@ Help and privacy: https://ongaku.co.uk/simple-chatgpt-exporter
 
 **Privacy policy URL:** https://ongaku.co.uk/simple-chatgpt-exporter/privacy
 
-**Single purpose:** Save the currently displayed, saved ChatGPT conversation's selected branch to a local text file with a metadata header.
+**Single purpose:** Save the currently displayed ChatGPT conversation's selected branch to a local text file with a metadata header.
 
 **Permission explanations:**
 
