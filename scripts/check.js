@@ -65,7 +65,7 @@ const manifest = JSON.parse(
 );
 if (
   JSON.stringify(manifest.permissions) !==
-    JSON.stringify(["activeTab", "scripting", "downloads"]) ||
+    JSON.stringify(["activeTab", "scripting"]) ||
   manifest.host_permissions ||
   JSON.stringify(manifest.optional_host_permissions) !==
     JSON.stringify(["https://*.web-sandbox.oaiusercontent.com/*"]) ||

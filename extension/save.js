@@ -7,152 +7,141 @@ export async function saveFile(
     signal,
     timeout = 120000,
     directoryHandle,
-    downloads = globalThis.chrome?.downloads,
+    locks = globalThis.navigator?.locks,
   } = {},
 ) {
+  if (signal?.aborted) throw new ExportError("cancelled");
+  if (
+    typeof filename !== "string" ||
+    !filename ||
+    /[/\\\u0000-\u001f\u007f<>:"|?*]/.test(filename) ||
+    /[. ]$/.test(filename) ||
+    /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(filename)
+  )
+    throw new ExportError("save-interrupted");
   if (directoryHandle)
     return saveToDirectory(blob, filename, directoryHandle, {
       signal,
       timeout,
+      locks,
     });
-  signal?.throwIfAborted();
-  const url = URL.createObjectURL(blob);
-  let id,
-    timer,
-    listener,
-    abort,
-    expired = false;
-  const events = new Map();
-  let resolveDone, rejectDone;
-  const done = new Promise((resolve, reject) => {
-    resolveDone = resolve;
-    rejectDone = reject;
-  });
-  // Attach immediately so cancellation while the save dialogue is open cannot
-  // create an unhandled rejection before downloads.download resolves.
-  done.catch(() => {});
-  function observe(item) {
-    const state = item.state?.current ?? item.state;
-    if (state === "complete") resolveDone();
-    if (state === "interrupted")
-      rejectDone(new ExportError("save-interrupted"));
-  }
+
+  let url,
+    anchor,
+    handedOff = false;
   try {
-    listener = (delta) => {
-      if (id === undefined) {
-        if (events.size < 100 && delta.state)
-          events.set(delta.id, { state: delta.state });
-      } else if (delta.id === id) observe(delta);
-    };
-    downloads.onChanged.addListener(listener);
-    abort = () => {
-      expired = true;
-      rejectDone(new ExportError("cancelled"));
-      if (id !== undefined) downloads.cancel(id).catch(() => {});
-    };
-    signal?.addEventListener("abort", abort, { once: true });
-    timer = setTimeout(() => {
-      expired = true;
-      rejectDone(new ExportError("save-timeout"));
-      if (id !== undefined) downloads.cancel(id).catch(() => {});
-    }, timeout);
-    const starting = downloads.download({
-      url,
-      filename,
-      saveAs: false,
-      conflictAction: "uniquify",
-    });
-    // A closed window/timeout must still cancel a late-starting download.
-    starting.then(
-      (lateId) => {
-        if (expired) downloads.cancel(lateId).catch(() => {});
-      },
-      () => {},
-    );
-    id = await Promise.race([starting, done]);
-    if (!Number.isInteger(id)) throw new ExportError("save-interrupted");
-    if (expired || signal?.aborted) throw new ExportError("cancelled");
-    if (events.has(id)) observe(events.get(id));
-    // Close the race between completion and registration. Query only our ID.
-    const items = await Promise.race([
-      downloads.search({ id }),
-      done.then(() => []),
-    ]);
-    const [item] = items;
-    if (item) observe(item);
-    await done;
-    return id;
+    url = URL.createObjectURL(blob);
+    anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = filename;
+    anchor.hidden = true;
+    document.body.append(anchor);
+    if (signal?.aborted) throw new ExportError("cancelled");
+    anchor.click();
+    handedOff = true;
+    // The browser owns the download after this click. Ordinary anchors cannot
+    // observe completion, cancellation, or the final filename/location.
+    return { status: "download-started", filename };
   } catch (error) {
-    if (id !== undefined) await downloads.cancel(id).catch(() => {});
     if (error instanceof ExportError) throw error;
     throw new ExportError("save-interrupted");
   } finally {
-    clearTimeout(timer);
-    if (listener) downloads.onChanged.removeListener(listener);
-    signal?.removeEventListener("abort", abort);
-    events.clear();
-    URL.revokeObjectURL(url);
+    anchor?.remove();
+    if (url) {
+      if (handedOff) {
+        // Allow Chrome to consume the Blob before releasing it. Closing this
+        // document also releases its object URLs; no persistent URL is kept.
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      } else URL.revokeObjectURL(url);
+    }
   }
 }
 
-async function saveToDirectory(blob, filename, directory, { signal, timeout }) {
-  signal?.throwIfAborted();
-  if (
-    !filename ||
-    /[/\\\u0000-\u001f]/.test(filename) ||
-    [".", ".."].includes(filename)
-  )
-    throw new ExportError("save-interrupted");
-  let writer, stopped;
+async function saveToDirectory(
+  blob,
+  filename,
+  directory,
+  { signal, timeout, locks },
+) {
+  // A file stream's exclusive mode alone cannot protect the preceding filename
+  // check. All extension windows must hold this same origin-wide lock.
+  if (!locks?.request) throw new ExportError("save-interrupted");
+  let writer, stopped, aborting;
   let rejectStopped;
   const interrupted = new Promise((_, reject) => {
     rejectStopped = reject;
   });
   interrupted.catch(() => {});
+  const queued = new AbortController();
+  const abortWriter = () => {
+    if (writer && !aborting)
+      aborting = Promise.resolve()
+        .then(() => writer.abort())
+        .catch(() => {});
+    return aborting;
+  };
   const stop = (code) => {
     if (stopped) return;
     stopped = new ExportError(code);
+    queued.abort();
     rejectStopped(stopped);
-    writer?.abort().catch(() => {});
+    abortWriter();
   };
   const abort = () => stop("cancelled");
   signal?.addEventListener("abort", abort, { once: true });
   const timer = setTimeout(() => stop("save-timeout"), timeout);
+  const check = () => {
+    if (stopped) throw stopped;
+  };
   const wait = (operation) => Promise.race([operation, interrupted]);
   try {
-    const dot = filename.lastIndexOf(".");
-    const stem = dot > 0 ? filename.slice(0, dot) : filename;
-    const suffix = dot > 0 ? filename.slice(dot) : "";
-    let handle, name;
-    for (let i = 0; i < 1000; i++) {
-      if (stopped) throw stopped;
-      name = i ? `${stem} (${i})${suffix}` : filename;
-      try {
-        // Check only candidate names. Do not read or enumerate folder contents.
-        await wait(directory.getFileHandle(name));
-      } catch (error) {
-        if (error.name === "TypeMismatchError") continue;
-        if (error.name !== "NotFoundError") throw error;
-        handle = await wait(directory.getFileHandle(name, { create: true }));
-        break;
-      }
-    }
-    if (!handle) throw new ExportError("save-interrupted");
-    const opening = handle.createWritable({ mode: "exclusive" });
-    opening.then(
-      (lateWriter) => {
-        if (stopped) lateWriter.abort().catch(() => {});
+    const saving = locks.request(
+      "simple-ai-chat-export-custom-save",
+      { mode: "exclusive", signal: queued.signal },
+      async () => {
+        check();
+        let committed = false;
+        try {
+          const dot = filename.lastIndexOf(".");
+          const stem = dot > 0 ? filename.slice(0, dot) : filename;
+          const suffix = dot > 0 ? filename.slice(dot) : "";
+          let handle, name;
+          for (let i = 0; i < 1000; i++) {
+            check();
+            name = i ? `${stem} (${i})${suffix}` : filename;
+            try {
+              // Check only candidate names; never enumerate or read a folder.
+              await directory.getFileHandle(name);
+              check();
+            } catch (error) {
+              check();
+              if (error.name === "TypeMismatchError") continue;
+              if (error.name !== "NotFoundError") throw error;
+              handle = await directory.getFileHandle(name, { create: true });
+              check();
+              break;
+            }
+          }
+          if (!handle) throw new ExportError("save-interrupted");
+          // These uncancellable handle/open operations stay inside the lock
+          // until they settle, even if the caller has already timed out.
+          writer = await handle.createWritable({ mode: "exclusive" });
+          check();
+          await wait(writer.write(blob));
+          check();
+          await wait(writer.close());
+          check();
+          committed = true;
+          return { status: "saved", filename: name };
+        } finally {
+          // Keep the lock until abort settles, so another window cannot race
+          // a late-opening or interrupted stream.
+          if (!committed) await abortWriter();
+        }
       },
-      () => {},
     );
-    writer = await wait(opening);
-    await wait(writer.write(blob));
-    if (stopped) throw stopped;
-    await wait(writer.close());
-    signal?.throwIfAborted();
-    return name;
+    return await wait(saving);
   } catch (error) {
-    writer?.abort().catch(() => {});
     if (stopped) throw stopped;
     if (error instanceof ExportError) throw error;
     throw new ExportError("save-interrupted");

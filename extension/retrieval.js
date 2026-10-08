@@ -6,7 +6,28 @@ import {
   formatResearchReport,
 } from "./research.js";
 
-export async function retrieveCurrentConversation(tab, { signal } = {}) {
+// A page-controlled MAIN-world promise can never settle. Bound our wait and
+// discard late results; Chrome cannot forcibly cancel an injected function.
+async function waitForRead(operation, signal, timeout) {
+  let timer, abort;
+  const stopped = new Promise((_, reject) => {
+    abort = () => reject(new ExportError("cancelled"));
+    signal?.addEventListener("abort", abort, { once: true });
+    if (signal?.aborted) abort();
+    timer = setTimeout(() => reject(new ExportError("read-timeout")), timeout);
+  });
+  try {
+    return await Promise.race([operation, stopped]);
+  } finally {
+    clearTimeout(timer);
+    signal?.removeEventListener("abort", abort);
+  }
+}
+
+export async function retrieveCurrentConversation(
+  tab,
+  { signal, timeout = 30000 } = {},
+) {
   signal?.throwIfAborted();
   const location = conversationLocation(tab?.url);
   if (!Number.isInteger(tab.id)) throw new ExportError("wrong-page");
@@ -14,8 +35,13 @@ export async function retrieveCurrentConversation(tab, { signal } = {}) {
     throw new ExportError("extension-update");
   async function inject(options) {
     try {
-      return await chrome.scripting.executeScript(options);
+      return await waitForRead(
+        chrome.scripting.executeScript(options),
+        signal,
+        timeout,
+      );
     } catch (error) {
+      if (error instanceof ExportError) throw error;
       signal?.throwIfAborted();
       // Do not expose raw browser errors, which can contain the private chat URL.
       const message = String(error?.message ?? "");
@@ -49,7 +75,13 @@ export async function retrieveCurrentConversation(tab, { signal } = {}) {
     const origins = [
       ...new Set(frames.map((frame) => researchOrigin(frame.url))),
     ];
-    if (!(await chrome.permissions.contains({ origins }))) {
+    if (
+      !(await waitForRead(
+        chrome.permissions.contains({ origins }),
+        signal,
+        timeout,
+      ))
+    ) {
       const error = new ExportError("research-access");
       error.researchOrigins = origins;
       throw error;

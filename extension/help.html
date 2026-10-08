@@ -45,8 +45,10 @@
         Files saved to custom folders do not appear in Chrome’s Downloads list.
       </p>
       <p>
-        Keep the export window open until saving finishes. Closing it cancels an
-        unfinished export; check Downloads if a save had already started.
+        Keep this window open while your chat is read. Downloads are handed to
+        Chrome: check its Downloads list to confirm completion. For a selected
+        folder, keep this window open until Export saved appears. Closing it
+        cancels unfinished work, but cannot undo a file already written.
       </p>
       <h2>What’s in the file?</h2>
       <p>
@@ -72,16 +74,24 @@
         Claude artifacts, Gemini Canvas and other content outside messages are
         not included. Gemini Deep Research is not yet verified.
       </p>
+      <p>
+        Markdown viewers may render HTML or load remote images contained in a
+        message. Use plain text to view literal content, or disable remote
+        content and HTML in your Markdown editor. Cloud-synced folders can
+        upload saved files through their own software.
+      </p>
       <h2>Your privacy</h2>
       <p>
         Processing happens on your device. The extension has no analytics,
-        conversation storage or developer backend. Your saved files and browser
-        download history remain until you remove them.
+        retained conversation cache or developer backend. Your saved files and
+        browser download history remain until you remove them.
       </p>
       <p>
         The extension reads text from the current page only after you choose
-        Export. It does not access authentication tokens or make API requests.
-        Only source links present in the message content are included.
+        Export. It does not read session cookies or authentication state, or
+        make chat API requests. Source links already loaded in messages or
+        supported reports are included. Secrets typed into a message are part of
+        the exported text.
       </p>
       <h2>Permissions</h2>
       <p>
@@ -90,9 +100,10 @@
         after you choose Export.
       </p>
       <p>
-        <strong>Downloads:</strong> saves your export and checks whether that
-        download finished or was interrupted. The browser permission is broader
-        than this use; the extension queries only the download it starts.
+        <strong>Downloads:</strong> Chrome receives a local file through its
+        normal download mechanism. No downloads permission or download-history
+        access is requested. Download started means the file was handed to
+        Chrome; check Downloads to confirm that it finished.
       </p>
       <p>
         <strong>Selected folder:</strong> the native picker grants access to the

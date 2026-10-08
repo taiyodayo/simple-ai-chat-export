@@ -4,6 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="referrer" content="no-referrer" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/simple-ai-chat-export/favicon.png"
+    />
     <meta
       name="description"
       content="A simple way to keep the ChatGPT, Claude or Gemini conversation you’re viewing, ready to archive or edit. By @taiyodayo."
@@ -19,9 +25,9 @@
         Claude, Gemini</a
       >
       <nav aria-label="Main">
+        <a class="support-link" href="#install">Install</a>
         <a href="#how">How it works</a><a href="#help">Help</a
         ><a
-          class="support-link"
           href="https://buymeacoffee.com/taiyodayo"
           target="_blank"
           rel="noopener noreferrer"
@@ -40,8 +46,9 @@
             it for later, make a quick edit, or carry on somewhere else.
           </p>
           <p class="release-note">
-            <strong>Production release.</strong> Version 0.2.0 supports ChatGPT,
-            Claude and Gemini. Chrome Web Store review is pending.
+            <strong>Production release.</strong> Version 0.2.1 supports ChatGPT,
+            Claude and Gemini. The Chrome Web Store install link will appear
+            after approval.
           </p>
           <p class="quiet">
             By @taiyodayo · Not affiliated with OpenAI, Anthropic or Google
@@ -135,11 +142,12 @@
       <section id="help" class="faq">
         <p class="eyebrow">A little practical help</p>
         <h2>Before you export.</h2>
-        <details>
+        <details id="install" open>
           <summary>How do I install it?</summary>
           <p>
-            Chrome Web Store review is pending. No store listing is live yet.
-            Until approval, download the release ZIP from
+            The Chrome Web Store install link will appear after approval. No
+            store listing is live yet. Until approval, download the release ZIP
+            from
             <a
               href="https://github.com/taiyodayo/simple-ai-chat-export/releases"
               target="_blank"
@@ -269,7 +277,7 @@
         <p>
           Conversation processing happens in your browser. No analytics,
           conversation cache or developer backend. ChatGPT export, including
-          supported Deep Research reports, is included in version 0.2.0. Claude
+          supported Deep Research reports, is included in version 0.2.1. Claude
           and Gemini readers use the same export flow; ordinary saved
           conversations have been checked in Chrome. The browser preview uses
           sample conversations.

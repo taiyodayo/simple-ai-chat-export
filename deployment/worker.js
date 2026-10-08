@@ -6,11 +6,13 @@ export default {
       ["/simple-ai-chat-export", "/index.html"],
       ["/simple-ai-chat-export/", "/index.html"],
       ["/simple-ai-chat-export/styles.css", "/styles.css"],
+      ["/simple-ai-chat-export/favicon.png", "/favicon.png"],
       ["/simple-ai-chat-export/privacy", "/privacy.html"],
       ["/simple-ai-chat-export/privacy/", "/privacy.html"],
       ["/simple-chatgpt-exporter", "/index.html"],
       ["/simple-chatgpt-exporter/", "/index.html"],
       ["/simple-chatgpt-exporter/styles.css", "/styles.css"],
+      ["/simple-chatgpt-exporter/favicon.png", "/favicon.png"],
       ["/simple-chatgpt-exporter/privacy", "/privacy.html"],
       ["/simple-chatgpt-exporter/privacy/", "/privacy.html"],
     ]);

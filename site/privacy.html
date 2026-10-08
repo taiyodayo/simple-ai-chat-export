@@ -4,6 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="referrer" content="no-referrer" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/simple-ai-chat-export/favicon.png"
+    />
     <meta
       name="description"
       content="How Simple AI-Chat export for ChatGPT, Claude, Gemini handles conversation data, local files and privacy."
@@ -36,10 +42,10 @@
       </p>
       <h2>Current availability</h2>
       <p>
-        Production release 0.2.0 reads rendered ChatGPT, Claude and Gemini
-        messages after you choose Export. Chrome Web Store submission is being
-        prepared; approval and a store install link are pending. Its separate
-        browser demonstration uses sample conversations.
+        Production release 0.2.1 reads rendered ChatGPT, Claude and Gemini
+        messages after you choose Export. Chrome Web Store approval and an
+        install link are pending. Its separate browser demonstration uses sample
+        conversations.
       </p>
       <h2>Conversation data</h2>
       <p>
@@ -52,9 +58,10 @@
         The extension reads only the displayed conversation you choose,
         including guest chats, and processes it locally. It briefly scrolls the
         page to check stability. It does not make conversation API requests or
-        access authentication tokens. Conversation content is not sent to the
-        developer, payment providers or other processing services. Server-side
-        history completeness cannot be verified.
+        read session cookies or provider authentication state. Secrets typed
+        into a message can appear in its export. Conversation content is not
+        sent to the developer, payment providers or other processing services.
+        Server-side history completeness cannot be verified.
       </p>
       <h2>Your saved files</h2>
       <p>
@@ -77,10 +84,10 @@
         single-conversation boundary.
       </p>
       <p>
-        <strong>Downloads:</strong> the extension saves the file you request and
-        checks completion or interruption for that download. The browser grants
-        a broader permission, but the extension does not search through your
-        other downloads.
+        <strong>Downloads:</strong> a local file is handed to Chrome through a
+        normal download link. No downloads permission is requested. Chrome
+        manages completion and history; the extension cannot inspect it. Check
+        Downloads to confirm that the file finished saving.
       </p>
       <p>
         <strong>Optional Deep Research access:</strong> when a completed report

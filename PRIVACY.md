@@ -1,14 +1,14 @@
 # Privacy
 
-Applies to production release 0.2.0. Updated 8 October 2026.
+Applies to production release 0.2.1. Updated 8 October 2026.
 
-Simple AI-Chat export for ChatGPT, Claude, Gemini is an independent project by @taiyodayo. The extension reads rendered messages from the selected ChatGPT, Claude or Gemini tab after you choose Export. It makes no API requests and does not access authentication tokens. The browser preview uses synthetic conversations.
+Simple AI-Chat export for ChatGPT, Claude, Gemini is an independent project by @taiyodayo. The extension reads rendered messages from the selected ChatGPT, Claude or Gemini tab after you choose Export. It makes no chat API requests and does not read session cookies or authentication state. Secrets typed into a message remain part of its exported text. The browser preview uses synthetic conversations.
 
 Formatting and file creation run on your device. There is no analytics, advertising, error upload, developer backend, remote configuration or retained conversation cache. The extension does not use localStorage, IndexedDB or Chrome extension storage. Temporary data is released after use; JavaScript memory cannot be guaranteed securely erased.
 
-Your saved files and the browser’s download history remain under your control. The exported text file is not encrypted. Its metadata header includes a conversation URL and message identifiers, which may be sensitive even though they do not grant someone your chat session. Deleting the extension does not delete your downloaded files.
+Your saved files and the browser’s download history remain under your control. Cloud sync, backups and Markdown viewers may process saved files outside the extension’s control. The exported text file is not encrypted. Its metadata header includes a conversation URL and message identifiers, which may be sensitive even though they do not grant someone your chat session. Deleting the extension does not delete your downloaded files.
 
-The `downloads` permission permits more than this extension needs in practice. The implementation starts the requested export, checks only its download identifier, and cancels it if requested or interrupted. It does not enumerate other downloads.
+The extension requests no `downloads` permission. A local Blob is handed to Chrome through a normal download link; the temporary object URL is released after a one-second grace period. The extension cannot query download history, confirm completion, or cancel a download after hand-off. Check Chrome’s Downloads list. User-selected folders are confirmed only after their writable stream closes.
 
 If you select a custom save folder, Chrome’s native directory picker grants file-system access to that folder. This browser grant is broader than the extension’s use: the exporter checks only candidate export filenames and writes the requested file without reading file contents or enumerating the directory. The directory handle stays in the export window’s memory and is not persisted. Custom-folder saves do not use the downloads API or add an entry to Chrome’s download history. A failed or cancelled save may leave an empty file created before writing completed.
 
@@ -16,7 +16,7 @@ The fixed Buy Me a Coffee link opens only when you click it. No conversation tex
 
 The public website is hosted by Cloudflare. It has no analytics scripts or remote fonts; automatic beacon injection is prevented for these pages. Cloudflare may process ordinary connection information and maintain hosting/security logs under its own policies. Disabling Worker observability does not eliminate provider network logs. If you choose to submit a GitHub issue or security report, GitHub processes it under its own policies and the project owner receives what you send. Public issues can be read by others. Do not include private transcripts or credentials.
 
-The `activeTab` and `scripting` permissions allow an isolated script to read the chosen conversation after you click the extension and choose Export. The script briefly scrolls the page and restores its position. The chat app itself may load content in response to scrolling; the exporter does not make network requests. No credentials are read.
+The `activeTab` and `scripting` permissions allow an isolated script to read the chosen conversation after you click the extension and choose Export. The script briefly scrolls the page and restores its position. The chat app itself may load content in response to scrolling; the exporter does not make network requests. Provider authentication state is not read.
 
 Completed Deep Research reports live in separate embedded sandbox pages. The extension declares optional access to `https://*.web-sandbox.oaiusercontent.com/*` and requests only the detected report’s exact app origin after you choose **Allow Deep Research and export**. Chrome retains a granted permission until you remove it in extension settings. The permission is broader than one report; the implementation reads only matching report frames in the chosen tab during export. A script in the report’s main JavaScript world reads the displayed report component’s Markdown and citation fields. It does not inspect authentication/session state, research activity or other conversations, and does not fetch cited source pages. The result is validated locally and discarded after use.
 

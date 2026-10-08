@@ -20,9 +20,9 @@ test("welcoming first use, format choice, success and a deliberate coffee click"
   await page.getByRole("radio", { name: /Plain text/ }).check();
   await page.getByRole("button", { name: /Export conversation/ }).click();
   await expect(
-    page.getByRole("heading", { name: "Export saved." }),
+    page.getByRole("heading", { name: "Download started" }),
   ).toBeVisible();
-  await expect(page.getByText("2 messages. Ready")).toBeVisible();
+  await expect(page.getByText("2 messages. Open Chrome")).toBeVisible();
   const coffee = page.getByRole("link", { name: "Buy me a coffee" });
   await expect(coffee).toHaveAttribute(
     "href",
@@ -48,7 +48,7 @@ test("one export click downloads text with omissions without a second confirmati
   await page.getByLabel("Preview scenario").selectOption("omission");
   await page.getByRole("button", { name: /Export conversation/ }).click();
   await expect(
-    page.getByRole("heading", { name: "Export saved." }),
+    page.getByRole("heading", { name: "Download started" }),
   ).toBeVisible();
   await expect(page.getByText("2 messages · text-only copy.")).toBeVisible();
   await expect(
@@ -56,12 +56,12 @@ test("one export click downloads text with omissions without a second confirmati
   ).toHaveCount(0);
 });
 for (const [scenario, heading] of [
-  ["incomplete", "We couldn’t confirm the whole conversation"],
+  ["incomplete", "We couldn’t verify the rendered conversation"],
   ["changed", "The conversation changed"],
   ["generating", "Let the reply finish first"],
   ["signed-out", "Sign in to your chat app"],
   ["offline", "Couldn’t reach your chat app"],
-  ["save-interrupted", "The file wasn’t saved"],
+  ["save-interrupted", "We couldn’t confirm the save"],
 ])
   test(`${scenario} never offers coffee or claims success`, async ({
     page,
@@ -86,7 +86,7 @@ test("cancel stops pending work and permits retry", async ({ page }) => {
   await page.getByLabel("Preview scenario").selectOption("success");
   await page.getByRole("button", { name: /Export conversation/ }).click();
   await expect(
-    page.getByRole("heading", { name: "Export saved." }),
+    page.getByRole("heading", { name: "Download started" }),
   ).toBeVisible();
 });
 test("long conversation count comes from the validated branch", async ({
@@ -94,7 +94,7 @@ test("long conversation count comes from the validated branch", async ({
 }) => {
   await page.getByLabel("Preview scenario").selectOption("long");
   await page.getByRole("button", { name: /Export conversation/ }).click();
-  await expect(page.getByText("2000 messages. Ready")).toBeVisible();
+  await expect(page.getByText("2000 messages. Open Chrome")).toBeVisible();
 });
 test("success fits the export window and another copy restores the format choice", async ({
   page,
@@ -120,7 +120,7 @@ test("message HTML never enters the interface or triggers requests", async ({
   await page.getByLabel("Preview scenario").selectOption("unsafe");
   await page.getByRole("button", { name: /Export conversation/ }).click();
   await expect(
-    page.getByRole("heading", { name: "Export saved." }),
+    page.getByRole("heading", { name: "Download started" }),
   ).toBeVisible();
   expect(dialogs).toEqual([]);
   expect(requests.some((r) => r.includes("invalid.example"))).toBe(false);

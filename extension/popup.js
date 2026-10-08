@@ -31,6 +31,10 @@ const errors = {
     "Chrome couldn’t read this conversation",
     "Nothing was saved. Refresh the chat tab, then open the extension again.",
   ],
+  "read-timeout": [
+    "The chat took too long to read",
+    "Nothing was downloaded. Keep your chat open and try again once it has finished loading.",
+  ],
   "wrong-page": [
     "Open a ChatGPT, Claude or Gemini conversation",
     "Then open Simple AI-Chat export for ChatGPT, Claude, Gemini from your browser’s Extensions menu.",
@@ -44,7 +48,7 @@ const errors = {
     "Open a saved conversation, then try again. ChatGPT guest chats also work.",
   ],
   incomplete: [
-    "We couldn’t confirm the whole conversation",
+    "We couldn’t verify the rendered conversation",
     "Nothing was saved. Reload the chat and try again.",
   ],
   changed: [
@@ -68,12 +72,12 @@ const errors = {
     "No completed export was confirmed. You can try again whenever you like.",
   ],
   "save-interrupted": [
-    "The file wasn’t saved",
-    "The save was cancelled or interrupted. Try again and choose a writable folder.",
+    "We couldn’t confirm the save",
+    "Saving was interrupted. Check your folder or Chrome Downloads before trying again.",
   ],
   "save-timeout": [
     "We couldn’t confirm the save",
-    "Check your browser’s Downloads before trying again.",
+    "Check the selected folder before trying again.",
   ],
   "signed-out": [
     "Sign in to your chat app",
@@ -216,15 +220,16 @@ export function mount(adapter) {
       await adapter.confirmUnchanged(identity, { signal });
       signal.throwIfAborted();
       status("Saving…", "Your file includes metadata at the beginning.");
-      await adapter.save(
+      const outcome = await adapter.save(
         new Blob([result.content], { type: result.mimeType }),
         result.filename,
         { signal, directoryHandle },
       );
-      signal.throwIfAborted();
+      if (!["download-started", "saved"].includes(outcome?.status))
+        throw new ExportError("save-interrupted");
       status(
-        "Export saved.",
-        `${result.metadata.messageCount} messages${result.omissions.length ? " · text-only copy" : ""}. Ready to read or edit.`,
+        outcome.status === "saved" ? "Export saved." : "Download started",
+        `${result.metadata.messageCount} messages${result.omissions.length ? " · text-only copy" : ""}. ${outcome.status === "saved" ? "Ready to read or edit." : "Open Chrome’s Downloads (Ctrl+J, or ⌘⇧J on Mac) to check the file. Completion isn’t confirmed here."}`,
       );
       $("success").hidden = false;
       $("export-form").hidden = true;

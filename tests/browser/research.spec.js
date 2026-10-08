@@ -106,6 +106,7 @@ test("a research permission refusal never saves, and a later approval retries fr
       confirmUnchanged: async () => {},
       save: async () => {
         window.researchTest.saves++;
+        return { status: "saved", filename: "synthetic.md" };
       },
       requestResearchPermission: () => {
         window.researchTest.requests++;
@@ -210,7 +211,6 @@ test("Chrome injects into nested research frames, binds reports to chat order an
       const { retrieveCurrentConversation, confirmConversationUnchanged } =
         await import("./retrieval.js");
       const { validateConversation, createExport } = await import("./core.js");
-      const { saveFile } = await import("./save.js");
       const [tab] = await chrome.tabs.query({ url: "https://chatgpt.com/*" });
       const { data, identity } = await retrieveCurrentConversation(tab);
       await confirmConversationUnchanged(tab.id, identity);
@@ -218,14 +218,9 @@ test("Chrome injects into nested research frames, binds reports to chat order an
       const files = [];
       for (const format of ["md", "txt"]) {
         const output = createExport(conversation, format);
-        const id = await saveFile(
-          new Blob([output.content], { type: output.mimeType }),
-          output.filename,
-        );
-        const [item] = await chrome.downloads.search({ id });
         files.push({
-          path: item.filename,
-          state: item.state,
+          filename: output.filename,
+          mimeType: output.mimeType,
           expected: output.content,
         });
       }
@@ -243,13 +238,24 @@ test("Chrome injects into nested research frames, binds reports to chat order an
     ]);
     expect(output.sources).toBe(2);
     for (const file of output.files) {
-      expect(file.state).toBe("complete");
-      expect(await readFile(file.path, "utf8")).toBe(file.expected);
+      const [download, outcome] = await Promise.all([
+        popup.waitForEvent("download"),
+        popup.evaluate(async (file) => {
+          const { saveFile } = await import("./save.js");
+          return saveFile(
+            new Blob([file.expected], { type: file.mimeType }),
+            file.filename,
+          );
+        }, file),
+      ]);
+      expect(outcome.status).toBe("download-started");
+      expect(await download.failure()).toBeNull();
+      expect(await readFile(await download.path(), "utf8")).toBe(file.expected);
       expect(file.expected).toContain("Again [1]");
       expect(file.expected).toContain("https://example.org/research");
       expect(file.expected).toContain("Follow-up answer");
       expect(file.expected).toContain("renderedSourceMessageIds");
-      await rm(file.path, { force: true });
+      await download.delete();
     }
     await frame.evaluate(() => {
       const p =

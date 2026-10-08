@@ -4,7 +4,7 @@
 
 Save the ChatGPT, Claude or Gemini conversation you’re viewing as Markdown or plain text, ready for archiving or a quick edit. Made by **@taiyodayo**. Not affiliated with OpenAI, Anthropic or Google.
 
-**Production release: 0.2.0.** Chrome Web Store review is pending; the extension will publish automatically after approval, and a store install link will be added then. ChatGPT, Claude and Gemini use the same UI and save flow. Live saved-conversation reads have been checked in Chrome on macOS; other operating systems have not been independently verified. Export reads rendered messages, checks stability and preserves displayed order. It cannot prove server-side history completeness; virtualised content that disappears during checking is rejected. The preview uses synthetic conversations.
+**Production release: 0.2.1.** A replacement Chrome Web Store package is ready after the 0.2.0 permission rejection; an install link will be added after approval. ChatGPT, Claude and Gemini use the same UI and save flow. Live saved-conversation reads have been checked in Chrome on macOS; other operating systems have not been independently verified. Export reads rendered messages, checks stability and preserves displayed order. It cannot prove server-side history completeness; virtualised content that disappears during checking is rejected. The preview uses synthetic conversations.
 
 Source is available for security inspection and local builds under **MIT + Commons Clause v1.0**, with credit to **@taiyodayo**. The earlier ChatGPT baseline remains archived as [v0.1.1-beta.1](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v0.1.1-beta.1).
 
@@ -34,7 +34,7 @@ To inspect the actual extension, open `chrome://extensions`, turn on **Developer
 
 The default control shows the standard OS Downloads path (`~/Downloads` on macOS/Linux or `%USERPROFILE%\\Downloads` on Windows); Chrome’s download settings determine the actual default location and whether a save dialogue appears. Selecting a folder opens a native directory picker initially at Downloads and grants access to that folder. Chrome exposes its name rather than its absolute path, so custom destinations display `…/folder-name`. The choice lasts for the current export window; **Use Downloads** resets it. Custom-folder exports write directly to that folder and do not appear in Chrome’s download history. Existing filenames receive a numbered suffix rather than being intentionally overwritten.
 
-The transcript keeps speaker labels and the original text, including paragraphs, Unicode, code and table syntax. Plain text retains readable Markdown-style notation where present rather than attempting lossy conversion. Metadata holds the title, conversation URL, provider, branch/message identifiers, export date, format, count and omissions. It does not contain authentication data. No donation message is added to your files.
+The transcript keeps speaker labels and the original text, including paragraphs, Unicode, code and table syntax. Plain text retains readable Markdown-style notation where present rather than attempting lossy conversion. Metadata holds the title, conversation URL, provider, branch/message identifiers, export date, format, count and omissions. Provider session cookies and authentication state are not read; titles or messages can contain secrets that a user typed. No donation message is added to your files.
 
 One editable file keeps the metadata and transcript together. No ZIP or companion file. Keep the export window open until saving finishes. A cancelled or interrupted save never displays success. The success screen shows the message count and an optional coffee link.
 
@@ -51,7 +51,7 @@ One editable file keeps the metadata and transcript together. No ZIP or companio
 
 ## Permissions and privacy
 
-`activeTab` and `scripting` allow reading the clicked tab after you choose Export. It does not technically enforce a single-conversation boundary. `downloads` allows saving and checking the outcome of the download the extension starts; this browser permission is broader than the extension’s use of it. No required host permissions, automatic content scripts, cookies access, telemetry, remote libraries or storage permission.
+`activeTab` and `scripting` allow reading the clicked tab after you choose Export. It does not technically enforce a single-conversation boundary. No `downloads` permission is requested. Standard saves use a local download link; Chrome manages completion and the extension does not inspect download history. Selected-folder saves confirm completion after the stream closes. No required host permissions, automatic content scripts, cookies access, telemetry, remote libraries or storage permission.
 
 Deep Research uses optional host access declared for `https://*.web-sandbox.oaiusercontent.com/*`. After a report is detected, **Allow Deep Research and export** requests access only to its exact sandbox app origin. Access persists until you remove it in Chrome’s extension settings. The exporter reads only matching report frames in the chosen tab when you export. It reads report text and citation data already loaded by ChatGPT; it does not retrieve source pages or research activity.
 

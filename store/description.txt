@@ -6,7 +6,7 @@ Your copy includes the displayed messages, speaker labels, readable formatting, 
 
 Completed ChatGPT Deep Research reports in the supported embedded layout include their Markdown and citation links. When needed, Chrome asks for optional access to that report's embedded site.
 
-Processing stays on your device. There is no analytics, developer backend, account registration, subscription or conversation upload. The exporter does not access authentication tokens or make conversation API requests.
+Processing stays on your device. There is no analytics, developer backend, account registration, subscription or conversation upload. The exporter does not read session cookies or provider authentication state or make conversation API requests.
 
 Scope and limits:
 - One currently displayed conversation at a time, including ChatGPT guest chats.
@@ -14,7 +14,7 @@ Scope and limits:
 - Images, audio, video and attachment files are not downloaded. Known omissions are marked.
 - Claude artifacts, Gemini Canvas and other content outside displayed messages are not archived. Gemini Deep Research is not supported.
 - Desktop Chrome on macOS has been tested. Windows and Linux are not independently verified yet.
-- Keep the export window open until saving finishes. A cancelled or interrupted export is not reported as saved.
+- Keep the window open while reading. Standard downloads are handed to Chrome; check its Downloads list for completion. Selected-folder saves are confirmed after the file stream closes.
 
 Made by @taiyodayo. Independent of OpenAI, Anthropic and Google.
 

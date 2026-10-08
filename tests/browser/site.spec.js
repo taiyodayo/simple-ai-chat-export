@@ -17,7 +17,8 @@ test("support page is honest about production status, licence and store availabi
   expect(
     await page.getByRole("link", { name: /Buy me a coffee/ }).count(),
   ).toBe(2);
-  await page.getByText("How do I install it?", { exact: true }).click();
+  await page.getByRole("link", { name: "Install", exact: true }).click();
+  await expect(page.locator("#install")).toHaveAttribute("open", "");
   await expect(
     page.getByText("No store listing is live yet.", { exact: false }),
   ).toBeVisible();
