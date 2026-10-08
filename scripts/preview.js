@@ -13,6 +13,10 @@ const types = {
 const server = createServer(async (req, res) => {
   try {
     let path = new URL(req.url, "http://127.0.0.1").pathname;
+    path = path.replace(
+      /^\/simple-ai-chat-export(?=\/|$)/,
+      "/simple-chatgpt-exporter",
+    );
     if (path === "/") path = "/dev/index.html";
     if (
       path === "/simple-chatgpt-exporter" ||

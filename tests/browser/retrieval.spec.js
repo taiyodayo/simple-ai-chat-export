@@ -67,87 +67,115 @@ test("virtualised messages are rejected instead of silently dropped", async ({
   );
 });
 
-test("Chrome scripting reads the chat, revalidates it, and downloads both formats", async () => {
-  const { chromium } = await import("@playwright/test");
-  const { mkdtemp, cp, readFile, writeFile, rm } =
-    await import("node:fs/promises");
-  const { tmpdir } = await import("node:os");
-  const { join, resolve } = await import("node:path");
-  const temporary = await mkdtemp(join(tmpdir(), "export-injection-"));
-  let context;
-  try {
-    const extension = join(temporary, "extension");
-    await cp(resolve("extension"), extension, { recursive: true });
-    const manifestPath = join(extension, "manifest.json");
-    const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
-    // Test-only access replaces a physical toolbar click's activeTab grant.
-    // The shipped manifest has no host permissions.
-    manifest.host_permissions = ["https://chatgpt.com/*"];
-    await writeFile(manifestPath, JSON.stringify(manifest));
-    context = await chromium.launchPersistentContext(
-      join(temporary, "profile"),
-      {
-        channel: "chromium",
-        headless: true,
-        acceptDownloads: true,
-        args: [
-          `--disable-extensions-except=${extension}`,
-          `--load-extension=${extension}`,
-        ],
-      },
-    );
-    const worker =
-      context.serviceWorkers()[0] ??
-      (await context.waitForEvent("serviceworker"));
-    const target = await context.newPage();
-    await chat(target);
-    const popup = await context.newPage();
-    await popup.goto(
-      `chrome-extension://${new URL(worker.url()).host}/popup.html`,
-    );
-    const output = await popup.evaluate(async () => {
-      const { retrieveCurrentConversation, confirmConversationUnchanged } =
-        await import("./retrieval.js");
-      const { validateConversation, createExport } = await import("./core.js");
-      const { saveFile } = await import("./save.js");
-      const [tab] = await chrome.tabs.query({ url: "https://chatgpt.com/*" });
-      const { data, identity } = await retrieveCurrentConversation(tab);
-      await confirmConversationUnchanged(tab.id, identity);
-      const conversation = validateConversation(data, identity);
-      const files = [];
-      for (const format of ["txt", "md"]) {
-        const result = createExport(conversation, format);
-        const downloads = {
-          onChanged: chrome.downloads.onChanged,
-          search: (q) => chrome.downloads.search(q),
-          cancel: (id) => chrome.downloads.cancel(id),
-          download: (o) => chrome.downloads.download({ ...o, saveAs: false }),
-        };
-        const id = await saveFile(
-          new Blob([result.content], { type: result.mimeType }),
-          result.filename,
-          { downloads },
+for (const provider of ["ChatGPT", "Claude", "Gemini"])
+  test(`${provider}: Chrome scripting reads, revalidates and downloads both formats`, async () => {
+    const { chromium } = await import("@playwright/test");
+    const { mkdtemp, cp, readFile, writeFile, rm } =
+      await import("node:fs/promises");
+    const { tmpdir } = await import("node:os");
+    const { join, resolve } = await import("node:path");
+    const temporary = await mkdtemp(join(tmpdir(), "export-injection-"));
+    let context;
+    try {
+      const extension = join(temporary, "extension");
+      await cp(resolve("extension"), extension, { recursive: true });
+      const manifestPath = join(extension, "manifest.json");
+      const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+      // Test-only access replaces a physical toolbar click's activeTab grant.
+      // The shipped manifest has no host permissions.
+      const origin =
+        provider === "Claude"
+          ? "https://claude.ai"
+          : provider === "Gemini"
+            ? "https://gemini.google.com"
+            : "https://chatgpt.com";
+      manifest.host_permissions = [`${origin}/*`];
+      await writeFile(manifestPath, JSON.stringify(manifest));
+      context = await chromium.launchPersistentContext(
+        join(temporary, "profile"),
+        {
+          channel: "chromium",
+          headless: true,
+          acceptDownloads: true,
+          args: [
+            `--disable-extensions-except=${extension}`,
+            `--load-extension=${extension}`,
+          ],
+        },
+      );
+      const worker =
+        context.serviceWorkers()[0] ??
+        (await context.waitForEvent("serviceworker"));
+      const target = await context.newPage();
+      if (provider === "ChatGPT") await chat(target);
+      else {
+        const url = `${origin}/${provider === "Claude" ? `chat/${id}` : "app/0123456789abcdef"}`;
+        const body =
+          provider === "Claude"
+            ? '<div data-testid="user-message"><div style="display:contents"><p>日本語 ☕</p></div></div><div data-testid="assistant-message" data-turn-key="answer-1" data-is-streaming="false"><div class="standard-markdown"><p>Saved answer</p></div></div>'
+            : '<user-query><div class="query-text">日本語 ☕</div></user-query><model-response><message-content><div class="markdown" aria-busy="false"><p>Saved answer</p></div></message-content></model-response>';
+        await target.route(origin + "/**", (route) =>
+          route.fulfill({
+            contentType: "text/html; charset=utf-8",
+            body: `<title>Provider chat</title><main>${body}</main>`,
+          }),
         );
-        const [item] = await chrome.downloads.search({ id });
-        files.push({
-          path: item.filename,
-          state: item.state,
-          expected: result.content,
-        });
+        await target.goto(url);
       }
-      return files;
-    });
-    for (const file of output) {
-      expect(file.state).toBe("complete");
-      expect(await readFile(file.path, "utf8")).toBe(file.expected);
-      expect(file.expected).toContain("日本語 ☕");
-      await rm(file.path, { force: true });
+      const popup = await context.newPage();
+      await popup.goto(
+        `chrome-extension://${new URL(worker.url()).host}/popup.html`,
+      );
+      const output = await popup.evaluate(
+        async ({ origin, provider }) => {
+          const { retrieveCurrentConversation, confirmConversationUnchanged } =
+            await import("./retrieval.js");
+          const { validateConversation, createExport } =
+            await import("./core.js");
+          const { saveFile } = await import("./save.js");
+          const [tab] = await chrome.tabs.query({ url: `${origin}/*` });
+          const { data, identity } = await retrieveCurrentConversation(tab);
+          await confirmConversationUnchanged(tab.id, identity);
+          const conversation = validateConversation(data, identity);
+          const files = [];
+          for (const format of ["txt", "md"]) {
+            const result = createExport(conversation, format);
+            if (result.metadata.provider !== provider)
+              throw new Error("Incorrect speaker");
+            const downloads = {
+              onChanged: chrome.downloads.onChanged,
+              search: (q) => chrome.downloads.search(q),
+              cancel: (id) => chrome.downloads.cancel(id),
+              download: (o) =>
+                chrome.downloads.download({ ...o, saveAs: false }),
+            };
+            const id = await saveFile(
+              new Blob([result.content], { type: result.mimeType }),
+              result.filename,
+              { downloads },
+            );
+            const [item] = await chrome.downloads.search({ id });
+            files.push({
+              path: item.filename,
+              state: item.state,
+              expected: result.content,
+            });
+          }
+          return files;
+        },
+        { origin, provider },
+      );
+      for (const file of output) {
+        expect(file.state).toBe("complete");
+        expect(await readFile(file.path, "utf8")).toBe(file.expected);
+        expect(file.expected).toContain("日本語 ☕");
+        await rm(file.path, { force: true });
+      }
+    } finally {
+      await context?.close();
+      await rm(temporary, { recursive: true, force: true });
     }
-  } finally {
-    await context?.close();
-    await rm(temporary, { recursive: true, force: true });
-  }
-});
+  });
 
 for (const guest of [true, false])
   test(`message layout is detected independently of ${guest ? "history" : "guest"} URL`, async ({

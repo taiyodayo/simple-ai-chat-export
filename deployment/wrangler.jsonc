@@ -13,6 +13,10 @@
   },
   "routes": [
     {
+      "pattern": "ongaku.co.uk/simple-ai-chat-export*",
+      "zone_name": "ongaku.co.uk",
+    },
+    {
       "pattern": "ongaku.co.uk/simple-chatgpt-exporter*",
       "zone_name": "ongaku.co.uk",
     },

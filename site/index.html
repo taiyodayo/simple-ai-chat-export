@@ -6,16 +6,17 @@
     <meta name="referrer" content="no-referrer" />
     <meta
       name="description"
-      content="A simple way to keep the ChatGPT conversation you’re viewing, ready to archive or edit. By @taiyodayo."
+      content="A simple way to keep the ChatGPT, Claude or Gemini conversation you’re viewing, ready to archive or edit. By @taiyodayo."
     />
-    <title>Simple ChatGPT Export</title>
-    <link rel="canonical" href="https://ongaku.co.uk/simple-chatgpt-exporter" />
-    <link rel="stylesheet" href="/simple-chatgpt-exporter/styles.css" />
+    <title>Simple AI-Chat export for ChatGPT, Claude, Gemini</title>
+    <link rel="canonical" href="https://ongaku.co.uk/simple-ai-chat-export" />
+    <link rel="stylesheet" href="/simple-ai-chat-export/styles.css" />
   </head>
   <body>
     <header>
-      <a class="brand" href="/simple-chatgpt-exporter"
-        ><span aria-hidden="true">↧</span> Simple ChatGPT Export</a
+      <a class="brand" href="/simple-ai-chat-export"
+        ><span aria-hidden="true">↧</span> Simple AI-Chat export for ChatGPT,
+        Claude, Gemini</a
       >
       <nav aria-label="Main">
         <a href="#how">How it works</a><a href="#help">Help</a
@@ -35,14 +36,16 @@
           <p class="eyebrow">For the conversations worth keeping</p>
           <h1>A good conversation.<br />A copy of your own.</h1>
           <p class="lead">
-            Save the ChatGPT conversation you’re viewing. Keep it for later,
-            make a quick edit, or carry on somewhere else.
+            Save the ChatGPT, Claude or Gemini conversation you’re viewing. Keep
+            it for later, make a quick edit, or carry on somewhere else.
           </p>
           <p class="release-note">
-            <strong>In development.</strong> We’re checking complete, reliable
-            exports before opening the doors.
+            <strong>In development.</strong> The private ChatGPT prerelease is
+            ready for testing. Claude and Gemini use the same export flow.
           </p>
-          <p class="quiet">By @taiyodayo · Not affiliated with OpenAI</p>
+          <p class="quiet">
+            By @taiyodayo · Not affiliated with OpenAI, Anthropic or Google
+          </p>
         </div>
         <div
           class="paper"
@@ -132,17 +135,18 @@
             listing. No store listing is live yet.
           </p>
           <p>
-            After installation, open your conversation and choose Simple ChatGPT
-            Export from the browser’s Extensions menu. Pin it there if you’d
+            After installation, open your conversation and choose Simple AI-Chat
+            export from the browser’s Extensions menu. Pin it there if you’d
             like it close to hand. No onboarding tour required.
           </p>
         </details>
         <details>
           <summary>What if I open it on another website?</summary>
           <p>
-            Export will work with signed-in and guest conversations at
-            chatgpt.com. On an unsupported page, it asks you to open a ChatGPT
-            conversation. Nothing is read or saved.
+            The development build recognises saved conversations at chatgpt.com,
+            claude.ai and gemini.google.com, plus ChatGPT guest chats. On an
+            unsupported page, it asks you to open a supported conversation.
+            Nothing is read or saved.
           </p>
         </details>
         <details>
@@ -168,10 +172,20 @@
           </p>
         </details>
         <details>
+          <summary>Does it include reports and artifacts?</summary>
+          <p>
+            Supported completed ChatGPT Deep Research reports include Markdown
+            and citations. Claude artifacts, Gemini Canvas and other content
+            outside messages are not archived. Gemini Deep Research is not yet
+            verified. Rendered exports cannot prove server-side history
+            completeness.
+          </p>
+        </details>
+        <details>
           <summary>What if an export cannot be completed?</summary>
           <p>
             The extension will explain the problem and avoid claiming success.
-            Wait for ChatGPT to finish replying, check your connection, and try
+            Wait for the app to finish replying, check your connection, and try
             again on the branch you want. If saving was interrupted, check
             Downloads before retrying.
           </p>
@@ -223,9 +237,11 @@
         <h2>Privacy, plainly.</h2>
         <p>
           Conversation processing happens in your browser. No analytics,
-          conversation cache or developer backend. Live ChatGPT export is
-          implemented in the private development build; the browser preview uses
-          sample conversations.
+          conversation cache or developer backend. ChatGPT export, including
+          supported Deep Research reports, is implemented in the private
+          prerelease. Claude and Gemini readers use the same export flow;
+          ordinary saved conversations have been checked in Chrome. The browser
+          preview uses sample conversations.
         </p>
         <p>
           This website has no tracking scripts or remote fonts. Cloudflare
@@ -237,13 +253,13 @@
           without conversation data or a referrer. Support is entirely optional.
         </p>
         <p>
-          <a href="/simple-chatgpt-exporter/privacy">Read the privacy policy</a>
+          <a href="/simple-ai-chat-export/privacy">Read the privacy policy</a>
         </p>
       </section>
     </main>
     <footer>
       <span>© 2026 @taiyodayo</span
-      ><a href="/simple-chatgpt-exporter/privacy">Privacy</a
+      ><a href="/simple-ai-chat-export/privacy">Privacy</a
       ><span>Not affiliated with or endorsed by OpenAI.</span>
     </footer>
   </body>

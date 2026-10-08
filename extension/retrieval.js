@@ -91,8 +91,9 @@ export async function retrieveCurrentConversation(tab, { signal } = {}) {
     identity,
     data: {
       ...location,
-      title:
-        title === "ChatGPT" ? messages[0].parts[0].text.slice(0, 100) : title,
+      title: ["ChatGPT", "Claude", "Gemini"].includes(title)
+        ? messages[0].parts[0].text.slice(0, 100)
+        : title,
       selectedNode,
       rootNode: "export-root",
       complete: true,

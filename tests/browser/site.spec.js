@@ -5,7 +5,7 @@ test("support page is honest about availability, private source and support setu
 }) => {
   const requests = [];
   page.on("request", (request) => requests.push(request.url()));
-  await page.goto("/simple-chatgpt-exporter");
+  await page.goto("/simple-ai-chat-export");
   await expect(
     page.getByRole("heading", {
       name: "A good conversation. A copy of your own.",

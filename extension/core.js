@@ -19,11 +19,26 @@ export function conversationLocation(value) {
   } catch {
     fail("wrong-page");
   }
-  if (url.origin !== "https://chatgpt.com" || url.username || url.password)
-    fail("wrong-page");
-  const match = /^\/(c|uc)\/([^/]+)\/?$/.exec(url.pathname);
-  if (!match || !uuidPattern.test(match[2])) fail("wrong-page");
-  return { id: match[2], url: `https://chatgpt.com/${match[1]}/${match[2]}` };
+  if (url.username || url.password) fail("wrong-page");
+  let match, provider;
+  if (url.origin === "https://chatgpt.com") {
+    match = /^\/(c|uc)\/([^/]+)\/?$/.exec(url.pathname);
+    if (!match || !uuidPattern.test(match[2])) fail("wrong-page");
+    provider = "ChatGPT";
+  } else if (url.origin === "https://claude.ai") {
+    match = /^\/(chat)\/([^/]+)\/?$/.exec(url.pathname);
+    if (!match || !uuidPattern.test(match[2])) fail("wrong-page");
+    provider = "Claude";
+  } else if (url.origin === "https://gemini.google.com") {
+    match = /^\/((?:u\/\d+\/)?app)\/([a-f0-9]{8,64})\/?$/.exec(url.pathname);
+    if (!match) fail("wrong-page");
+    provider = "Gemini";
+  } else fail("wrong-page");
+  return {
+    id: match[2],
+    url: `${url.origin}/${match[1]}/${match[2]}`,
+    provider,
+  };
 }
 
 export function validateConversation(data, expected) {
@@ -159,6 +174,7 @@ export function validateConversation(data, expected) {
   return {
     id: data.id,
     url: location.url,
+    provider: location.provider,
     rendered: data.rendered === true,
     title: data.title,
     selectedNode: data.selectedNode,
@@ -182,6 +198,9 @@ export function safeFilename(title) {
 
 export function createExport(conversation, format, now = new Date()) {
   if (!["md", "txt"].includes(format)) fail("unsupported");
+  const location = conversationLocation(
+    conversation.url ?? `https://chatgpt.com/c/${conversation.id}`,
+  );
   const omissions = [];
   const messages = conversation.messages.map((message, index) => {
     const body = message.parts
@@ -191,7 +210,7 @@ export function createExport(conversation, format, now = new Date()) {
         return `[${part.kind[0].toUpperCase() + part.kind.slice(1)} not included in this text export.]`;
       })
       .join("\n\n");
-    const speaker = message.role === "user" ? "You" : "ChatGPT";
+    const speaker = message.role === "user" ? "You" : location.provider;
     const sources = message.sources.length
       ? "\n\nSources\n" +
         message.sources
@@ -207,10 +226,11 @@ export function createExport(conversation, format, now = new Date()) {
   const metadata = {
     schemaVersion: 1,
     exporter: {
-      name: "Simple ChatGPT Export",
-      version: "0.1.1-beta.1",
+      name: "simple-ai-chat-export",
+      version: "0.2.0-alpha.1",
       author: "@taiyodayo",
     },
+    provider: location.provider,
     title: conversation.title,
     conversationId: conversation.id,
     conversationUrl: conversationLocation(
@@ -236,6 +256,7 @@ export function createExport(conversation, format, now = new Date()) {
     // Never imply attachments were archived or that timestamps were available when they were not.
     notes: [
       "Non-text files are not downloaded.",
+      "Artifacts and Canvas content outside the displayed messages are not included.",
       "Original message timestamps are not available.",
       ...(conversation.rendered
         ? [

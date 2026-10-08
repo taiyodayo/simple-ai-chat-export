@@ -2,15 +2,15 @@
 
 Do not submit this draft until the release gate passes. Screenshots and supported-browser claims must match the verified release.
 
-**Name:** Simple ChatGPT Export
+**Name:** Simple AI-Chat export for ChatGPT, Claude, Gemini
 
-**Short description:** Save the ChatGPT conversation you’re viewing as Markdown or plain text, with metadata included. Processed in-browser.
+**Short description:** Save a ChatGPT, Claude or Gemini conversation you’re viewing as Markdown or plain text, with metadata included. Processed in-browser.
 
 **Description:**
 
-Save this chatGPT conversation.
+Save this conversation.
 
-Simple ChatGPT Export saves the ChatGPT conversation you’re viewing for archiving or a quick edit. Open the extension, choose Markdown or plain text, and export. Metadata appears at the beginning of the output file. No ZIP to unpack.
+Simple AI-Chat export for ChatGPT, Claude, Gemini saves the ChatGPT, Claude or Gemini conversation you’re viewing for archiving or a quick edit. Open the extension, choose Markdown or plain text, and export. Metadata appears at the beginning of the output file. No ZIP to unpack.
 
 • Keeps messages in the order of the branch you’re viewing.
 • Preserves paragraphs, Unicode, code indentation, readable table notation and available source links.
@@ -18,26 +18,29 @@ Simple ChatGPT Export saves the ChatGPT conversation you’re viewing for archiv
 • Tells you when something cannot be included. It won’t quietly call an incomplete conversation complete.
 • Processes the export on your device. No analytics, extension account or subscription.
 
-Open a conversation at chatgpt.com to begin. Guest chats are included; no sign-in is required. Image, audio, video and attachment files are not downloaded. Known omissions are marked in a text-only export. Some conversation types may be unsupported. Keep the export window open until saving finishes.
+Open a saved conversation at chatgpt.com, claude.ai or gemini.google.com to begin. ChatGPT guest chats are included. Image, audio, video and attachment files are not downloaded. Known omissions are marked in a text-only export. Some conversation types may be unsupported. Keep the export window open until saving finishes.
 
-Created by @taiyodayo. Not affiliated with OpenAI; not an official ChatGPT product.
+Created by @taiyodayo. Not affiliated with OpenAI, Anthropic or Google; an independent extension.
 
 Useful? Buy me a coffee: https://buymeacoffee.com/taiyodayo
 Entirely optional. Every export works without it.
 
-Help and privacy: https://ongaku.co.uk/simple-chatgpt-exporter
+Help and privacy: https://ongaku.co.uk/simple-ai-chat-export
 
-**Website/support URL:** https://ongaku.co.uk/simple-chatgpt-exporter
+**Website/support URL:** https://ongaku.co.uk/simple-ai-chat-export
 
-**Privacy policy URL:** https://ongaku.co.uk/simple-chatgpt-exporter/privacy
+**Privacy policy URL:** https://ongaku.co.uk/simple-ai-chat-export/privacy
 
-**Single purpose:** Save the currently displayed ChatGPT conversation's selected branch to a local text file with a metadata header.
+**Single purpose:** Save the currently displayed ChatGPT, Claude or Gemini conversation's selected branch to a local text file with a metadata header.
 
 **Permission explanations:**
 
 - `activeTab`: access the tab selected when the user deliberately opens the extension. Confirm the final retrieval behaviour before submission.
 - `downloads`: save the requested file and confirm completion or interruption for that download only.
-- `scripting`: not currently requested. Add and explain only if the live retrieval decision requires it.
+- `scripting`: inject the local page reader after the user requests export.
+- Optional Deep Research host access: request the detected ChatGPT report’s exact embedded sandbox origin to include its text and citations.
+
+Claude artifacts and Gemini Canvas outside messages are excluded. Gemini Deep Research is not verified. The store copy must be reviewed against final live verification before submission.
 
 **Screenshots after verification:**
 

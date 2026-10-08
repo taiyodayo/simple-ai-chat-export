@@ -1,6 +1,6 @@
 {
-  "name": "simple-chatgpt-export",
-  "version": "0.1.1-beta.1",
+  "name": "simple-ai-chat-export",
+  "version": "0.2.0-alpha.1",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.4.2",

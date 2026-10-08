@@ -32,11 +32,27 @@ test("support worker serves only its known paths with restrictive headers", asyn
   );
   assert.equal(privacy.status, 200);
   assert.equal(fetched.at(-1), "/privacy.html");
+  for (const [path, asset] of [
+    ["/simple-ai-chat-export", "/index.html"],
+    ["/simple-ai-chat-export/", "/index.html"],
+    ["/simple-ai-chat-export/styles.css", "/styles.css"],
+    ["/simple-ai-chat-export/privacy", "/privacy.html"],
+    ["/simple-ai-chat-export/privacy/", "/privacy.html"],
+  ]) {
+    const response = await worker.fetch(
+      new Request("https://ongaku.co.uk" + path),
+      env,
+    );
+    assert.equal(response.status, 200);
+    assert.equal(fetched.at(-1), asset);
+  }
   for (const path of [
     "/",
     "/some-other-project",
     "/simple-chatgpt-exporter-unrelated",
     "/simple-chatgpt-exporter/private",
+    "/simple-ai-chat-export-unrelated",
+    "/simple-ai-chat-export/private",
   ]) {
     const response = await worker.fetch(
       new Request("https://ongaku.co.uk" + path),
@@ -56,5 +72,5 @@ test("support worker serves only its known paths with restrictive headers", asyn
     ).status,
     405,
   );
-  assert.equal(fetched.length, 2);
+  assert.equal(fetched.length, 7);
 });

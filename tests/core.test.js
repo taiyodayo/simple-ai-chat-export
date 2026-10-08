@@ -35,6 +35,7 @@ test("guest URLs are canonicalised and retained in TXT and Markdown metadata", (
   assert.deepEqual(conversationLocation(`${url}/?ignored=yes#fragment`), {
     id: conversationId,
     url,
+    provider: "ChatGPT",
   });
   const data = { ...fixture(), url };
   const conversation = validateConversation(data, { ...identity(data), url });
@@ -203,4 +204,37 @@ test("rendered transcript metadata does not claim server-side completeness", () 
   );
   assert.equal(result.metadata.textComplete, false);
   assert.match(result.metadata.scope, /rendered/);
+});
+
+test("saved Claude and Gemini URLs retain their provider and canonical identity", () => {
+  for (const [provider, url] of [
+    ["Claude", `https://claude.ai/chat/${conversationId}`],
+    ["Gemini", "https://gemini.google.com/app/0123456789abcdef"],
+    ["Gemini", "https://gemini.google.com/u/1/app/0123456789abcdef"],
+  ]) {
+    const location = conversationLocation(`${url}/?ignored=true#fragment`);
+    assert.equal(location.url, url);
+    assert.equal(location.provider, provider);
+    const data = { ...fixture(), id: location.id, url };
+    const conversation = validateConversation(data, { ...identity(data), url });
+    for (const format of ["md", "txt"]) {
+      const result = createExport(conversation, format);
+      assert.equal(result.metadata.provider, provider);
+      assert.equal(result.metadata.conversationUrl, url);
+      assert.match(result.transcript, new RegExp(`${provider}\\n\\n`));
+      assert.equal(result.metadata.exporter.name, "simple-ai-chat-export");
+    }
+  }
+  for (const url of [
+    `https://claude.ai.evil.test/chat/${conversationId}`,
+    `http://claude.ai/chat/${conversationId}`,
+    `https://user:pass@claude.ai/chat/${conversationId}`,
+    `https://claude.ai/share/${conversationId}`,
+    "https://claude.ai/new",
+    "https://gemini.google.com/app",
+    "https://gemini.google.com/app/not-a-chat-id",
+    "https://gemini.google.com/share/0123456789abcdef",
+    "https://gemini.google.com/u/1/app/0123456789abcdef/extra",
+  ])
+    assert.throws(() => conversationLocation(url), { code: "wrong-page" });
 });

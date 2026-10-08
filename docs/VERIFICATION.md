@@ -1,5 +1,17 @@
 # Verification
 
+## Provider alpha — 8 October 2026
+
+The repository is renamed to `taiyodayo/simple-ai-chat-export` and remains private. The marketing name is **Simple AI-Chat export for ChatGPT, Claude, Gemini**. Branch `feat/multi-provider-export` follows the merged ChatGPT prerelease; its package version is `0.2.0-alpha.1` with Chrome version `0.2.0`. The existing unpacked extension was reloaded in the owner’s first Chrome profile and displays the renamed UI, default `~/Downloads` and an Export button that fits within its window.
+
+Live Claude: the owner signed in and opened a saved conversation. Structural inspection logged DOM markers and counts only. The production reader recognised one user and one completed assistant message, including Claude’s `display: contents` user wrapper. A temporary local extension inspection entry exercised actual `chrome.scripting`, schema validation, a second read/fingerprint check and Markdown/TXT formatting, reporting two messages and the correct Claude provider. No live transcript, title, URL or message ID was logged, downloaded, committed or uploaded. The temporary entry was removed before packaging.
+
+Gemini: the personal profile’s home screen contained saved history links. The most recent saved conversation was opened for in-memory inspection, without logging its contents or identifiers. It exposes `user-query`, `.query-text`, `model-response`, `message-content .markdown`, and explicit `aria-busy="false"` completion markers. The production page reader recognised four messages in order. A temporary local extension inspection then exercised actual Chrome scripting, validation, rereading/fingerprint checks and both Markdown/TXT formats for Gemini (four messages) and Claude (two messages); both passed with correct provider metadata. Only counts, success status and file lengths were reported. No live chat content was saved or uploaded. Claude artifacts and Gemini Canvas outside displayed messages are excluded and disclosed; Gemini Deep Research is not verified. ChatGPT guest/history/Deep Research regression cases remain covered.
+
+Final checks pass 59 Node tests and 43 browser tests, including actual Chrome scripting/revalidation/download completion in both formats for synthetic conversations from each provider, the extracted package, shared folder UX and ChatGPT Deep Research regression cases. Source/manifest checks and formatting pass.
+
+The renamed website and privacy pages, new project path and legacy aliases pass local tests and Wrangler 4.148.0 dry-run bundling. Live publishing is pending: the documented `taiyodayo-personal` profile is missing locally and the default login cannot access the pinned personal account. No deployment was attempted with that identity.
+
 ## ChatGPT prerelease — 8 October 2026
 
 The owner authorised merging the current ChatGPT implementation and cutting the private `v0.1.1-beta.1` prerelease before broader provider support. Final verification passes 58 Node tests, 35 browser tests, source/manifest checks and formatting. The package name follows the project name/version and the inventory records its artifact filename and source commit. The manifest uses Chrome’s numeric version `0.1.1` with `version_name` set to `0.1.1-beta.1`. This is a private test release; Chrome Web Store publication, public repository access and unresolved licence/release gates are unchanged.

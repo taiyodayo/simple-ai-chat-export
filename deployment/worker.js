@@ -3,6 +3,11 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const paths = new Map([
+      ["/simple-ai-chat-export", "/index.html"],
+      ["/simple-ai-chat-export/", "/index.html"],
+      ["/simple-ai-chat-export/styles.css", "/styles.css"],
+      ["/simple-ai-chat-export/privacy", "/privacy.html"],
+      ["/simple-ai-chat-export/privacy/", "/privacy.html"],
       ["/simple-chatgpt-exporter", "/index.html"],
       ["/simple-chatgpt-exporter/", "/index.html"],
       ["/simple-chatgpt-exporter/styles.css", "/styles.css"],

@@ -1,3 +1,11 @@
+# Current direction — 8 October 2026
+
+The owner expanded the product to ChatGPT, Claude and Gemini and renamed it to `simple-ai-chat-export`, marketed as **Simple AI-Chat export for ChatGPT, Claude, Gemini**. PR #2 merged the ChatGPT baseline; private `v0.1.1-beta.1` freezes that working version before provider changes. The new branch uses the existing reader/formatter/save pipeline and the same popup UI, without a provider framework or extra settings.
+
+The earlier plan below records the original ChatGPT prototype. Its ChatGPT-only scope is superseded by the owner’s request.
+
+---
+
 # Simple ChatGPT Export
 
 Status: implementation authorised by the owner. Private GitHub development authorised; public release requires live verification and security review. Build a synthetic-data prototype before the owner provides a dedicated live testing profile.
