@@ -1,5 +1,7 @@
 # Independent adversarial review — 8 October 2026
 
+Historical review of 0.2.0/0.2.1. Findings, counts and upload instructions below describe that snapshot. Current changes are recorded in [VERIFICATION.md](VERIFICATION.md); use [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md) for the latest owner-operated upload.
+
 Three agents independently reviewed baseline 0.2.0 (commit 43044c3): security, privacy and screenshot-based UX. A fourth agent implemented the permission-rejection fix. This is an internal source review with targeted synthetic experiments, not an external audit, certification or proof against every possible attack. No real chats or private account data were used.
 
 ## Verified issues and changes in 0.2.1

@@ -1,5 +1,9 @@
 # Verification
 
+## Documentation alignment — 8 October 2026
+
+Issue #13 publishes the original 0.2.1 local assessment with evidence links pinned to its measured commit. Historical settings/results remain historical. Current docs distinguish native handoff from confirmed folder writes, local processing from user/browser retention, persistent report grants and future publisher trust. Security and privacy details have canonical destinations; repeated README/site prose is reduced. Version 0.2.2 store copy is prepared for the owner; neither the dashboard nor the live website is changed by this documentation merge. Runtime logic, permissions and output content are unchanged by this documentation task.
+
 ## Literal Markdown table cells — 8 October 2026
 
 Issue #16 replaces recursive Markdown conversion inside table cells with literal inline-code fences. Backslashes retain their code-span meaning and GFM table pipes use one literal escape. A character loop chooses fences longer than every input backtick run; no regex-based fence detection or table-cell substitution is used. Table row/column/size limits and source-link collection remain. Inline styling inside cells becomes literal text; displayed values, Unicode, backslashes and pipes are preserved. Browser regressions exercise code-like/HTML-like cells and the original large-backtick/deep/ragged cases. GitHub’s GFM renderer and Python’s standard HTMLParser independently confirmed the production reader’s two synthetic cell values and column count survive exactly. This does not sanitise arbitrary non-table Markdown for external viewers.
@@ -26,7 +30,7 @@ Issue #8 adds one read-only CI job with pinned actions, Node 24 and the declared
 
 Main requires the GitHub Actions `verify` check with an up-to-date base, including administrators, and blocks force pushes/deletion. Pull requests are required without a second-person approval requirement. A deliberately failing check under that protection in PR #15 produced a blocked merge state ([failure run](https://github.com/taiyodayo/simple-ai-chat-export/actions/runs/37752520723)); its temporary failure step was removed before final verification and merge. These are repository controls, not a guarantee against malicious publisher updates.
 
-CodeQL flagged two URL-related test expressions, now replaced with an exact string assertion, and table-cell backslash escaping. A synthetic GitHub Markdown rendering probe confirmed a literal backslash before a pipe can be lost in a non-code table cell. Escaping every backslash would instead change inline code values. This is an exported-format correctness finding, not a demonstrated popup code-execution path; it requires a context-aware correction and remains tracked separately.
+CodeQL flagged two URL-related test expressions, now replaced with an exact string assertion, and table-cell backslash escaping. A synthetic GitHub Markdown rendering probe confirmed a literal backslash before a pipe can be lost in a non-code table cell. Escaping every backslash would instead change inline code values. This is an exported-format correctness finding, not a demonstrated popup code-execution path; it was corrected with literal table-cell fences in PR #21. Fresh main-branch CodeQL read-back marks all three alerts fixed.
 
 ## Adversarial review and replacement 0.2.1 — 8 October 2026
 
