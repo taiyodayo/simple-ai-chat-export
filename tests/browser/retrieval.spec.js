@@ -126,6 +126,7 @@ for (const provider of ["ChatGPT", "Claude", "Gemini"])
       await popup.goto(
         `chrome-extension://${new URL(worker.url()).host}/popup.html`,
       );
+      await expect(popup.locator('input[value="txt"]')).toBeChecked();
       const output = await popup.evaluate(
         async ({ origin, provider }) => {
           const { retrieveCurrentConversation, confirmConversationUnchanged } =
