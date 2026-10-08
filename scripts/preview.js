@@ -9,6 +9,7 @@ const types = {
   ".js": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".svg": "image/svg+xml",
+  ".png": "image/png",
 };
 const server = createServer(async (req, res) => {
   try {
@@ -23,6 +24,8 @@ const server = createServer(async (req, res) => {
       path === "/simple-chatgpt-exporter/"
     )
       path = "/site/index.html";
+    if (path === "/simple-chatgpt-exporter/favicon.png")
+      path = "/site/favicon.png";
     if (path === "/simple-chatgpt-exporter/styles.css")
       path = "/site/styles.css";
     if (
