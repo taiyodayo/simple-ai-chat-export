@@ -21,6 +21,9 @@ test("the extracted package loads with its CSP and saves readable TXT and Markdo
       ),
       extension,
     ]);
+    expect(await readFile(join(extension, "LICENSE"), "utf8")).toBe(
+      await readFile(resolve("LICENSE"), "utf8"),
+    );
     context = await chromium.launchPersistentContext(
       join(temporary, "profile"),
       {

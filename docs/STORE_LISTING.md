@@ -1,51 +1,96 @@
-# Chrome Web Store copy — release draft
+# Chrome Web Store submission — 0.2.0
 
-Do not submit this draft until the release gate passes. Screenshots and supported-browser claims must match the verified release.
+The owner authorised production release and store publication. The app is a production release; Google review and store availability are separate statuses. No store item ID or approved install URL has been obtained yet.
 
-**Name:** Simple AI-Chat export for ChatGPT, Claude, Gemini
+## Listing fields
 
-**Short description:** Save a ChatGPT, Claude or Gemini conversation you’re viewing as Markdown or plain text, with metadata included. Processed in-browser.
+| Field                | Value                                                                                                                |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Name                 | Simple AI-Chat export for ChatGPT, Claude, Gemini                                                                    |
+| Version              | 0.2.0                                                                                                                |
+| Short description    | Save the displayed ChatGPT, Claude or Gemini conversation as plain text or Markdown. Local processing. No analytics. |
+| Detailed description | Paste [store/description.txt](../store/description.txt).                                                             |
+| Language             | English (United Kingdom), if that locale is offered; otherwise English.                                              |
+| Category             | Productivity; choose the tools subcategory if required.                                                              |
+| Price                | Free. The coffee link is optional and unlocks nothing.                                                               |
+| Visibility           | Public.                                                                                                              |
+| Distribution         | All supported regions unless the publisher's verified legal/account settings require otherwise.                      |
+| Mature content       | No; the app itself supplies no mature content.                                                                       |
+| Homepage             | https://ongaku.co.uk/simple-ai-chat-export                                                                           |
+| Support              | https://ongaku.co.uk/simple-ai-chat-export#help                                                                      |
+| Privacy policy       | https://ongaku.co.uk/simple-ai-chat-export/privacy                                                                   |
+| Source               | https://github.com/taiyodayo/simple-ai-chat-export                                                                   |
+| Licence              | MIT + Commons Clause v1.0; copyright (c) 2026 @taiyodayo.                                                            |
 
-**Description:**
+The name and short description come from manifest.json. Use no fabricated ratings, testimonials, compatibility, audit claims or store install URLs.
 
-Save this conversation.
+## Single purpose
 
-Simple AI-Chat export for ChatGPT, Claude, Gemini saves the ChatGPT, Claude or Gemini conversation you’re viewing for archiving or a quick edit. Open the extension, choose Markdown or plain text, and export. Metadata appears at the beginning of the output file. No ZIP to unpack.
+Save the currently displayed conversation from ChatGPT, Claude or Gemini to a local Markdown or plain-text file, with a metadata header. The user initiates each export and chooses its format and destination.
 
-• Keeps messages in the order of the branch you’re viewing.
-• Preserves paragraphs, Unicode, code indentation, readable table notation and available source links.
-• Includes the conversation title, original link, export date, message count and omission details at the beginning of the file.
-• Tells you when something cannot be included. It won’t quietly call an incomplete conversation complete.
-• Processes the export on your device. No analytics, extension account or subscription.
+## Permission justifications — paste into the Privacy tab
 
-Open a saved conversation at chatgpt.com, claude.ai or gemini.google.com to begin. ChatGPT guest chats are included. Image, audio, video and attachment files are not downloaded. Known omissions are marked in a text-only export. Some conversation types may be unsupported. Keep the export window open until saving finishes.
+**activeTab**
 
-Created by @taiyodayo. Not affiliated with OpenAI, Anthropic or Google; an independent extension.
+Temporary access to the tab where the user clicks the extension. The exporter validates the exact supported conversation URL and reads displayed messages only after the user chooses Export. It does not inspect other conversations or run automatic background collection.
 
-Useful? Buy me a coffee: https://buymeacoffee.com/taiyodayo
-Entirely optional. Every export works without it.
+**scripting**
 
-Help and privacy: https://ongaku.co.uk/simple-ai-chat-export
+Inject the packaged DOM reader into the selected tab to read the displayed conversation and check its stability. The script briefly scrolls and restores the page position. A second read detects changes before saving. Scripts are included in the ZIP; no code is downloaded.
 
-**Website/support URL:** https://ongaku.co.uk/simple-ai-chat-export
+**downloads**
 
-**Privacy policy URL:** https://ongaku.co.uk/simple-ai-chat-export/privacy
+Create the user's requested local export in Chrome's download destination and confirm whether that specific download completed, was cancelled or was interrupted. The extension queries only downloads it starts; it does not enumerate the user's download history. Custom-folder writes use a user-selected File System Access directory handle instead.
 
-**Single purpose:** Save the currently displayed ChatGPT, Claude or Gemini conversation's selected branch to a local text file with a metadata header.
+**Optional host permission: https://_.web-sandbox.oaiusercontent.com/_**
 
-**Permission explanations:**
+ChatGPT Deep Research reports are displayed in cross-origin sandbox frames which ordinary activeTab access cannot read. The wildcard declares potential sandbox access, but the user-triggered permission request is limited to the detected exact HTTPS mcp-app sandbox origin. The exporter reads matching report text/citation data in the chosen tab only; it does not fetch cited sources, inspect research activity or read authentication state. Users can revoke the persistent site grant in Chrome's extension settings. No additional required host access is requested for ordinary conversations.
 
-- `activeTab`: access the tab selected when the user deliberately opens the extension. Confirm the final retrieval behaviour before submission.
-- `downloads`: save the requested file and confirm completion or interruption for that download only.
-- `scripting`: inject the local page reader after the user requests export.
-- Optional Deep Research host access: request the detected ChatGPT report’s exact embedded sandbox origin to include its text and citations.
+## Remote code
 
-Claude artifacts and Gemini Canvas outside messages are excluded. Gemini Deep Research is not verified. The store copy must be reviewed against final live verification before submission.
+Select **No, I am not using remote code**.
 
-**Screenshots after verification:**
+All executable JavaScript is packaged locally. Reading text/citation fields already loaded by the chat app is data handling, not downloading executable code. No eval, remote scripts, runtime libraries or remote configuration are used.
 
-1. Format choice: “Choose a format. Keep a copy.”
-2. Successful export with message count: “Ready to read. Ready to edit.”
-3. Transcript beside metadata using synthetic content: “The conversation, with its context.”
+## User data declarations
 
-No ratings, testimonials, browser compatibility, audit claims or completion screenshots may be fabricated. Use the fixed coffee URL as a visible listing link; the store controls whether description URLs become clickable. No payment iframe or remote button image.
+Disclose local processing: do not select “no user data” solely because the extension has no backend. The app reads chat text and records its title/URL in a local export.
+
+Select **Website content**, **Personal communications**, and **Web history** (limited here to the selected chat's URL/title, not general browser history). Explain where a comment field is available:
+
+> The user-selected chat text, title, URL, source links and message identifiers are processed locally to create the requested export. No conversation information is uploaded, retained in extension storage, sold, used for ads or profiling, or sent to the developer. The extension does not request the history, cookies or identity APIs. Files and download records remain under the user's control.
+
+Other data categories are not independently extracted: the extension does not read payment fields, account credentials, health records, location, click tracking or identity profiles. Conversation text can contain sensitive information supplied by the user; the privacy policy covers that text and the unencrypted output file. Review the dashboard's exact category wording when completing the form.
+
+Certify the three Limited Use declarations: data is not sold/transferred to third parties, is used only for the single purpose, and is not used to assess creditworthiness or for lending. The public website and optional support/coffee links have their own ordinary connection processing; clicking them sends no conversation data or referrer from the extension.
+
+## Reviewer test instructions — paste into Test instructions
+
+1. Use desktop Chrome. No extension account, subscription, payment or developer credential is required.
+2. For a test without signing in, open https://chatgpt.com, send a harmless prompt and wait for its completed guest conversation URL at /uc/<UUID>. Guest availability is controlled by ChatGPT; if unavailable, use your own ChatGPT account and a saved /c/<UUID> chat.
+3. For Claude or Gemini, sign in using your own test account, create a harmless saved conversation and wait for a completed reply. Supported routes are claude.ai/chat/<UUID>, gemini.google.com/app/<hex-id>, and the account-prefixed Gemini /u/<number>/app/<hex-id> route.
+4. Suggested prompt: “Give me a short explanation, a two-row Markdown table and a JavaScript code block that prints hello.” Synthetic content only.
+5. Click the extension on that conversation. Choose Markdown, leave Save location at Downloads and select Export conversation. Confirm the .md file begins with metadata, uses the correct provider speaker label and contains the displayed text. Repeat with Plain text.
+6. Choose Change above Export, select a writable directory and export. Confirm the file exists in that directory. Repeated exports keep both files with numbered names. Use Downloads resets the destination. Cancelling the folder dialog retains the previous destination.
+7. Try while a reply is still generating, or switch chats during reading. The app must show a clear error and must not claim a completed save. The source includes synthetic automated cases for these conditions.
+8. Optional Deep Research: use a completed supported ChatGPT report in a saved conversation. After detection, choose Allow Deep Research and export, then grant the exact sandbox-site request. The report text and citation URLs should be included. This scenario may require a ChatGPT subscription; ordinary export does not.
+9. No developer login credentials are supplied or needed. No donation is required; the coffee link appears only after a successful save.
+
+## Upload files
+
+- ZIP: `dist/simple-ai-chat-export-0.2.0.zip` (manifest at ZIP root, full LICENSE included).
+- Store icon: `store/assets/icon-128.png` (128 × 128 PNG, transparent outer padding).
+- Screenshots: `store/assets/01-export.png` and `02-saved.png` (1280 × 800 PNG).
+- Required small promotional tile: `store/assets/promo-440x280.png`.
+
+Screenshots show the real extension UI. The success capture follows a real Chrome-script read/revalidation/download of hand-written synthetic chat markup; it is not an injected success message or a capture of a private chat. Promotional art uses the app's own export icon, not provider trademarks. Image generation/capture tooling is development-only and not shipped.
+
+## Account and publishing steps
+
+Use the dedicated app-publishing Google account, never the employer or Cloudflare account. Registration/payment, verified publisher contact email, two-step verification and any required trader/business declarations must be completed truthfully in Google's dashboard. Do not put login emails, private destinations, credentials or payment information in Git. Support uses the public help page and GitHub issues; no unverified forwarding alias is advertised.
+
+Upload the ZIP through **Add new item**, enter the fields above, add images, fill Privacy and Test instructions, select public/free distribution, and submit for review. The owner authorised publication; automatic publication after approval is the intended setting. Record the actual store item ID and review status in docs/RELEASE.md, then add the approved listing URL to the website and README once available. Google approval is not implied by merging this release.
+
+## Primary references checked 8 October 2026
+
+[Publishing](https://developer.chrome.com/docs/webstore/publish), [listing fields](https://developer.chrome.com/docs/webstore/cws-dashboard-listing), [privacy fields](https://developer.chrome.com/docs/webstore/cws-dashboard-privacy), [local data handling](https://developer.chrome.com/docs/webstore/program-policies/user-data-faq), [image specifications](https://developer.chrome.com/docs/webstore/images), and [Commons Clause](https://commonsclause.com/).

@@ -2,15 +2,15 @@
 
 ## Current status
 
-Private development alpha 0.2.0-alpha.1. Rendered-page extraction is implemented; server-side history completeness is not established. No external security audit has been completed. Passing tests of synthetic conversations does not establish that live provider retrieval works, that every browser behaves identically, or that the extension is universally safe.
+Production release 0.2.0; Chrome Web Store publication is tracked separately. Licensed under [MIT + Commons Clause v1.0](LICENSE), with attribution to @taiyodayo. Source is provided for security inspection. Rendered-page extraction is implemented; server-side history completeness is not established. No external security audit has been completed. Passing tests of synthetic conversations does not establish that live provider retrieval works, that every browser behaves identically, or that the extension is universally safe.
 
 ## Threat model
 
 Protect private conversation content, authentication, and the user's expectation of a complete selected branch. Treat page data, conversation text, links and filenames as untrusted. Defend against wrong-origin access, mixed branches, missing nodes, cycles, unexpected content, silent truncation, executable UI injection, unsafe filenames, misleading save confirmation and third-party data transfer.
 
-The prototype uses exact origin/path checks, bounded schema validation, a verified internal parent chain, explicit omission records, text-only DOM updates, escaped metadata headers, restricted filenames, a local-only CSP, and a fixed no-referrer support link. The source has no runtime dependencies. The CSP applies to extension pages, not the chat apps themselves or another application opening exported Markdown.
+The extension uses exact origin/path checks, bounded schema validation, a verified internal parent chain, explicit omission records, text-only DOM updates, escaped metadata headers, restricted filenames, a local-only CSP, and a fixed no-referrer support link. The source has no runtime dependencies. The CSP applies to extension pages, not the chat apps themselves or another application opening exported Markdown.
 
-The current internal model is not an authenticated statement from ChatGPT. Its completeness flags must eventually be derived from observed retrieval evidence by a reviewed adapter, never trusted merely because a remote response supplies a similarly named field.
+The current internal model is not an authenticated statement from ChatGPT. Its completeness flags are derived from observed rendering and stability checks; they do not prove server-side history completeness.
 
 `activeTab` grants temporary site access; it is not a one-conversation security boundary. The `downloads` permission is broader than the specific ID queried here. A separate profile does not isolate conversations within the same chat account. Malicious extensions, a compromised browser or account, local file readers, and vulnerabilities in Markdown editors remain outside this project's guarantees.
 
@@ -26,8 +26,8 @@ Do not retain real conversations, credentials, profile files, screenshots, netwo
 
 ## Reporting
 
-Before publication, activate `chat-simple-export@ongaku.co.uk` and enable private GitHub vulnerability reporting. Until then this repository remains private. Report the affected version, browser, operating system and synthetic reproduction. Do not attach authentication tokens, real transcripts or session captures. Public GitHub issues are not a safe place for secrets.
+Use [private vulnerability reporting](https://github.com/taiyodayo/simple-ai-chat-export/security/advisories/new) for security issues. Report the affected version, browser, operating system and a synthetic reproduction. Do not attach authentication tokens, real transcripts or session captures. Public GitHub issues are suitable for ordinary bugs and are not a safe place for secrets.
 
-## Release blockers
+## Publication and verification
 
-See [RELEASE.md](docs/RELEASE.md). Live data retrieval, selected-branch correspondence, exporter-attributable network traffic, real save-dialogue behaviour across target platforms, support routing, licence terms and a repository-history secret review remain mandatory gates.
+See [RELEASE.md](docs/RELEASE.md). The verification record distinguishes tested behaviour from remaining platform and long-history limits. Production status does not imply an external audit or Chrome Web Store approval.

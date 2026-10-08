@@ -40,8 +40,8 @@
             it for later, make a quick edit, or carry on somewhere else.
           </p>
           <p class="release-note">
-            <strong>In development.</strong> The private ChatGPT prerelease is
-            ready for testing. Claude and Gemini use the same export flow.
+            <strong>Production release.</strong> Version 0.2.0 supports ChatGPT,
+            Claude and Gemini. Chrome Web Store submission is being prepared.
           </p>
           <p class="quiet">
             By @taiyodayo · Not affiliated with OpenAI, Anthropic or Google
@@ -91,8 +91,8 @@
           </article>
         </div>
         <p class="quiet">
-          This describes the planned release. The extension is not available to
-          install yet.
+          Build and install locally from the source today. The Chrome Web Store
+          install link will appear here after approval.
         </p>
       </section>
       <section class="principles">
@@ -118,9 +118,17 @@
           </p>
           <h3>Code you can inspect</h3>
           <p>
-            The source will be published after security review and licence
-            confirmation. Readable code helps scrutiny; it is not a security
-            guarantee.
+            The source is public mainly for security inspection, under
+            <a
+              href="https://github.com/taiyodayo/simple-ai-chat-export/blob/main/LICENSE"
+              target="_blank"
+              rel="noopener noreferrer"
+              referrerpolicy="no-referrer"
+              >MIT + Commons Clause v1.0</a
+            >. Keep @taiyodayo’s copyright and the full licence notices. You can
+            modify, build and install it locally; selling it as defined in the
+            Commons Clause is excluded. Source availability is not an external
+            security audit.
           </p>
         </div>
       </section>
@@ -128,11 +136,18 @@
         <p class="eyebrow">A little practical help</p>
         <h2>Before you export.</h2>
         <details>
-          <summary>How will I install it?</summary>
+          <summary>How do I install it?</summary>
           <p>
-            The Chrome Web Store will be the main installation route. Once the
-            verified release is available, this page will link directly to its
-            listing. No store listing is live yet.
+            Chrome Web Store submission is being prepared. No store listing is
+            live yet. Until approval, download the release ZIP from
+            <a
+              href="https://github.com/taiyodayo/simple-ai-chat-export/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              referrerpolicy="no-referrer"
+              >GitHub releases</a
+            >, extract it, then choose Load unpacked in chrome://extensions with
+            Developer mode enabled.
           </p>
           <p>
             After installation, open your conversation and choose Simple AI-Chat
@@ -143,22 +158,22 @@
         <details>
           <summary>What if I open it on another website?</summary>
           <p>
-            The development build recognises saved conversations at chatgpt.com,
+            The extension recognises saved conversations at chatgpt.com,
             claude.ai and gemini.google.com, plus ChatGPT guest chats. On an
             unsupported page, it asks you to open a supported conversation.
             Nothing is read or saved.
           </p>
         </details>
         <details>
-          <summary>Which browsers will it support?</summary>
+          <summary>Which browsers does it support?</summary>
           <p>
-            We’re targeting desktop Chrome on macOS, Windows and Linux. Other
-            Chromium browsers will be listed once tested. Mobile browsers are
-            outside the initial scope.
+            Desktop Chrome on macOS has been tested. Windows, Linux and other
+            Chromium browsers are not independently verified yet. Mobile
+            browsers are outside the current scope.
           </p>
         </details>
         <details>
-          <summary>What will be in my download?</summary>
+          <summary>What is in my download?</summary>
           <p>
             An editable Markdown or plain-text file with metadata at the
             beginning. Metadata records the title, original conversation link,
@@ -208,10 +223,23 @@
         <details>
           <summary>How can I get help or report a security issue?</summary>
           <p>
-            The support address is being set up before public release. When
-            active, it will be listed here. Please include your browser,
-            operating system, extension version and the message you saw. Never
-            send passwords, authentication tokens or private conversation files.
+            Report ordinary bugs through
+            <a
+              href="https://github.com/taiyodayo/simple-ai-chat-export/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              referrerpolicy="no-referrer"
+              >GitHub issues</a
+            >. For security issues, use
+            <a
+              href="https://github.com/taiyodayo/simple-ai-chat-export/security/advisories/new"
+              target="_blank"
+              rel="noopener noreferrer"
+              referrerpolicy="no-referrer"
+              >private vulnerability reporting</a
+            >. Include your browser, operating system, extension version and a
+            synthetic reproduction. Never send passwords, authentication tokens
+            or private conversation files.
           </p>
         </details>
       </section>
@@ -238,10 +266,10 @@
         <p>
           Conversation processing happens in your browser. No analytics,
           conversation cache or developer backend. ChatGPT export, including
-          supported Deep Research reports, is implemented in the private
-          prerelease. Claude and Gemini readers use the same export flow;
-          ordinary saved conversations have been checked in Chrome. The browser
-          preview uses sample conversations.
+          supported Deep Research reports, is included in version 0.2.0. Claude
+          and Gemini readers use the same export flow; ordinary saved
+          conversations have been checked in Chrome. The browser preview uses
+          sample conversations.
         </p>
         <p>
           This website has no tracking scripts or remote fonts. Cloudflare

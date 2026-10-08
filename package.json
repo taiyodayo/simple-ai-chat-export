@@ -1,6 +1,6 @@
 {
   "name": "simple-ai-chat-export",
-  "version": "0.2.0-alpha.1",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.4.2",
@@ -14,10 +14,12 @@
     "inspect:live": "node scripts/live-profile.js",
     "check": "node scripts/check.js",
     "format:check": "prettier --check .",
-    "package:prototype": "node scripts/package.js"
+    "package": "node scripts/package.js",
+    "store:assets": "node scripts/store-assets.js"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
     "prettier": "3.9.9"
-  }
+  },
+  "license": "SEE LICENSE IN LICENSE"
 }

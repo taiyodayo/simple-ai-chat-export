@@ -1,6 +1,6 @@
 # Live-test handoff
 
-The development extension reads rendered messages from ChatGPT (guest and signed-in), Claude and Gemini conversations and saves Markdown or plain text. The current method and its completeness limits are documented in [RETRIEVAL.md](RETRIEVAL.md). This guide covers the remaining manual checks; it does not imply approval for store release.
+The production extension reads rendered messages from ChatGPT (guest and signed-in), Claude and Gemini conversations and saves Markdown or plain text. The current method and its completeness limits are documented in [RETRIEVAL.md](RETRIEVAL.md). This guide covers the remaining manual checks; it does not imply approval for store release.
 
 ## Owner setup
 

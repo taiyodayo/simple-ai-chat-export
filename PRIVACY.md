@@ -1,6 +1,6 @@
 # Privacy
 
-Applies to development alpha 0.2.0-alpha.1. Updated 8 October 2026.
+Applies to production release 0.2.0. Updated 8 October 2026.
 
 Simple AI-Chat export for ChatGPT, Claude, Gemini is an independent project by @taiyodayo. The extension reads rendered messages from the selected ChatGPT, Claude or Gemini tab after you choose Export. It makes no API requests and does not access authentication tokens. The browser preview uses synthetic conversations.
 
@@ -14,12 +14,12 @@ If you select a custom save folder, Chrome’s native directory picker grants fi
 
 The fixed Buy Me a Coffee link opens only when you click it. No conversation text, title, identifier, query parameter or referrer is sent by the extension with the link. The destination then receives ordinary web connection information, such as your IP address, and applies its own privacy practices. No payment widget or payment credentials are embedded in the extension. Help in the extension is local.
 
-The public website is hosted by Cloudflare. It has no analytics scripts or remote fonts; automatic beacon injection is prevented for these pages. Cloudflare may process ordinary connection information and maintain hosting/security logs under its own policies. Disabling Worker observability does not eliminate provider network logs. If you choose to contact support, the email provider processes the message and the project owner receives what you send. Do not include private transcripts or credentials.
+The public website is hosted by Cloudflare. It has no analytics scripts or remote fonts; automatic beacon injection is prevented for these pages. Cloudflare may process ordinary connection information and maintain hosting/security logs under its own policies. Disabling Worker observability does not eliminate provider network logs. If you choose to submit a GitHub issue or security report, GitHub processes it under its own policies and the project owner receives what you send. Public issues can be read by others. Do not include private transcripts or credentials.
 
 The `activeTab` and `scripting` permissions allow an isolated script to read the chosen conversation after you click the extension and choose Export. The script briefly scrolls the page and restores its position. The chat app itself may load content in response to scrolling; the exporter does not make network requests. No credentials are read.
 
 Completed Deep Research reports live in separate embedded sandbox pages. The extension declares optional access to `https://*.web-sandbox.oaiusercontent.com/*` and requests only the detected report’s exact app origin after you choose **Allow Deep Research and export**. Chrome retains a granted permission until you remove it in extension settings. The permission is broader than one report; the implementation reads only matching report frames in the chosen tab during export. A script in the report’s main JavaScript world reads the displayed report component’s Markdown and citation fields. It does not inspect authentication/session state, research activity or other conversations, and does not fetch cited source pages. The result is validated locally and discarded after use.
 
-The extension does not upload your conversation data anywhere. Processing happens in-browser, and the implementation can be checked in the [source code on GitHub](https://github.com/taiyodayo/simple-ai-chat-export). The repository is currently private during security review; it will be publicly inspectable before the extension is released. Conversation data is not sold, used for advertising or used to build profiles. Our use of user data adheres to the Chrome Web Store User Data Policy, including its Limited Use requirements.
+The extension does not upload your conversation data anywhere. Processing happens in-browser, and the implementation can be checked in the [source code on GitHub](https://github.com/taiyodayo/simple-ai-chat-export). The source is available for security inspection under MIT + Commons Clause v1.0; availability is not a claim of an external security audit. Conversation data is not sold, used for advertising or used to build profiles. Our use of user data adheres to the Chrome Web Store User Data Policy, including its Limited Use requirements.
 
-Planned contact: `chat-simple-export@ongaku.co.uk` (not yet verified). Public release is blocked until contact works.
+Contact: [support page](https://ongaku.co.uk/simple-ai-chat-export#help) or [GitHub issues](https://github.com/taiyodayo/simple-ai-chat-export/issues). Never include credentials or private transcripts.
