@@ -64,14 +64,16 @@ try {
     throw new Error("Synthetic native download did not complete");
   const bytes = await readFile(await download.path());
   const text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
-  const metadataBlock = text.match(
-    /^# Export metadata\n\n```json\n([\s\S]*?)\n```/,
+  const header = "Export metadata\n\n";
+  if (!text.startsWith(header))
+    throw new Error("Expected default plain-text export");
+  const metadata = JSON.parse(
+    text.slice(header.length).split("\n\n---\n\n", 1)[0],
   );
-  const metadata = metadataBlock ? JSON.parse(metadataBlock[1]) : null;
   if (
     metadata?.exporter?.version !== manifest.version ||
     metadata?.messageCount !== 2 ||
-    !download.suggestedFilename().endsWith(".md") ||
+    !download.suggestedFilename().endsWith(".txt") ||
     !text.includes("日本語 ☕") ||
     !text.includes('const tea = "earl grey";\n  console.log(tea);') ||
     !text.includes("Read a page") ||

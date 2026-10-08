@@ -1,5 +1,9 @@
 # Verification
 
+## Literal export default — 8 October 2026
+
+Issue #11 makes Plain text the initial native radio choice; Markdown remains one click away with a short note that viewer settings control HTML and remote images. No sanitiser, renderer, stored preference or extra confirmation is added. The next extension version is 0.2.2; manifest, package and export metadata agree, and the extracted-package test checks that agreement. Existing provider/research/fidelity tests remain applicable to both formats. Original raw Markdown is still untrusted data for external viewers.
+
 ## Preview serving boundary — 8 October 2026
 
 Issue #10 removes request-path-to-filesystem resolution and directory-wide serving. The loopback preview loads a fixed inventory into memory, rejects symlinked assets, validates the actual Host/port, and serves only GET/HEAD with explicit aliases. Restart after source edits. A disposable synthetic preview test verifies unapproved files, traversal/malformed targets, an outside-file symlink, hostile Host and write methods cannot return the private marker; HEAD and all current/legacy support routes still work. Preview code and fixtures remain excluded from the extension package.

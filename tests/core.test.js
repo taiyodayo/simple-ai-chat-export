@@ -168,6 +168,9 @@ test("filenames cannot escape their directory or use Windows reserved names", ()
 test("one UTF-8 file starts with complete metadata and preserves the transcript", () => {
   const data = fixture({ omission: true });
   data.title = '日本語 "quoted"\n```\n# Not a header';
+  const literal =
+    '<img src="https://invalid.example/marker"><script>alert(1)</script>';
+  data.nodes[1].parts[0].text += "\n" + literal;
   const conversation = validateConversation(data, identity(data));
   for (const format of ["md", "txt"]) {
     const result = createExport(conversation, format);
@@ -183,6 +186,7 @@ test("one UTF-8 file starts with complete metadata and preserves the transcript"
     const json = format === "md" ? header.slice(0, -4) : header;
     assert.deepEqual(JSON.parse(json), result.metadata);
     assert(result.content.endsWith(result.transcript));
+    assert(result.content.includes(literal));
     assert(result.filename.endsWith(`.${format}`));
     assert(!result.filename.endsWith(".zip"));
     assert(
