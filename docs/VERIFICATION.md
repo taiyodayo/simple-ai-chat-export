@@ -1,5 +1,13 @@
 # Verification
 
+## Immutable release 0.2.2 — 8 October 2026
+
+[Release v0.2.2](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v0.2.2) was published from commit `fea303a5ec80ca5f448d12091bdb389770738c75`. Its ZIP contains 17 entries; SHA-256 is `4974edbdf7f6101a9791844f2fd7df576c72c1ddba6d2c33f3a241b42de99381`. Each entry matched the committed Git bytes. The exact final extracted ZIP passed the TXT/Markdown download, CSP, permissions, metadata-version and Help test; it was not rebuilt after verification.
+
+All five uploaded draft assets matched their tested local bytes before publication. After publication, the GitHub API reported `draft: false` and `immutable: true`. Both `gh release verify v0.2.2` and `gh release verify-asset v0.2.2 dist/simple-ai-chat-export-0.2.2.zip` succeeded. The native attestation includes the ZIP, checksum, inventory and two synthetic store screenshots. This verifies release/asset identity, not security or publisher honesty. No dummy release was created; existing 0.2.0/0.2.1 assets were unchanged.
+
+The final implementation PR [#23](https://github.com/taiyodayo/simple-ai-chat-export/pull/23) passed the required [CI run](https://github.com/taiyodayo/simple-ai-chat-export/actions/runs/37759383957): 66 unit tests, all 52 browser cases, source and format checks. CodeQL analysis of actions, JavaScript/TypeScript and Python also passed; all three existing alerts were marked fixed in main-branch read-back. Coverage is synthetic and retains the documented live-provider/platform and publisher/viewer limits. Chrome Web Store submission and website deployment remain separate from this GitHub release.
+
 ## Documentation alignment — 8 October 2026
 
 Issue #13 publishes the original 0.2.1 local assessment with evidence links pinned to its measured commit. Historical settings/results remain historical. Current docs distinguish native handoff from confirmed folder writes, local processing from user/browser retention, persistent report grants and future publisher trust. Security and privacy details have canonical destinations; repeated README/site prose is reduced. Version 0.2.2 store copy is prepared for the owner; neither the dashboard nor the live website is changed by this documentation merge. Runtime logic, permissions and output content are unchanged by this documentation task. PR #21 passed 66 unit tests and all 52 browser cases under the required CI check; synthetic coverage does not establish universal safety or live-provider completeness.

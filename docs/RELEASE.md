@@ -2,6 +2,8 @@
 
 ## Current version 0.2.2
 
+[GitHub release v0.2.2](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v0.2.2) is published and immutable. Native release and exact-ZIP attestation checks passed; source commit, digest and test evidence are recorded in [VERIFICATION.md](VERIFICATION.md).
+
 The downloads permission/API removed in 0.2.1 remain absent. Plain text is now the default, save outcomes show filenames, and literal table cells preserve backslashes/pipes. Packaging uses Python's standard ZIP writer and refuses dirty/mismatched Git source. Preview serving and enforced GitHub checks are hardened; see [VERIFICATION.md](VERIFICATION.md).
 
 The owner operates existing store item `hnolfghceldfcghkcfnfafainiiodkhl`. Follow [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md). No approved install URL is recorded here. Store text is prepared in [STORE_LISTING.md](STORE_LISTING.md); repository merge/release publication does not submit or approve the store item. Website deployment is separate.
