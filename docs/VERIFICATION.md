@@ -2,7 +2,7 @@
 
 ## Documentation alignment — 8 October 2026
 
-Issue #13 publishes the original 0.2.1 local assessment with evidence links pinned to its measured commit. Historical settings/results remain historical. Current docs distinguish native handoff from confirmed folder writes, local processing from user/browser retention, persistent report grants and future publisher trust. Security and privacy details have canonical destinations; repeated README/site prose is reduced. Version 0.2.2 store copy is prepared for the owner; neither the dashboard nor the live website is changed by this documentation merge. Runtime logic, permissions and output content are unchanged by this documentation task.
+Issue #13 publishes the original 0.2.1 local assessment with evidence links pinned to its measured commit. Historical settings/results remain historical. Current docs distinguish native handoff from confirmed folder writes, local processing from user/browser retention, persistent report grants and future publisher trust. Security and privacy details have canonical destinations; repeated README/site prose is reduced. Version 0.2.2 store copy is prepared for the owner; neither the dashboard nor the live website is changed by this documentation merge. Runtime logic, permissions and output content are unchanged by this documentation task. PR #21 passed 66 unit tests and all 52 browser cases under the required CI check; synthetic coverage does not establish universal safety or live-provider completeness.
 
 ## Literal Markdown table cells — 8 October 2026
 
