@@ -10,6 +10,8 @@ try {
       canvas.height = size;
       const c = canvas.getContext("2d");
       c.scale(size / 128, size / 128);
+      c.translate(16, 16);
+      c.scale(0.75, 0.75);
       c.fillStyle = "#284e3a";
       c.beginPath();
       c.roundRect(0, 0, 128, 128, 28);

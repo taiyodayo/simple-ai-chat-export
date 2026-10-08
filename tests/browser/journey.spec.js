@@ -12,7 +12,7 @@ test("welcoming first use, format choice, success and a deliberate coffee click"
       external.push(request.url());
   });
   await expect(
-    page.getByRole("heading", { name: "Save this chatGPT conversation." }),
+    page.getByRole("heading", { name: "Save this conversation." }),
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Buy me a coffee" }),
@@ -58,9 +58,9 @@ test("one export click downloads text with omissions without a second confirmati
 for (const [scenario, heading] of [
   ["incomplete", "We couldn’t confirm the whole conversation"],
   ["changed", "The conversation changed"],
-  ["generating", "Let ChatGPT finish first"],
-  ["signed-out", "Sign in to ChatGPT"],
-  ["offline", "Couldn’t reach ChatGPT"],
+  ["generating", "Let the reply finish first"],
+  ["signed-out", "Sign in to your chat app"],
+  ["offline", "Couldn’t reach your chat app"],
   ["save-interrupted", "The file wasn’t saved"],
 ])
   test(`${scenario} never offers coffee or claims success`, async ({

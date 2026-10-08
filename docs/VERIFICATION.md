@@ -1,8 +1,36 @@
 # Verification
 
+## Production release 0.2.0 — 8 October 2026
+
+The owner selected the supplied MIT text plus Commons Clause v1.0, with copyright and visible credit to @taiyodayo, local build/install rights, and public source primarily for security inspection. LICENSE includes the full condition and its Software/License/Licensor definitions. The package licence field points to LICENSE rather than declaring unrestricted MIT or OSI open-source. The 17-file upload ZIP includes the full licence. Production UI/metadata use 0.2.0; Google approval is a separate status.
+
+59 Node tests and all 43 browser cases pass (the updated site assertion was rerun after fixing whitespace matching). Coverage includes Chrome-script reading/revalidation/downloads for all three providers, ChatGPT Deep Research, custom folder saves, failures/cancellation and the extracted ZIP with a byte-identical licence. Source checks and formatting pass. A limited review of 198 Git-history text blobs found no matches for the checked credential/private-email patterns; no external audit is claimed.
+
+The store materials include listing text, privacy/data categories (including local chat content and the selected URL), permission justifications, reviewer instructions, a 128-pixel PNG icon with transparent padding, a 440 × 280 promo, and two 1280 × 800 screenshots. The success image follows an actual Chrome-script read, second-read check and completed download using only hand-written synthetic markup in a fresh temporary profile. Exported bytes were checked for the stable version and Unicode. No real chat, credential or authentication profile was captured. All assets were visually inspected and the temporary profile/downloads removed.
+
+Source/store publication and deployment outcomes are recorded after the corresponding actions. Chrome developer registration, authentication and Google review remain separate from the working extension and website.
+
+## Website rename deployed — 8 October 2026
+
+The owner restored personal Cloudflare authentication. The selected profile has two accounts; zone API inspection confirmed `ongaku.co.uk` belongs to the pinned personal account and that the new project path had no conflicting Worker. Deployed the prepared handler and three static assets with Wrangler 4.148.0 using `taiyodayo-personal`. Worker version: `b279ce92-cb80-43d6-a196-84c934ab514e`.
+
+The new website, privacy policy, trailing-slash variants, stylesheet and legacy aliases all return HTTP 200. All eight checked responses match repository assets byte for byte and carry the expected CSP, no-referrer and no-transform headers. The domain homepage and `/seatdesigner` retain their pre-deployment SHA-256. Live Chromium checks found zero scripts, zero third-party requests and no horizontal overflow at 320 pixels on either page. No DNS or mail records were changed. The extension and repository remain private; draft PR #3 records the provider work.
+
+## Provider alpha — 8 October 2026
+
+The repository is renamed to `taiyodayo/simple-ai-chat-export` and remains private. The marketing name is **Simple AI-Chat export for ChatGPT, Claude, Gemini**. Branch `feat/multi-provider-export` follows the merged ChatGPT prerelease; its package version is `0.2.0-alpha.1` with Chrome version `0.2.0`. The existing unpacked extension was reloaded in the owner’s first Chrome profile and displays the renamed UI, default `~/Downloads` and an Export button that fits within its window.
+
+Live Claude: the owner signed in and opened a saved conversation. Structural inspection logged DOM markers and counts only. The production reader recognised one user and one completed assistant message, including Claude’s `display: contents` user wrapper. A temporary local extension inspection entry exercised actual `chrome.scripting`, schema validation, a second read/fingerprint check and Markdown/TXT formatting, reporting two messages and the correct Claude provider. No live transcript, title, URL or message ID was logged, downloaded, committed or uploaded. The temporary entry was removed before packaging.
+
+Gemini: the personal profile’s home screen contained saved history links. The most recent saved conversation was opened for in-memory inspection, without logging its contents or identifiers. It exposes `user-query`, `.query-text`, `model-response`, `message-content .markdown`, and explicit `aria-busy="false"` completion markers. The production page reader recognised four messages in order. A temporary local extension inspection then exercised actual Chrome scripting, validation, rereading/fingerprint checks and both Markdown/TXT formats for Gemini (four messages) and Claude (two messages); both passed with correct provider metadata. Only counts, success status and file lengths were reported. No live chat content was saved or uploaded. Claude artifacts and Gemini Canvas outside displayed messages are excluded and disclosed; Gemini Deep Research is not verified. ChatGPT guest/history/Deep Research regression cases remain covered.
+
+Final checks pass 59 Node tests and 43 browser tests, including actual Chrome scripting/revalidation/download completion in both formats for synthetic conversations from each provider, the extracted package, shared folder UX and ChatGPT Deep Research regression cases. Source/manifest checks and formatting pass.
+
+The renamed website and privacy pages, new project path and legacy aliases pass local tests and Wrangler 4.148.0 dry-run bundling. Publishing was initially blocked by the missing personal profile; the owner subsequently restored it and deployment is verified in the newer entry above. No deployment was attempted with the default work identity.
+
 ## ChatGPT prerelease — 8 October 2026
 
-The owner authorised merging the current ChatGPT implementation and cutting the private `v0.1.1-beta.1` prerelease before broader provider support. Final verification passes 58 Node tests, 35 browser tests, source/manifest checks and formatting. The package name follows the project name/version and the inventory records its artifact filename and source commit. The manifest uses Chrome’s numeric version `0.1.1` with `version_name` set to `0.1.1-beta.1`. This is a private test release; Chrome Web Store publication, public repository access and unresolved licence/release gates are unchanged.
+The owner authorised merging the current ChatGPT implementation and cutting the private `v0.1.1-beta.1` prerelease before broader provider support. Final verification passes 58 Node tests, 35 browser tests, source/manifest checks and formatting. The package name follows the project name/version and the inventory records its artifact filename and source commit. The manifest uses Chrome’s numeric version `0.1.1` with `version_name` set to `0.1.1-beta.1`. This is a private test release; Chrome Web Store publication, public repository access and the then-pending licence was later settled as MIT + Commons Clause v1.0 for production 0.2.0.
 
 ## Save location control — 8 October 2026
 
@@ -26,7 +54,7 @@ All 41 Node tests, 26 browser tests, source checks and formatting checks pass. T
 
 Final checks: 41 Node tests, 26 browser tests, and the syntax/manifest/common-secret checks pass. The owner successfully exported the history conversation and supplied the output for spacing review. Nested HTML separators are now merged without altering fenced-code whitespace. Export starts with one click, skips the extra omission confirmation, and downloads without a forced Save As dialog. The success screen includes the updated coffee message.
 
-The source remains private and is not approved for store submission. Rendered-message extraction cannot guarantee unloaded history. Security review, licence, public support contact, and cross-browser/platform release checks remain outstanding. The entries below preserve earlier verification evidence and its limitations.
+Historical prototype status: the source was private and not submitted to the store. Production 0.2.0 now uses MIT + Commons Clause v1.0 and public source for security inspection. Rendered-message extraction still cannot guarantee unloaded history; platform and external-audit limits remain documented. The entries below preserve earlier verification evidence and its limitations.
 
 ## Page extraction — 8 October 2026
 
@@ -52,7 +80,7 @@ Tested 7 October 2026 on the local macOS environment with Node 26.9.0, Playwrigh
 - Synthetic success and support-page screenshots were visually inspected outside Git. The compact success state fits a 420 × 600 viewport. No real chat screenshots were captured.
 - `pnpm check` passes JavaScript syntax, manifest-access, prohibited runtime-pattern and common secret-pattern checks. The owner's private Gmail does not occur in the staged source. This is not an external audit or an exhaustive secret detector.
 
-Not verified: live ChatGPT retrieval, private endpoint stability, pagination adapter, selected UI branch identity, signed-in traffic, native save dialogue, Windows/Linux/other Chromium browser behaviour, email forwarding, store submission or payment-provider behaviour. The source is private and has no settled redistribution licence. Public release remains blocked.
+Not verified: live ChatGPT retrieval, private endpoint stability, pagination adapter, selected UI branch identity, signed-in traffic, native save dialogue, Windows/Linux/other Chromium browser behaviour, email forwarding, store submission or payment-provider behaviour. The prototype source was private. Production 0.2.0 uses MIT + Commons Clause v1.0; the newer production entry supersedes that historical release status.
 
 Package hashes and the actual source commit are generated in `dist/inventory.json` at packaging time. The package contains no test fixture, dev dependency, profile, capture or website file. Re-run packaging from the clean reviewed source before distribution.
 

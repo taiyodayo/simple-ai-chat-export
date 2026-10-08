@@ -21,27 +21,27 @@ const errors = {
   ],
   "layout-unrecognized": [
     "We couldn’t read this chat’s layout",
-    "Your conversation may still be loading, or ChatGPT’s layout may have changed. Nothing was saved. Let the chat finish loading, then try again.",
+    "Your conversation may still be loading, or the app’s layout may have changed. Nothing was saved. Let the chat finish loading, then try again.",
   ],
   "extension-update": [
     "Reload the extension once",
-    "Open chrome://extensions and click Reload on Simple ChatGPT Export. Then close this window and reopen the extension on your chat.",
+    "Open chrome://extensions and click Reload on Simple AI-Chat export for ChatGPT, Claude, Gemini. Then close this window and reopen the extension on your chat.",
   ],
   "read-failed": [
     "Chrome couldn’t read this conversation",
-    "Nothing was saved. Refresh the ChatGPT tab, then open the extension again.",
+    "Nothing was saved. Refresh the chat tab, then open the extension again.",
   ],
   "wrong-page": [
-    "Open a ChatGPT conversation",
-    "Then open Simple ChatGPT Export from your browser’s Extensions menu.",
+    "Open a ChatGPT, Claude or Gemini conversation",
+    "Then open Simple AI-Chat export for ChatGPT, Claude, Gemini from your browser’s Extensions menu.",
   ],
   access: [
     "Reopen the extension on your chat",
-    "Chrome could not read this tab. Close this window, then click the extension again on your ChatGPT conversation.",
+    "Chrome could not read this tab. Close this window, then click the extension again on your conversation.",
   ],
   empty: [
     "There’s no conversation here yet",
-    "Send a message in ChatGPT, then try again. No sign-in is required for guest chats.",
+    "Open a saved conversation, then try again. ChatGPT guest chats also work.",
   ],
   incomplete: [
     "We couldn’t confirm the whole conversation",
@@ -52,7 +52,7 @@ const errors = {
     "Return to the branch you want, then try again. Nothing was saved.",
   ],
   generating: [
-    "Let ChatGPT finish first",
+    "Let the reply finish first",
     "Try again once the reply is complete.",
   ],
   unsupported: [
@@ -76,11 +76,11 @@ const errors = {
     "Check your browser’s Downloads before trying again.",
   ],
   "signed-out": [
-    "Sign in to ChatGPT",
+    "Sign in to your chat app",
     "Open your conversation, then try again.",
   ],
   offline: [
-    "Couldn’t reach ChatGPT",
+    "Couldn’t reach your chat app",
     "Check your connection and try again. Nothing was saved.",
   ],
 };
@@ -207,7 +207,7 @@ export function mount(adapter) {
       ).value;
       status(
         "Checking your conversation…",
-        "Keep ChatGPT open while we read the conversation. The page may scroll briefly.",
+        "Keep your chat open while we read the conversation. The page may scroll briefly.",
       );
       const { data, identity } = await adapter.retrieve({ signal });
       signal.throwIfAborted();

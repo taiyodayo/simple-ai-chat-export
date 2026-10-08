@@ -1,0 +1,28 @@
+Save a conversation from ChatGPT, Claude or Gemini as Markdown or plain text.
+
+Open the chat you want to keep, click the extension, choose a format and export. The same simple interface works on all three apps. Downloads is the default destination; the native folder picker lets you choose another folder.
+
+Your copy includes the displayed messages, speaker labels, readable formatting, code blocks, tables and available source links. A metadata header records the conversation title, original URL, export date, provider, message count and any marked omissions.
+
+Completed ChatGPT Deep Research reports in the supported embedded layout include their Markdown and citation links. When needed, Chrome asks for optional access to that report's embedded site.
+
+Processing stays on your device. There is no analytics, developer backend, account registration, subscription or conversation upload. The exporter does not access authentication tokens or make conversation API requests.
+
+Scope and limits:
+- One currently displayed conversation at a time, including ChatGPT guest chats.
+- Rendered messages are checked for stability, but server-side history completeness cannot be verified.
+- Images, audio, video and attachment files are not downloaded. Known omissions are marked.
+- Claude artifacts, Gemini Canvas and other content outside displayed messages are not archived. Gemini Deep Research is not supported.
+- Desktop Chrome on macOS has been tested. Windows and Linux are not independently verified yet.
+- Keep the export window open until saving finishes. A cancelled or interrupted export is not reported as saved.
+
+Made by @taiyodayo. Independent of OpenAI, Anthropic and Google.
+
+Source is available mainly for security inspection under MIT + Commons Clause v1.0. You may modify, build and install it locally, retaining the full copyright and licence notices. Selling the software as defined in the Commons Clause is excluded.
+
+Help: https://ongaku.co.uk/simple-ai-chat-export
+Privacy: https://ongaku.co.uk/simple-ai-chat-export/privacy
+Source and issues: https://github.com/taiyodayo/simple-ai-chat-export
+
+Useful? Buy me a coffee: https://buymeacoffee.com/taiyodayo
+Entirely optional. All export features work without it.

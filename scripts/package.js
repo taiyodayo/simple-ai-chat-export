@@ -8,6 +8,7 @@ const project = JSON.parse(
   await readFile(new URL("package.json", root), "utf8"),
 );
 const inventory = [
+  "LICENSE",
   "core.js",
   "help.html",
   "help.js",
@@ -28,7 +29,11 @@ const inventory = [
 const entries = await Promise.all(
   inventory.map(async (name) => [
     name,
-    new Uint8Array(await readFile(new URL(`extension/${name}`, root))),
+    new Uint8Array(
+      await readFile(
+        new URL(name === "LICENSE" ? "LICENSE" : `extension/${name}`, root),
+      ),
+    ),
   ]),
 );
 const zip = archiveBytes(entries);
@@ -54,7 +59,8 @@ await writeFile(
   new URL("dist/inventory.json", root),
   JSON.stringify(
     {
-      kind: "private development prerelease, not Chrome Web Store approved",
+      kind: "production release; Chrome Web Store approval tracked separately",
+      license: "MIT + Commons Clause v1.0",
       artifact: name,
       version: project.version,
       commit,
@@ -67,5 +73,5 @@ await writeFile(
   ) + "\n",
 );
 console.log(
-  `Packaged ${inventory.length} files. SHA-256 ${sha256}. Source ${commit}${dirty ? " (working tree has changes)" : ""}. Not approved for Chrome Web Store release.`,
+  `Packaged ${inventory.length} files. SHA-256 ${sha256}. Source ${commit}${dirty ? " (working tree has changes)" : ""}. Chrome Web Store submission package.`,
 );

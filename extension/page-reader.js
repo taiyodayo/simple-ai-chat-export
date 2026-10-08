@@ -9,10 +9,16 @@ export async function readConversationPage(expectedUrl, reports = []) {
   let scroller, originalTop;
   try {
     if (canonical() !== expectedUrl) fail("changed");
+    const provider = new URL(expectedUrl).hostname;
+    const external = provider !== "chatgpt.com";
     // The URL identifies the conversation, not its rendering implementation.
     // History and guest pages can use either supported message layout.
     const selector =
-      "[data-message-role], [data-message-author-role], [data-chatgpt-search-message-ids]";
+      provider === "claude.ai"
+        ? '[data-testid="user-message"], [data-testid="assistant-message"]'
+        : provider === "gemini.google.com"
+          ? "user-query, model-response"
+          : "[data-message-role], [data-message-author-role], [data-chatgpt-search-message-ids]";
     const visible = (e) =>
       !!e.getClientRects().length &&
       !e.closest('[hidden],[aria-hidden="true"]');
@@ -135,6 +141,10 @@ export async function readConversationPage(expectedUrl, reports = []) {
         return url ? text + " (" + url + ")" : text;
       }
       if (tag === "BR") return "\n";
+      if (/^(STRONG|B)$/.test(tag)) return "**" + text + "**";
+      if (/^(EM|I)$/.test(tag)) return "*" + text + "*";
+      if (/^(S|DEL)$/.test(tag)) return "~~" + text + "~~";
+      if (tag === "HR") return "\n\n---\n\n";
       if (tag === "LI") return "\n- " + text.trim();
       if (/^H[1-6]$/.test(tag))
         return "\n\n" + "#".repeat(Number(tag[1])) + " " + text.trim() + "\n\n";
@@ -169,140 +179,220 @@ export async function readConversationPage(expectedUrl, reports = []) {
         return text + next;
       }, "");
     }
-    const snapshot = () => {
+    const contentParts = (e, content, text) => {
+      if (!text.trim()) fail("unsupported");
+      const parts = [{ type: "text", text }];
+      for (const [selector, kind] of [
+        ["img", "image"],
+        ["audio", "audio"],
+        ["video", "video"],
+      ])
+        if (content.some((node) => node.querySelector(selector)))
+          parts.push({ type: "omission", kind });
+      if (e.querySelector('[data-testid*="attachment"],a[download]'))
+        parts.push({ type: "omission", kind: "attachment" });
+      const sources = content
+        .flatMap((node) => [...node.querySelectorAll("a[href]")])
+        .map((a) => ({ title: a.textContent.trim(), url: safeLink(a.href) }))
+        .filter((source) => source.url);
+      return { parts, sources };
+    };
+    const snapshot = async () => {
       if (canonical() !== expectedUrl) fail("changed");
       if (
         [
           ...document.querySelectorAll(
-            '[data-testid="stop-button"],button[aria-label="Stop generating"],[aria-busy="true"]',
+            '[data-testid="stop-button"],button[aria-label="Stop generating"],button[aria-label="Stop response"],[aria-busy="true"],[data-is-streaming="true"]',
           ),
         ].some(visible)
       )
         fail("generating");
-      const messages = elements().map((e) => {
-        const modern = e.hasAttribute("data-chatgpt-search-message-ids");
-        const guest = e.hasAttribute("data-message-role");
-        const researchFrame = e.querySelector(
-          '[data-mcp-app-frame] iframe[title="Deep research"]',
-        );
-        const role = modern
-          ? e.querySelector("[data-user-message-bubble]")
-            ? "user"
-            : researchFrame ||
-                e.querySelector('[data-conversation-role="assistant"]')
-              ? "assistant"
-              : null
-          : e.getAttribute(
-              guest ? "data-message-role" : "data-message-author-role",
+      const occurrences = new Map();
+      const messages = await Promise.all(
+        elements().map(async (e) => {
+          if (external) {
+            const claude = provider === "claude.ai";
+            const role = (
+              claude
+                ? e.getAttribute("data-testid") === "user-message"
+                : e.tagName === "USER-QUERY"
+            )
+              ? "user"
+              : "assistant";
+            if (e.querySelector("iframe")) fail("unsupported");
+            if (
+              claude &&
+              role === "assistant" &&
+              e.getAttribute("data-is-streaming") !== "false"
+            )
+              fail("generating");
+            const content = claude
+              ? role === "user"
+                ? [e.firstElementChild]
+                : [...e.querySelectorAll(".standard-markdown")]
+              : role === "user"
+                ? [...e.querySelectorAll(".query-text")]
+                : [...e.querySelectorAll("message-content .markdown")];
+            const roots = content.filter(
+              (node) =>
+                node &&
+                (visible(node) ||
+                  (getComputedStyle(node).display === "contents" &&
+                    [...node.children].some(visible))) &&
+                !content.some(
+                  (other) => other !== node && other.contains(node),
+                ),
             );
-        if (!["user", "assistant"].includes(role)) fail("unsupported");
-        const selection = modern
-          ? e.querySelector("[data-chatgpt-selection-conversation-id]")
-          : null;
-        const ids = modern
-          ? e
-              .getAttribute("data-chatgpt-search-message-ids")
-              .trim()
-              .split(/\s+/)
-          : [];
-        if (
-          modern &&
-          (!ids.length ||
-            ids.length > 1000 ||
-            ids.some((id) => !/^[a-zA-Z0-9_-]{1,100}$/.test(id)))
-        )
-          fail("unsupported");
-        const selectedId = selection?.getAttribute(
-          "data-chatgpt-selection-message-id",
-        );
-        const grouped =
-          modern && role === "assistant" && !selectedId && !researchFrame;
-        const id = modern
-          ? (role === "user" || researchFrame) && ids.length === 1
-            ? ids[0]
-            : selectedId || (grouped && selection ? `rendered-${ids[0]}` : null)
-          : guest
-            ? e.id
-            : e.getAttribute("data-message-id");
-        if (
-          modern &&
-          ((!grouped && !ids.includes(id)) ||
-            (selection &&
-              selection.getAttribute(
-                "data-chatgpt-selection-conversation-id",
-              ) !== new URL(expectedUrl).pathname.split("/").at(-1)))
-        )
-          fail("changed");
-        if (
-          modern &&
-          e
-            .closest("[data-talvt-turn-state]")
-            ?.getAttribute("data-talvt-turn-state") !== "complete"
-        )
-          fail("generating");
-        if (!id || !/^[a-zA-Z0-9_-]{1,100}$/.test(id)) fail("unsupported");
-        if (researchFrame) {
-          const report = reports.find((r) => r.url === researchFrame.src);
-          if (!report) fail("changed");
+            if (!roots.length) fail("unsupported");
+            if (
+              !claude &&
+              role === "assistant" &&
+              roots.some((node) => node.getAttribute("aria-busy") !== "false")
+            )
+              fail("generating");
+            const text = roots
+              .map((node) =>
+                role === "user" ? node.innerText : markdown(node).trim(),
+              )
+              .join("\n\n");
+            const body = contentParts(e, roots, text);
+            // DOM-generated user IDs are not stable across renders. Content hashes
+            // keep retained messages identifiable when older history is loaded.
+            const key = JSON.stringify({ role, ...body });
+            if (key.length > 20_000_000) fail("too-large");
+            const occurrence = (occurrences.get(key) ?? 0) + 1;
+            occurrences.set(key, occurrence);
+            const digest = [
+              ...new Uint8Array(
+                await crypto.subtle.digest(
+                  "SHA-256",
+                  new TextEncoder().encode(key),
+                ),
+              ),
+            ]
+              .map((b) => b.toString(16).padStart(2, "0"))
+              .join("");
+            const sourceId = claude
+              ? e.getAttribute("data-turn-key")
+              : e.getAttribute("data-message-id");
+            const id =
+              sourceId && /^[a-zA-Z0-9_-]{1,100}$/.test(sourceId)
+                ? sourceId
+                : `rendered-${digest}-${occurrence}`;
+            return { id, role, ...body };
+          }
+          const modern = e.hasAttribute("data-chatgpt-search-message-ids");
+          const guest = e.hasAttribute("data-message-role");
+          const researchFrame = e.querySelector(
+            '[data-mcp-app-frame] iframe[title="Deep research"]',
+          );
+          const role = modern
+            ? e.querySelector("[data-user-message-bubble]")
+              ? "user"
+              : researchFrame ||
+                  e.querySelector('[data-conversation-role="assistant"]')
+                ? "assistant"
+                : null
+            : e.getAttribute(
+                guest ? "data-message-role" : "data-message-author-role",
+              );
+          if (!["user", "assistant"].includes(role)) fail("unsupported");
+          const selection = modern
+            ? e.querySelector("[data-chatgpt-selection-conversation-id]")
+            : null;
+          const ids = modern
+            ? e
+                .getAttribute("data-chatgpt-search-message-ids")
+                .trim()
+                .split(/\s+/)
+            : [];
+          if (
+            modern &&
+            (!ids.length ||
+              ids.length > 1000 ||
+              ids.some((id) => !/^[a-zA-Z0-9_-]{1,100}$/.test(id)))
+          )
+            fail("unsupported");
+          const selectedId = selection?.getAttribute(
+            "data-chatgpt-selection-message-id",
+          );
+          const grouped =
+            modern && role === "assistant" && !selectedId && !researchFrame;
+          const id = modern
+            ? (role === "user" || researchFrame) && ids.length === 1
+              ? ids[0]
+              : selectedId ||
+                (grouped && selection ? `rendered-${ids[0]}` : null)
+            : guest
+              ? e.id
+              : e.getAttribute("data-message-id");
+          if (
+            modern &&
+            ((!grouped && !ids.includes(id)) ||
+              (selection &&
+                selection.getAttribute(
+                  "data-chatgpt-selection-conversation-id",
+                ) !== new URL(expectedUrl).pathname.split("/").at(-1)))
+          )
+            fail("changed");
+          if (
+            modern &&
+            e
+              .closest("[data-talvt-turn-state]")
+              ?.getAttribute("data-talvt-turn-state") !== "complete"
+          )
+            fail("generating");
+          if (!id || !/^[a-zA-Z0-9_-]{1,100}$/.test(id)) fail("unsupported");
+          if (researchFrame) {
+            const report = reports.find((r) => r.url === researchFrame.src);
+            if (!report) fail("changed");
+            return {
+              id,
+              role,
+              parts: report.parts,
+              sources: report.sources,
+              sourceMessageIds: [...new Set([id, report.messageId])],
+            };
+          }
+          if (
+            guest &&
+            role === "assistant" &&
+            !e.hasAttribute("data-message-complete")
+          )
+            fail("generating");
+          const content = modern
+            ? role === "user"
+              ? e.querySelector("[data-user-message-bubble]")
+              : selection?.querySelector("[data-markdown-text-style]")
+            : guest
+              ? e.querySelector(
+                  role === "user"
+                    ? "[data-user-message-copy]"
+                    : "[data-assistant-markdown]",
+                )
+              : e.querySelector(
+                  role === "assistant" ? ".markdown" : ".whitespace-pre-wrap",
+                );
+          if (!content) fail("unsupported");
+          const text =
+            role === "user" ? content.innerText : markdown(content).trim();
+          const { parts, sources } = contentParts(e, [content], text);
           return {
             id,
             role,
-            parts: report.parts,
-            sources: report.sources,
-            sourceMessageIds: [...new Set([id, report.messageId])],
+            parts,
+            sources,
+            ...(grouped ? { sourceMessageIds: ids } : {}),
           };
-        }
-        if (
-          guest &&
-          role === "assistant" &&
-          !e.hasAttribute("data-message-complete")
-        )
-          fail("generating");
-        const content = modern
-          ? role === "user"
-            ? e.querySelector("[data-user-message-bubble]")
-            : selection?.querySelector("[data-markdown-text-style]")
-          : guest
-            ? e.querySelector(
-                role === "user"
-                  ? "[data-user-message-copy]"
-                  : "[data-assistant-markdown]",
-              )
-            : e.querySelector(
-                role === "assistant" ? ".markdown" : ".whitespace-pre-wrap",
-              );
-        if (!content) fail("unsupported");
-        const text =
-          role === "user" ? content.innerText : markdown(content).trim();
-        if (!text.trim()) fail("unsupported");
-        const parts = [{ type: "text", text }];
-        for (const [selector, kind] of [
-          ["img", "image"],
-          ["audio", "audio"],
-          ["video", "video"],
-        ])
-          if (content.querySelector(selector))
-            parts.push({ type: "omission", kind });
-        if (e.querySelector('[data-testid*="attachment"],a[download]'))
-          parts.push({ type: "omission", kind: "attachment" });
-        const sources = [...content.querySelectorAll("a[href]")]
-          .map((a) => ({ title: a.textContent.trim(), url: safeLink(a.href) }))
-          .filter((s) => s.url);
-        return {
-          id,
-          role,
-          parts,
-          sources,
-          ...(grouped ? { sourceMessageIds: ids } : {}),
-        };
-      });
+        }),
+      );
       if (!messages.length) fail("incomplete");
       if (new Set(messages.map((m) => m.id)).size !== messages.length)
         fail("incomplete");
       if (JSON.stringify(messages).length > 20_000_000) fail("too-large");
       return messages;
     };
-    const initial = snapshot();
+    const initial = await snapshot();
     let previous = initial;
     // Require retained, overlapping messages; never quietly lose virtualised history.
     const retains = (before, after) => {
@@ -329,7 +419,7 @@ export async function readConversationPage(expectedUrl, reports = []) {
             : 0;
         scroller.scrollTo({ top: edge, behavior: "instant" });
         await pause();
-        const next = snapshot();
+        const next = await snapshot();
         retains(previous, next);
         stable =
           JSON.stringify(previous) === JSON.stringify(next) ? stable + 1 : 0;
@@ -350,8 +440,9 @@ export async function readConversationPage(expectedUrl, reports = []) {
     return {
       messages: previous,
       title:
-        document.title.replace(/\s*[-–|]\s*ChatGPT\s*$/, "").trim() ||
-        "ChatGPT conversation",
+        document.title
+          .replace(/\s*[-–|]\s*(?:ChatGPT|Claude|Gemini)\s*$/, "")
+          .trim() || "AI conversation",
     };
   } catch (error) {
     return {

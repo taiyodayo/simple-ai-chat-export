@@ -1,3 +1,13 @@
+# Production direction — 8 October 2026
+
+The owner expanded the product to ChatGPT, Claude and Gemini and renamed it to `simple-ai-chat-export`, marketed as **Simple AI-Chat export for ChatGPT, Claude, Gemini**. PR #2 merged the ChatGPT baseline; private `v0.1.1-beta.1` freezes that working version before provider changes. The production release uses the existing reader/formatter/save pipeline and the same popup UI, without a provider framework or extra settings.
+
+Version 0.2.0 is the production release. The owner selected MIT + Commons Clause v1.0, public source for security inspection and Chrome Web Store publication. Current release and submission details are in docs/RELEASE.md and docs/STORE_LISTING.md.
+
+The earlier plan below records the original ChatGPT prototype. Its ChatGPT-only scope, undecided licence and private-release gates are historical and superseded by the owner’s later instructions.
+
+---
+
 # Simple ChatGPT Export
 
 Status: implementation authorised by the owner. Private GitHub development authorised; public release requires live verification and security review. Build a synthetic-data prototype before the owner provides a dedicated live testing profile.
@@ -17,7 +27,7 @@ All export processing happens on the user's device. Never send conversation cont
 - Use repository-local Git identity; never change global Git configuration. Verify the intended author name before making commits.
 - Verify the personal GitHub and Chrome Web Store publishing identities before publication. Do not infer authorization from whichever account happens to be logged in.
 - Keep payment-provider setup, financial advice, payment credentials, and private account details out of the repository. A public support link is the only payment-related runtime configuration needed.
-- Licence undecided: the owner requires attribution to @taiyodayo. Do not assume MIT or grant redistribution rights until the exact requirement is settled.
+- Licence settled: MIT + Commons Clause v1.0, with attribution to @taiyodayo. See LICENSE.
 - Public documentation must distinguish this independent project from an official OpenAI product.
 
 ## V1 scope
