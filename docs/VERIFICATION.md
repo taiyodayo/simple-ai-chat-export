@@ -1,5 +1,15 @@
 # Verification
 
+## Production publication and store draft — 8 October 2026
+
+PR #3 is merged at `8063de11afaa37f893216d74e0087e7e922505ce`; annotated tag v0.2.0 points to that clean source. The public GitHub release contains the 17-file ZIP, SHA-256, inventory and store images. Package SHA-256: `6e94c42230dd8e97cecb1a00a66329e2e1a74836f3e165625258c04d78c9a5cf`. Its inventory, CRC, manifest, full licence and every source byte were verified; the extracted package’s real-download test passed. The repository is public and private vulnerability reporting is enabled.
+
+The production support/privacy pages were deployed with the existing personal Cloudflare profile. Worker version: `beed510d-3a3a-4c38-ba38-3de5de86229d`. Live Chromium checks pass with zero scripts or third-party requests and no overflow at 320 pixels. The homepage and /seatdesigner retain their pre-deployment hashes.
+
+Google accepted the release ZIP in the authorised publisher profile and created draft item `hnolfghceldfcghkcfnfafainiiodkhl`. Description, Tools category, English (United Kingdom), homepage/support links, icon, two screenshots, small promo, privacy URL, permission justifications, no-remote-code declaration, local data categories and all three Limited Use certifications were saved. Reviewer instructions were saved in the dashboard’s 500-character field without supplying credentials. Public/free distribution is selected. The owner declared this a personal hobby and selected Non-trader; public display name is @taiyodayo.
+
+Google’s submission check reports only a missing and unverified publisher contact email. That email is public even for non-traders, so the private login address was not entered. The owner was asked to choose a public alias/address. The draft is not submitted for review or live in the store yet. No login address, legal name, postal address, phone number, token or credential is recorded here or in the listing text.
+
 ## Production release 0.2.0 — 8 October 2026
 
 The owner selected the supplied MIT text plus Commons Clause v1.0, with copyright and visible credit to @taiyodayo, local build/install rights, and public source primarily for security inspection. LICENSE includes the full condition and its Software/License/Licensor definitions. The package licence field points to LICENSE rather than declaring unrestricted MIT or OSI open-source. The 17-file upload ZIP includes the full licence. Production UI/metadata use 0.2.0; Google approval is a separate status.

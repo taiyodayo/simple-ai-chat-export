@@ -22,3 +22,5 @@ Store account registration/authentication is separate from the personal Cloudfla
 - Update README and public support/privacy pages. Retain the old website paths as aliases. Ordinary provider access continues to use `activeTab`, with no extra required host permissions.
 
 - The owner restored personal Cloudflare login for the website rename. The new project and privacy URLs are deployed and verified; the personal account is pinned even when the profile lists two accounts. Legacy aliases are retained, with no DNS or mail changes.
+
+- The publisher account is solely a personal hobby. The owner selected Non-trader and requested that private identity/contact details not be published. Public credit/display name is @taiyodayo. Google requires a verified public contact email even for non-traders; do not use the private login email as the public contact.
