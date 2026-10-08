@@ -1,5 +1,9 @@
 # Verification
 
+## Clean-source packaging — 8 October 2026
+
+Issue #9 replaces the handwritten ZIP/CRC encoder and permissive JavaScript packager with Python’s standard `zipfile` writer. Packaging reads the fixed inventory directly from the committed Git tree, refuses dirty/missing Git source and release-version mismatches before writing artifacts, and uses fixed ZIP timestamps. Five isolated synthetic Git-checkout tests cover byte-for-byte reproducibility/source identity and refusals that preserve an existing artifact. The frozen 0.2.0/0.2.1 release artifacts are not replaced by this change. Future publication uses GitHub immutable draft releases and native release attestations; the next real release must still be verified after publication.
+
 ## Enforced GitHub verification — 8 October 2026
 
 Issue #8 adds one read-only CI job with pinned actions, Node 24 and the declared pnpm version. It runs the existing unit, extracted-package browser, source and format checks. Local checks pass 60 unit and 50 browser tests. Native secret scanning, push protection, Dependabot alerts/security updates and CodeQL default setup are enabled; the initial CodeQL JavaScript analysis completed successfully.

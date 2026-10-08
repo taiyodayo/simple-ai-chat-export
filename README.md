@@ -14,7 +14,7 @@ Support the project, entirely optionally.
 
 ## Build and install locally
 
-Use a current Node.js release and pnpm. Python 3 is used to verify the extension installation package.
+Use a supported Node.js LTS release, pnpm and Python 3. Packaging uses Python’s standard ZIP writer and requires a clean Git checkout with committed source.
 
 ```sh
 pnpm install --frozen-lockfile
