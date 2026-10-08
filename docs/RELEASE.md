@@ -10,7 +10,7 @@ Public release is blocked until the owner confirms working behaviour and the fol
 - [ ] Perform a security review of code, dependencies, Git history and the final ZIP. Built-in pattern scanning is only a first-pass check, not a complete audit.
 - [ ] Confirm the owner's licence and visible-attribution requirements. Add the chosen licence verbatim and corresponding notices; do not label a custom licence MIT.
 - [ ] Activate and verify receive-only support email; preserve existing domain mail settings. Establish a way to reply from a public identity without exposing private Gmail.
-- [ ] Publish and verify the renamed website/privacy pages and new `/simple-ai-chat-export` paths after restoring personal Cloudflare authentication.
+- [x] Publish and verify the renamed website/privacy pages and new `/simple-ai-chat-export` paths using the restored personal Cloudflare profile. Legacy aliases and existing homepage/routes verified.
 - [x] Deploy and verify the original pre-release website at `https://ongaku.co.uk/simple-chatgpt-exporter` and policy at `/simple-chatgpt-exporter/privacy`. Existing homepage and routes preserved; email contact remains a separate gate.
 - [ ] Change prototype-only UI/copy only when evidence supports the resulting claims. Install screenshots must show the real verified product.
 - [ ] Confirm the owner's dedicated app-publishing Chrome Web Store identity, supplied privately. Do not use the Cloudflare login or employer account. Complete data-use disclosures and accurate permission justifications. Review current donation-link and branding policy; listing URLs may be plain text.

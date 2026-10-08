@@ -20,3 +20,5 @@ Pending owner inputs: attribution/licence choice; forwarding-alias destination c
 - On 8 October 2026 the owner authorised PR/merge of the ChatGPT baseline and a private prerelease before adding providers. PR #2 is merged and `v0.1.1-beta.1` is published.
 - Repository/app identifier: `simple-ai-chat-export`. Marketing name: **Simple AI-Chat export for ChatGPT, Claude, Gemini**. Keep one shared UI and avoid extra settings or a provider framework.
 - Update README and public support/privacy pages. Retain the old website paths as aliases. Ordinary provider access continues to use `activeTab`, with no extra required host permissions.
+
+- The owner restored personal Cloudflare login for the website rename. The new project and privacy URLs are deployed and verified; the personal account is pinned even when the profile lists two accounts. Legacy aliases are retained, with no DNS or mail changes.

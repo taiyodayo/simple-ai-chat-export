@@ -72,6 +72,6 @@ The source and Chrome Web Store release must correspond to the same tag. Store i
 
 ## Contact and licence
 
-[Current live website and help](https://ongaku.co.uk/simple-chatgpt-exporter) · [Privacy policy](https://ongaku.co.uk/simple-chatgpt-exporter/privacy). Updated pages and the new `/simple-ai-chat-export` address are ready locally; publishing awaits restoration of the personal Cloudflare profile. The legacy URLs will remain aliases. Planned receive-only address: `chat-simple-export@ongaku.co.uk` (not yet active). Never send tokens, passwords or private transcripts in an issue.
+[Website and help](https://ongaku.co.uk/simple-ai-chat-export) · [Privacy policy](https://ongaku.co.uk/simple-ai-chat-export/privacy). The renamed pre-release pages are live; the legacy `/simple-chatgpt-exporter` URLs remain working aliases. Planned receive-only address: `chat-simple-export@ongaku.co.uk` (not yet active). Never send tokens, passwords or private transcripts in an issue.
 
 Copyright © 2026 @taiyodayo. Attribution requirements are awaiting owner confirmation; no open-source licence has been granted yet. Do not describe this private prototype as an audited or licensed open-source release.

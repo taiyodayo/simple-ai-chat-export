@@ -1,5 +1,11 @@
 # Verification
 
+## Website rename deployed — 8 October 2026
+
+The owner restored personal Cloudflare authentication. The selected profile has two accounts; zone API inspection confirmed `ongaku.co.uk` belongs to the pinned personal account and that the new project path had no conflicting Worker. Deployed the prepared handler and three static assets with Wrangler 4.148.0 using `taiyodayo-personal`. Worker version: `b279ce92-cb80-43d6-a196-84c934ab514e`.
+
+The new website, privacy policy, trailing-slash variants, stylesheet and legacy aliases all return HTTP 200. All eight checked responses match repository assets byte for byte and carry the expected CSP, no-referrer and no-transform headers. The domain homepage and `/seatdesigner` retain their pre-deployment SHA-256. Live Chromium checks found zero scripts, zero third-party requests and no horizontal overflow at 320 pixels on either page. No DNS or mail records were changed. The extension and repository remain private; draft PR #3 records the provider work.
+
 ## Provider alpha — 8 October 2026
 
 The repository is renamed to `taiyodayo/simple-ai-chat-export` and remains private. The marketing name is **Simple AI-Chat export for ChatGPT, Claude, Gemini**. Branch `feat/multi-provider-export` follows the merged ChatGPT prerelease; its package version is `0.2.0-alpha.1` with Chrome version `0.2.0`. The existing unpacked extension was reloaded in the owner’s first Chrome profile and displays the renamed UI, default `~/Downloads` and an Export button that fits within its window.
@@ -10,7 +16,7 @@ Gemini: the personal profile’s home screen contained saved history links. The 
 
 Final checks pass 59 Node tests and 43 browser tests, including actual Chrome scripting/revalidation/download completion in both formats for synthetic conversations from each provider, the extracted package, shared folder UX and ChatGPT Deep Research regression cases. Source/manifest checks and formatting pass.
 
-The renamed website and privacy pages, new project path and legacy aliases pass local tests and Wrangler 4.148.0 dry-run bundling. Live publishing is pending: the documented `taiyodayo-personal` profile is missing locally and the default login cannot access the pinned personal account. No deployment was attempted with that identity.
+The renamed website and privacy pages, new project path and legacy aliases pass local tests and Wrangler 4.148.0 dry-run bundling. Publishing was initially blocked by the missing personal profile; the owner subsequently restored it and deployment is verified in the newer entry above. No deployment was attempted with the default work identity.
 
 ## ChatGPT prerelease — 8 October 2026
 
