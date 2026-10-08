@@ -1,5 +1,11 @@
 # Verification
 
+## Enforced GitHub verification — 8 October 2026
+
+Issue #8 adds one read-only CI job with pinned actions, Node 24 and the declared pnpm version. It runs the existing unit, extracted-package browser, source and format checks. Local checks pass 60 unit and 50 browser tests. Native secret scanning, push protection, Dependabot alerts/security updates and CodeQL default setup are enabled; the initial CodeQL JavaScript analysis completed successfully.
+
+Main requires the GitHub Actions `verify` check with an up-to-date base, including administrators, and blocks force pushes/deletion. Pull requests are required without a second-person approval requirement. A deliberately failing check in PR #15 produced a blocked merge state ([failure run](https://github.com/taiyodayo/simple-ai-chat-export/actions/runs/37752123345)); its temporary failure step was removed before final verification and merge. These are repository controls, not a guarantee against malicious publisher updates.
+
 ## Adversarial review and replacement 0.2.1 — 8 October 2026
 
 The owner reported the 0.2.0 Purple Potassium rejection and took over store operation. Version 0.2.1 removes downloads permission/API and uses ordinary local Blob downloads, with truthful Download started status. Selected-folder saves use an origin-wide Web Lock and confirm after close. Extraction waits cancel/time out and rendered conversion has early budgets and iterative fence sizing. See [ADVERSARIAL_REVIEW.md](ADVERSARIAL_REVIEW.md) and [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md).
