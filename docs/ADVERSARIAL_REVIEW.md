@@ -33,8 +33,8 @@ The independent audit captured and inspected 29 screenshots, including original 
 
 | Step                   | Health / finding                                                                                          |
 | ---------------------- | --------------------------------------------------------------------------------------------------------- |
-| 1. Discover product    | Needs a prominent installation action; coffee is currently the first-screen action.                       |
-| 2. Install             | Usable instructions once found; improve discovery from the hero.                                          |
+| 1. Discover product    | A prominent Install action now precedes coffee in navigation.                                             |
+| 2. Install             | Install jumps to expanded installation instructions.                                                      |
 | 3. Open supported chat | Clear wrong-page/sign-in recovery.                                                                        |
 | 4. Choose format       | Keyboard radios work; misleading formatting-intact copy tightened.                                        |
 | 5. Choose folder       | Selection/reset and narrow reflow work; default path is illustrative because Chrome settings can differ.  |
@@ -46,7 +46,7 @@ The independent audit captured and inspected 29 screenshots, including original 
 | 11. Help               | Comprehensive; a short topic index would improve scanning.                                                |
 | 12. Privacy            | Detailed caveats belong here; trim repeated landing-page prose rather than adding more prompts.           |
 
-Highest-value next UI improvement: a visible installation action. Preserve the existing restrained design and voluntary post-export coffee placement. Do not add settings, nags, tracking or promises that all users will donate.
+The visible installation action is implemented; showing the actual filename/destination is a remaining improvement. Preserve the existing restrained design and voluntary post-export coffee placement. Do not add settings, nags, tracking or promises that all users will donate.
 
 ## Store operation
 

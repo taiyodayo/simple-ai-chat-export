@@ -49,20 +49,46 @@ try {
     url,
   );
   await page.goto(`chrome-extension://${id}/popup.html?tab=${tabId}`);
+  if (
+    (await page.locator("#prototype").textContent()) !==
+    `Version ${manifest.version}`
+  )
+    throw new Error("Screenshot UI version does not match the manifest");
   await page.screenshot({ path: join(output, "01-export.png") });
+  const downloading = page.waitForEvent("download");
   await page.getByRole("button", { name: /Export conversation/ }).click();
-  await page.locator("#success").waitFor({ state: "visible" });
-  await page.screenshot({ path: join(output, "02-saved.png") });
-  const downloads = await page.evaluate(() =>
-    chrome.downloads.search({ state: "complete" }),
+  // Only the external Playwright runner observes completion. The extension's
+  // ordinary download anchor cannot observe a save or cancellation afterward.
+  const download = await downloading;
+  if (await download.failure())
+    throw new Error("Synthetic native download did not complete");
+  const bytes = await readFile(await download.path());
+  const text = new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+  const metadataBlock = text.match(
+    /^# Export metadata\n\n```json\n([\s\S]*?)\n```/,
   );
-  // This fresh, isolated profile contains only the export started above.
-  const own = downloads;
-  if (own.length !== 1) throw new Error("Synthetic save was not confirmed");
-  const text = await readFile(own[0].filename, "utf8");
-  if (!text.includes('"version": "0.2.0"') || !text.includes("日本語 ☕"))
-    throw new Error("Synthetic export verification failed");
-  await rm(own[0].filename, { force: true });
+  const metadata = metadataBlock ? JSON.parse(metadataBlock[1]) : null;
+  if (
+    metadata?.exporter?.version !== manifest.version ||
+    metadata?.messageCount !== 2 ||
+    !download.suggestedFilename().endsWith(".md") ||
+    !text.includes("日本語 ☕") ||
+    !text.includes('const tea = "earl grey";\n  console.log(tea);') ||
+    !text.includes("Read a page") ||
+    !text.includes("Step outside")
+  )
+    throw new Error("Synthetic export byte verification failed");
+  await download.delete();
+  await page.locator("#success").waitFor({ state: "visible" });
+  if (
+    (await page.locator("#status-title").textContent()) !==
+      "Download started" ||
+    !(await page.locator("#status-body").textContent()).includes(
+      "Completion isn’t confirmed here",
+    )
+  )
+    throw new Error("Screenshot UI does not describe native handoff honestly");
+  await page.screenshot({ path: join(output, "02-saved.png") });
   await cp(resolve("extension/icon-128.png"), join(output, "icon-128.png"));
   const promo = await page.evaluate(() => {
     const canvas = document.createElement("canvas");
