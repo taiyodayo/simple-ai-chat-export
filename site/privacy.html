@@ -35,9 +35,9 @@
       <h2>Current availability</h2>
       <p>
         The extension is in private development and is not available from the
-        Chrome Web Store yet. The current prototype checks the selected tab’s
-        address when you request an export, but does not retrieve live ChatGPT
-        messages. Its demonstration uses sample conversations.
+        Chrome Web Store yet. The development extension reads rendered ChatGPT
+        messages after you choose Export. Its separate browser demonstration
+        uses sample conversations.
       </p>
       <h2>Conversation data</h2>
       <p>
@@ -47,12 +47,12 @@
         retain conversation content.
       </p>
       <p>
-        The planned release will retrieve only the conversation you choose,
-        including guest chats, from ChatGPT using your existing session, then
-        process it locally. Conversation content will not be sent to the
-        developer, payment providers or other processing services. This policy
-        will be updated with the verified retrieval method before live export
-        becomes available.
+        The extension reads only the displayed conversation you choose,
+        including guest chats, and processes it locally. It briefly scrolls the
+        page to check stability. It does not make conversation API requests or
+        access authentication tokens. Conversation content is not sent to the
+        developer, payment providers or other processing services. Server-side
+        history completeness cannot be verified.
       </p>
       <h2>Your saved files</h2>
       <p>
@@ -79,6 +79,21 @@
         checks completion or interruption for that download. The browser grants
         a broader permission, but the extension does not search through your
         other downloads.
+      </p>
+      <p>
+        <strong>Optional Deep Research access:</strong> when a completed report
+        needs access to its embedded sandbox site, the development extension
+        requests that exact app origin after you choose to allow it. Chrome
+        retains this permission until you remove it in extension settings. The
+        exporter reads report Markdown and citations already loaded in the
+        chosen chat; it does not fetch source pages or research activity.
+      </p>
+      <p>
+        <strong>Selected save folder:</strong> choosing a custom folder grants
+        access through Chrome’s native picker. The exporter checks candidate
+        export filenames and writes your file without reading other files or
+        listing the directory. The folder handle is kept only in the export
+        window’s memory. These saves do not appear in Chrome’s download history.
       </p>
       <h2>This website</h2>
       <p>

@@ -7,6 +7,18 @@ import { saveFile } from "./save.js";
 
 const $ = (id) => document.getElementById(id);
 const errors = {
+  "research-access": [
+    "Allow access to the Deep Research report",
+    "ChatGPT displays this report in a separate embedded page. Choose Allow Deep Research and export, then approve Chrome’s site-access request to include its text and citations.",
+  ],
+  "research-permission": [
+    "Deep Research access wasn’t granted",
+    "Nothing was saved. Allow report access to export this conversation.",
+  ],
+  "research-unrecognized": [
+    "We couldn’t read this Deep Research report",
+    "Nothing was saved. Keep the completed report open in the conversation and try again. This report’s layout or citations may not be supported yet.",
+  ],
   "layout-unrecognized": [
     "We couldn’t read this chat’s layout",
     "Your conversation may still be loading, or ChatGPT’s layout may have changed. Nothing was saved. Let the chat finish loading, then try again.",
@@ -77,7 +89,34 @@ const errors = {
 // No demo fixture or test hook is loaded by the packaged extension.
 export function mount(adapter) {
   let controller,
+    researchOrigins,
+    directoryHandle,
+    choosing = false,
     saving = false;
+  let defaultPath = /Win/.test(navigator.platform)
+    ? "%USERPROFILE%\\Downloads"
+    : "~/Downloads";
+  function destination() {
+    $("destination-name").textContent = directoryHandle?.name ?? "Downloads";
+    $("destination-path").textContent = directoryHandle
+      ? `…/${directoryHandle.name}`
+      : defaultPath;
+    $("destination-path").title = directoryHandle
+      ? "Chrome exposes the folder name, not its full path."
+      : "Standard Downloads path. Chrome’s download settings can use a different folder.";
+    $("destination-hint").textContent = directoryHandle
+      ? "Selected folder · used until this window closes."
+      : "Uses Chrome’s download location.";
+    $("reset-directory").hidden = !directoryHandle;
+  }
+  destination();
+  globalThis.chrome?.runtime
+    ?.getPlatformInfo?.()
+    .then(({ os }) => {
+      defaultPath = os === "win" ? "%USERPROFILE%\\Downloads" : "~/Downloads";
+      destination();
+    })
+    .catch(() => {});
   function status(title = "", body = "") {
     $("status-title").textContent = title;
     $("status-body").textContent = body;
@@ -85,9 +124,48 @@ export function mount(adapter) {
   function busy(value) {
     $("export").disabled = value;
     $("formats").disabled = value;
+    $("choose-directory").disabled = value;
+    $("reset-directory").disabled = value;
     $("cancel").hidden = !value;
     $("export-form").setAttribute("aria-busy", String(value));
   }
+  $("choose-directory").addEventListener("click", async () => {
+    if (saving || choosing) return;
+    choosing = true;
+    busy(true);
+    $("cancel").hidden = true;
+    $("directory-status").hidden = true;
+    try {
+      const pick =
+        adapter.selectDirectory ??
+        ((options) => window.showDirectoryPicker(options));
+      const selected = await pick({
+        id: "conversation-export",
+        startIn: directoryHandle ?? "downloads",
+        mode: "readwrite",
+      });
+      if (selected?.kind !== "directory" || typeof selected.name !== "string")
+        throw new Error("Invalid folder");
+      directoryHandle = selected;
+      destination();
+    } catch (error) {
+      $("directory-status").textContent =
+        error.name === "AbortError"
+          ? "Folder unchanged."
+          : "Couldn’t open this folder. Try again or use Downloads.";
+      $("directory-status").hidden = false;
+    } finally {
+      choosing = false;
+      busy(false);
+      $("choose-directory").focus();
+    }
+  });
+  $("reset-directory").addEventListener("click", () => {
+    directoryHandle = undefined;
+    destination();
+    $("directory-status").hidden = true;
+    $("choose-directory").focus();
+  });
   $("again").addEventListener("click", () => {
     $("success").hidden = true;
     $("export-form").hidden = false;
@@ -106,13 +184,24 @@ export function mount(adapter) {
   );
   $("export-form").addEventListener("submit", async (event) => {
     event.preventDefault();
-    if (saving) return;
+    if (saving || choosing) return;
     saving = true;
     controller = new AbortController();
     const { signal } = controller;
     $("success").hidden = true;
     busy(true);
     try {
+      // Request synchronously from this click, before any asynchronous page read.
+      const permissionRequest = researchOrigins
+        ? adapter.requestResearchPermission({ origins: researchOrigins })
+        : null;
+      if (permissionRequest) {
+        if (!(await permissionRequest))
+          throw new ExportError("research-permission");
+        signal.throwIfAborted();
+        researchOrigins = undefined;
+        $("export").textContent = "Export conversation ↓";
+      }
       const format = document.querySelector(
         'input[name="format"]:checked',
       ).value;
@@ -126,11 +215,11 @@ export function mount(adapter) {
       const result = createExport(conversation, format);
       await adapter.confirmUnchanged(identity, { signal });
       signal.throwIfAborted();
-      status("Downloading…", "Your file includes metadata at the beginning.");
+      status("Saving…", "Your file includes metadata at the beginning.");
       await adapter.save(
         new Blob([result.content], { type: result.mimeType }),
         result.filename,
-        { signal },
+        { signal, directoryHandle },
       );
       signal.throwIfAborted();
       status(
@@ -146,6 +235,10 @@ export function mount(adapter) {
         : error instanceof ExportError
           ? error.code
           : "incomplete";
+      if (code === "research-access" && error.researchOrigins) {
+        researchOrigins = error.researchOrigins;
+        $("export").textContent = "Allow Deep Research and export";
+      }
       status(...(errors[code] ?? errors.incomplete));
       $("status-title").focus();
     } finally {
@@ -173,5 +266,6 @@ if (globalThis.chrome?.runtime?.id) {
     confirmUnchanged: (identity, options) =>
       confirmConversationUnchanged(tabId, identity, options),
     save: saveFile,
+    requestResearchPermission: (request) => chrome.permissions.request(request),
   });
 }

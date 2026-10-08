@@ -1,5 +1,10 @@
 import { ExportError, conversationLocation } from "./core.js";
 import { readConversationPage } from "./page-reader.js";
+import {
+  researchOrigin,
+  readResearchFrame,
+  formatResearchReport,
+} from "./research.js";
 
 export async function retrieveCurrentConversation(tab, { signal } = {}) {
   signal?.throwIfAborted();
@@ -7,27 +12,69 @@ export async function retrieveCurrentConversation(tab, { signal } = {}) {
   if (!Number.isInteger(tab.id)) throw new ExportError("wrong-page");
   if (!globalThis.chrome?.scripting?.executeScript)
     throw new ExportError("extension-update");
-  let result;
-  try {
-    [result] = await chrome.scripting.executeScript({
+  async function inject(options) {
+    try {
+      return await chrome.scripting.executeScript(options);
+    } catch (error) {
+      signal?.throwIfAborted();
+      // Do not expose raw browser errors, which can contain the private chat URL.
+      const message = String(error?.message ?? "");
+      if (/No tab with id|tab was closed|Frame with ID.*removed/i.test(message))
+        throw new ExportError("changed");
+      if (/permission|Cannot access|not allowed/i.test(message))
+        throw new ExportError("access");
+      throw new ExportError("read-failed");
+    }
+  }
+  const readPage = async (reports = []) => {
+    const [result] = await inject({
       target: { tabId: tab.id },
       func: readConversationPage,
-      args: [location.url],
+      args: [location.url, reports],
     });
-  } catch (error) {
     signal?.throwIfAborted();
-    // Do not expose raw browser errors, which can contain the private chat URL.
-    const message = String(error?.message ?? "");
-    if (/No tab with id|tab was closed|Frame with ID.*removed/i.test(message))
-      throw new ExportError("changed");
-    if (/permission|Cannot access|not allowed/i.test(message))
-      throw new ExportError("access");
-    throw new ExportError("read-failed");
+    if (!result?.result) throw new ExportError("incomplete");
+    return result.result;
+  };
+  let result = await readPage();
+  if (result.error === "research-access") {
+    const frames = result.researchFrames;
+    if (
+      !Array.isArray(frames) ||
+      !frames.length ||
+      frames.length > 20 ||
+      new Set(frames.map((f) => f.url)).size !== frames.length
+    )
+      throw new ExportError("research-unrecognized");
+    const origins = [
+      ...new Set(frames.map((frame) => researchOrigin(frame.url))),
+    ];
+    if (!(await chrome.permissions.contains({ origins }))) {
+      const error = new ExportError("research-access");
+      error.researchOrigins = origins;
+      throw error;
+    }
+    const results = await inject({
+      target: { tabId: tab.id, allFrames: true },
+      world: "MAIN",
+      func: readResearchFrame,
+      args: [frames.map((f) => f.url)],
+    });
+    signal?.throwIfAborted();
+    const reports = frames.map((frame) => {
+      const matches = results.filter((r) => r.result?.url === frame.url);
+      if (matches.length !== 1) throw new ExportError("research-unrecognized");
+      return {
+        url: frame.url,
+        messageId: matches[0].result.messageId,
+        ...formatResearchReport(matches[0].result),
+      };
+    });
+    result = await readPage(reports);
   }
   signal?.throwIfAborted();
-  if (!result?.result) throw new ExportError("incomplete");
-  if (result.result.error) throw new ExportError(result.result.error);
-  const { messages, title } = result.result;
+  if (result.error) throw new ExportError(result.error);
+  const { messages, title } = result;
   const fingerprint = Array.from(
     new Uint8Array(
       await crypto.subtle.digest(

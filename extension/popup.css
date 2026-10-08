@@ -19,7 +19,7 @@ body {
 }
 main {
   max-width: 440px;
-  padding: 26px;
+  padding: 22px;
   margin: auto;
 }
 header {
@@ -48,18 +48,19 @@ header small {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #716040;
-  margin: 22px 0 8px;
+  margin: 16px 0 6px;
 }
 h1 {
-  font-size: 29px;
+  font-size: 28px;
   line-height: 1.18;
   letter-spacing: -0.8px;
   font-weight: 600;
-  margin: 20px 0 12px;
+  margin: 14px 0 10px;
 }
 .intro {
   color: #5b655e;
-  margin: 0 0 25px;
+  font-size: 13px;
+  margin: 0 0 18px;
 }
 fieldset {
   border: 0;
@@ -77,7 +78,7 @@ legend {
   gap: 10px;
   border: 1px solid #d8ded6;
   border-radius: 10px;
-  padding: 13px;
+  padding: 11px 12px;
   margin-bottom: 8px;
   cursor: pointer;
   background: #fff;
@@ -109,7 +110,7 @@ input {
 .file-note {
   font-size: 12px;
   color: #627166;
-  margin: 13px 0 20px;
+  margin: 10px 0 12px;
 }
 button {
   font: inherit;
@@ -131,6 +132,93 @@ button:hover {
 button:disabled {
   opacity: 0.55;
   cursor: default;
+}
+.destination {
+  margin-bottom: 12px;
+}
+.destination-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 22px;
+  margin-bottom: 5px;
+  font-size: 12px;
+  font-weight: 600;
+}
+#reset-directory {
+  width: auto;
+  padding: 3px 0 3px 8px;
+  background: transparent;
+  color: #315b42;
+  font-size: 11px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.destination-picker {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 58px;
+  padding: 10px 12px;
+  border: 1px solid #d8ded6;
+  background: #fff;
+  color: #25372f;
+  text-align: left;
+  font-weight: 400;
+}
+.destination-picker:hover {
+  background: #f0f5ee;
+  border-color: #8ca28f;
+}
+.destination-picker span {
+  float: none;
+}
+.folder-icon {
+  flex-shrink: 0;
+  color: #416650;
+}
+.destination-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+.destination-text strong {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#destination-path {
+  color: #627166;
+  font:
+    11px/1.6 ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.destination-change {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #315b42;
+}
+.destination-change span {
+  margin-left: 5px;
+  font-size: 19px;
+}
+#destination-hint,
+#directory-status {
+  margin: 5px 0 0;
+  color: #627166;
+  font-size: 11px;
+}
+#directory-status {
+  color: #716040;
 }
 .secondary {
   background: transparent;
@@ -189,7 +277,7 @@ h2 {
   margin: 8px 0 0;
 }
 footer {
-  margin-top: 26px;
+  margin-top: 18px;
   font-size: 11px;
   color: #687269;
 }

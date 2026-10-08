@@ -15,7 +15,10 @@ test("the extracted package loads with its CSP and saves readable TXT and Markdo
     execFileSync("python3", [
       "-c",
       "import sys,zipfile; zipfile.ZipFile(sys.argv[1]).extractall(sys.argv[2])",
-      resolve("dist/simple-chatgpt-export-0.1.0-prototype.zip"),
+      resolve(
+        "dist",
+        JSON.parse(await readFile("dist/inventory.json", "utf8")).artifact,
+      ),
       extension,
     ]);
     context = await chromium.launchPersistentContext(

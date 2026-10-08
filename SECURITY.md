@@ -2,7 +2,7 @@
 
 ## Current status
 
-Private prototype 0.1.0. Rendered-page extraction is implemented; server-side history completeness is not established. No external security audit has been completed. Passing tests of synthetic conversations does not establish that ChatGPT retrieval works, that every browser behaves identically, or that the extension is universally safe.
+Private development prerelease 0.1.1-beta.1. Rendered-page extraction is implemented; server-side history completeness is not established. No external security audit has been completed. Passing tests of synthetic conversations does not establish that ChatGPT retrieval works, that every browser behaves identically, or that the extension is universally safe.
 
 ## Threat model
 
@@ -13,6 +13,10 @@ The prototype uses exact origin/path checks, bounded schema validation, a verifi
 The current internal model is not an authenticated statement from ChatGPT. Its completeness flags must eventually be derived from observed retrieval evidence by a reviewed adapter, never trusted merely because a remote response supplies a similarly named field.
 
 `activeTab` grants temporary site access; it is not a one-conversation security boundary. The `downloads` permission is broader than the specific ID queried here. A separate profile does not isolate conversations within the same ChatGPT account. Malicious extensions, a compromised browser or account, local file readers, and vulnerabilities in Markdown editors remain outside this project's guarantees.
+
+Deep Research optionally requests the detected report’s exact `mcp-app-<hex>.web-sandbox.oaiusercontent.com` HTTPS origin. This access persists in Chrome and covers more than one report. Injection is limited in code to matching frames in the clicked tab. The report reader runs in `MAIN`, whose globals and report component fields are untrusted page data; it reads only the observed report fields and makes no network requests. Bounded traversal, completion/stability checks, validated citation ranges, safe source URLs and normal conversation revalidation reject unsupported or changing data. Unknown report components or reference types fail explicitly. The extension-page CSP does not protect this script in the report’s world.
+
+The requested native folder picker uses the File System Access API with read/write access to the chosen directory. The handle is kept only in memory. Custom-folder saves validate filenames, probe only candidate names, use bounded collision handling, and await the writable stream’s close before reporting success. Cancellation and timeout abort pending writers, including late-opening streams. Creating a file handle can leave an empty placeholder after failure. Existence checking and file creation are separate operations, so another application creating the same filename concurrently remains a filesystem race; exclusive writable streams prevent overlapping writers where supported.
 
 ## Verification
 
