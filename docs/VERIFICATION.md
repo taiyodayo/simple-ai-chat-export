@@ -1,5 +1,11 @@
 # Verification
 
+## Website and repository sync — 8 October 2026
+
+[PR #22](https://github.com/taiyodayo/simple-ai-chat-export/pull/22) was updated with main, passed required CI/CodeQL, merged and pulled locally. Its change is confined to the owner's README tagline. Version 0.2.2 extension files and LICENSE remain identical to the immutable release; its tag and assets were not modified.
+
+The support/privacy site from commit `db69d79239fc632d3970d8f818303bcf70efc446` was dry-run checked and deployed with Wrangler 4.148.0 using the named personal profile and pinned account. Worker version: `99c90602-27ca-4045-90e5-086c444f0650`. All 12 current/legacy page, privacy, CSS and favicon URLs matched repository bytes and security headers. Initial privacy propagation returned stale bytes; the final verification passed for every URL. The domain homepage and `/seatdesigner` retained their pre-deployment hashes, and Worker route ownership was unchanged. Live Chromium checks at 320 and 1440 pixels found no scripts, third-party requests, page errors or horizontal overflow on either page. No DNS/mail changes or store submission were made.
+
 ## Immutable release 0.2.2 — 8 October 2026
 
 [Release v0.2.2](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v0.2.2) was published from commit `fea303a5ec80ca5f448d12091bdb389770738c75`. Its ZIP contains 17 entries; SHA-256 is `4974edbdf7f6101a9791844f2fd7df576c72c1ddba6d2c33f3a241b42de99381`. Each entry matched the committed Git bytes. The exact final extracted ZIP passed the TXT/Markdown download, CSP, permissions, metadata-version and Help test; it was not rebuilt after verification.
