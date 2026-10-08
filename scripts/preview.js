@@ -1,9 +1,9 @@
 import { createServer } from "node:http";
-import { readFile } from "node:fs/promises";
+import { open, realpath } from "node:fs/promises";
+import { constants } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { resolve, extname, sep } from "node:path";
-const root = fileURLToPath(new URL("../", import.meta.url));
-const allowed = ["extension", "dev", "tests", "site"];
+import { join, extname } from "node:path";
+const root = await realpath(fileURLToPath(new URL("../", import.meta.url)));
 const types = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
@@ -11,48 +11,88 @@ const types = {
   ".svg": "image/svg+xml",
   ".png": "image/png",
 };
-const server = createServer(async (req, res) => {
+// Load only reviewed preview assets. Requests never choose filesystem paths.
+const assets = new Map();
+for (const source of [
+  "extension/popup.html",
+  "extension/popup.js",
+  "extension/popup.css",
+  "extension/core.js",
+  "extension/save.js",
+  "extension/page-reader.js",
+  "extension/retrieval.js",
+  "extension/research.js",
+  "extension/help.html",
+  "extension/help.js",
+  "dev/preview.js",
+  "tests/fixtures.js",
+  "site/index.html",
+  "site/privacy.html",
+  "site/styles.css",
+  "site/favicon.png",
+]) {
+  const target = join(root, source);
+  let handle;
   try {
-    let path = new URL(req.url, "http://127.0.0.1").pathname;
-    path = path.replace(
-      /^\/simple-ai-chat-export(?=\/|$)/,
-      "/simple-chatgpt-exporter",
-    );
-    if (path === "/") path = "/dev/index.html";
+    if ((await realpath(target)) !== target) continue;
+    handle = await open(target, constants.O_RDONLY | constants.O_NOFOLLOW);
+    assets.set(`/${source}`, {
+      body: await handle.readFile(),
+      type: types[extname(source)] ?? "text/plain",
+    });
+  } catch {
+    // Missing or symlinked assets are unavailable, never followed elsewhere.
+  } finally {
+    await handle?.close();
+  }
+}
+const popup = assets.get("/extension/popup.html");
+if (popup)
+  assets.set("/dev/index.html", {
+    ...popup,
+    body: popup.body
+      .toString("utf8")
+      .replace('href="popup.css"', 'href="/extension/popup.css"')
+      .replace('src="popup.js"', 'src="/dev/preview.js"')
+      .replace('href="help.html"', 'href="/extension/help.html"'),
+  });
+assets.set("/", assets.get("/dev/index.html"));
+for (const base of ["/simple-ai-chat-export", "/simple-chatgpt-exporter"])
+  for (const [route, source] of [
+    ["", "index.html"],
+    ["/", "index.html"],
+    ["/privacy", "privacy.html"],
+    ["/privacy/", "privacy.html"],
+    ["/styles.css", "styles.css"],
+    ["/favicon.png", "favicon.png"],
+  ])
+    assets.set(base + route, assets.get(`/site/${source}`));
+
+const server = createServer((req, res) => {
+  try {
+    const host = `127.0.0.1:${server.address().port}`;
+    if (req.headers.host !== host) return res.writeHead(403).end();
+    if (!["GET", "HEAD"].includes(req.method))
+      return res.writeHead(405, { Allow: "GET, HEAD" }).end();
+    const origin = `http://${host}`;
+    const url = new URL(req.url, origin);
+    const segments = decodeURIComponent(req.url.split("?")[0]).split("/");
     if (
-      path === "/simple-chatgpt-exporter" ||
-      path === "/simple-chatgpt-exporter/"
+      url.origin !== origin ||
+      segments.includes("..") ||
+      segments.includes(".")
     )
-      path = "/site/index.html";
-    if (path === "/simple-chatgpt-exporter/favicon.png")
-      path = "/site/favicon.png";
-    if (path === "/simple-chatgpt-exporter/styles.css")
-      path = "/site/styles.css";
-    if (
-      path === "/simple-chatgpt-exporter/privacy" ||
-      path === "/simple-chatgpt-exporter/privacy/"
-    )
-      path = "/site/privacy.html";
-    const target = resolve(root, `.${decodeURIComponent(path)}`);
-    if (!allowed.some((dir) => target.startsWith(resolve(root, dir) + sep))) {
-      res.writeHead(404).end();
-      return;
-    }
-    let content;
-    if (path === "/dev/index.html") {
-      content = (await readFile(resolve(root, "extension/popup.html"), "utf8"))
-        .replace('href="popup.css"', 'href="/extension/popup.css"')
-        .replace('src="popup.js"', 'src="/dev/preview.js"')
-        .replace('href="help.html"', 'href="/extension/help.html"');
-    } else content = await readFile(target);
+      return res.writeHead(404).end();
+    const asset = assets.get(url.pathname);
+    if (!asset) return res.writeHead(404).end();
     res
       .writeHead(200, {
-        "Content-Type": types[extname(path)] ?? "text/plain",
+        "Content-Type": asset.type,
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
         "Referrer-Policy": "no-referrer",
       })
-      .end(content);
+      .end(req.method === "HEAD" ? undefined : asset.body);
   } catch {
     res.writeHead(404).end("Not found");
   }
