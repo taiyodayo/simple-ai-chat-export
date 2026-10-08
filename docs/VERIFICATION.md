@@ -1,5 +1,9 @@
 # Verification
 
+## Literal Markdown table cells — 8 October 2026
+
+Issue #16 replaces recursive Markdown conversion inside table cells with literal inline-code fences. Backslashes retain their code-span meaning and GFM table pipes use one literal escape. A character loop chooses fences longer than every input backtick run; no regex-based fence detection or table-cell substitution is used. Table row/column/size limits and source-link collection remain. Inline styling inside cells becomes literal text; displayed values, Unicode, backslashes and pipes are preserved. Browser regressions exercise code-like/HTML-like cells and the original large-backtick/deep/ragged cases. GitHub’s GFM renderer and Python’s standard HTMLParser independently confirmed the production reader’s two synthetic cell values and column count survive exactly. This does not sanitise arbitrary non-table Markdown for external viewers.
+
 ## Export result identity — 8 October 2026
 
 Issue #12 uses the existing save outcome to show the actual filename and selected folder after writer close. Native downloads show the requested filename and retain the unconfirmed-completion/Chrome Downloads guidance. Redundant generic success prose is removed; status text wraps safely without HTML insertion. Repeated real directory writes check the displayed collision-suffixed names against the actual files; the extracted-package native-download test compares the displayed requested name with the browser-observed download. No new permission, storage or polling is introduced.

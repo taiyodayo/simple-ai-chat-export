@@ -24,7 +24,7 @@ for (const guest of [true, false])
     expect(result.messages).toHaveLength(2);
     const text = result.messages[1].parts[0].text;
     expect(text).toContain("  first\n\n\n  second");
-    expect(text).toContain("| Tea | 2 |");
+    expect(text).toContain("| ` Tea ` | ` 2 ` |");
     expect(text).not.toContain("DO NOT EXPORT");
     expect(result.messages[1].sources[0].url).toBe(
       "https://example.org/source",
