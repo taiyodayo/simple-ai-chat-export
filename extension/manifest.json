@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Simple ChatGPT Export",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "version_name": "0.1.1-beta.1",
   "description": "Save the displayed ChatGPT conversation as plain text or Markdown. Local processing. No analytics.",
   "minimum_chrome_version": "120",
   "icons": {
@@ -11,6 +12,7 @@
     "128": "icon-128.png"
   },
   "permissions": ["activeTab", "scripting", "downloads"],
+  "optional_host_permissions": ["https://*.web-sandbox.oaiusercontent.com/*"],
   "action": {
     "default_title": "Simple ChatGPT Export"
   },

@@ -12,6 +12,7 @@ controls.innerHTML =
 document.body.append(controls);
 let scenario;
 mount({
+  selectDirectory: async () => ({ kind: "directory", name: "Chat exports" }),
   retrieve: async ({ signal }) => {
     scenario = document.getElementById("scenario").value;
     await new Promise((resolve, reject) => {

@@ -27,8 +27,10 @@ To inspect the actual extension, open `chrome://extensions`, turn on **Developer
 ## Intended everyday use
 
 1. Open the conversation and branch you want to keep.
-2. Open Simple ChatGPT Export. Choose Markdown or plain text, then **Export conversation**.
-3. Choose where to save your `.md` or `.txt` file. Metadata appears at the beginning, followed by the conversation.
+2. Open Simple ChatGPT Export. Choose Markdown or plain text. **Save location** defaults to Downloads; choose **Change** to pick another folder, then **Export conversation**.
+3. Find your `.md` or `.txt` file in the selected folder. Metadata appears at the beginning, followed by the conversation.
+
+The default control shows the standard OS Downloads path (`~/Downloads` on macOS/Linux or `%USERPROFILE%\\Downloads` on Windows); Chrome’s download settings determine the actual default location and whether a save dialogue appears. Selecting a folder opens a native directory picker initially at Downloads and grants access to that folder. Chrome exposes its name rather than its absolute path, so custom destinations display `…/folder-name`. The choice lasts for the current export window; **Use Downloads** resets it. Custom-folder exports write directly to that folder and do not appear in Chrome’s download history. Existing filenames receive a numbered suffix rather than being intentionally overwritten.
 
 The transcript keeps speaker labels and the original text, including paragraphs, Unicode, code and table syntax. Plain text retains readable Markdown-style notation where present rather than attempting lossy conversion. Metadata holds the title, conversation URL, branch/message identifiers, export date, format, count and omissions. It does not contain authentication data. No donation message is added to your files.
 
@@ -37,14 +39,17 @@ One editable file keeps the metadata and transcript together. No ZIP or companio
 ## Scope and limits
 
 - One currently displayed conversation, including guest chats, and its selected branch. No bulk export, alternate branches, PDF, cloud sync or account signup.
-- Non-text files are not downloaded. Known omissions require an explicit **Export text only** action and are recorded in the transcript and metadata. Unknown content or uncertain completeness blocks export.
+- Completed Deep Research reports in the observed embedded report layout are included, with their original Markdown and numbered citation URLs. Chrome asks for optional access to the report’s embedded site the first time it is needed. Unfinished reports and unknown report or citation layouts block export.
+- Non-text files are not downloaded. Known omissions are recorded in the transcript and metadata; the success screen identifies a text-only copy. Unknown content or uncertain completeness blocks export.
 - Current URL recognition accepts `https://chatgpt.com/c/<conversation-id>` and guest chats at `https://chatgpt.com/uc/<conversation-id>`. Both routes use the page reader. Projects, custom GPT routes, shared links and temporary chats are unverified, not promised.
 - Desktop Chrome on macOS, Windows and Linux is the target. Edge, Brave and other Chromium browsers are candidates for verification, not yet certified. There is no mobile support claim.
 - The exported file is not encrypted. Conversation text is untrusted; a Markdown editor’s handling of embedded links, images or HTML is outside the extension’s control.
 
 ## Permissions and privacy
 
-`activeTab` and `scripting` allow reading the clicked tab after you choose Export. It does not technically enforce a single-conversation boundary. `downloads` allows saving and checking the outcome of the download the extension starts; this browser permission is broader than the extension’s use of it. No host permissions, automatic content scripts, cookies access, telemetry, remote libraries or storage permission.
+`activeTab` and `scripting` allow reading the clicked tab after you choose Export. It does not technically enforce a single-conversation boundary. `downloads` allows saving and checking the outcome of the download the extension starts; this browser permission is broader than the extension’s use of it. No required host permissions, automatic content scripts, cookies access, telemetry, remote libraries or storage permission.
+
+Deep Research uses optional host access declared for `https://*.web-sandbox.oaiusercontent.com/*`. After a report is detected, **Allow Deep Research and export** requests access only to its exact sandbox app origin. Access persists until you remove it in Chrome’s extension settings. The exporter reads only matching report frames in the chosen tab when you export. It reads report text and citation data already loaded by ChatGPT; it does not retrieve source pages or research activity.
 
 The small service worker only opens the export window in response to your toolbar click. It does not poll or retrieve chats. Export data is held in the window’s memory and released after use; no secure-memory-erasure guarantee is made. Read [privacy](PRIVACY.md), [security and verification limits](SECURITY.md), and the [retrieval decision gate](docs/RETRIEVAL.md).
 

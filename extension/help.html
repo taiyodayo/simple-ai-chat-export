@@ -26,19 +26,33 @@
           there if you use it often.
         </li>
         <li>
-          Choose Markdown or plain text, then select
+          Choose Markdown or plain text. Save location defaults to Downloads;
+          choose <strong>Change</strong> to pick another folder. Then select
           <strong>Export conversation</strong>.
         </li>
         <li>
-          Find your file in your browser’s Downloads. Open it to read or edit
-          your conversation.
+          Find your file in the selected folder. Open it to read or edit your
+          conversation.
         </li>
       </ol>
+      <p>
+        Your folder choice lasts until this export window closes.
+        <strong>Use Downloads</strong> resets it. Chrome shows only the name of
+        a custom folder; default downloads follow Chrome’s download settings.
+        Files saved to custom folders do not appear in Chrome’s Downloads list.
+      </p>
       <p>
         Keep the export window open until saving finishes. Closing it cancels an
         unfinished export; check Downloads if a save had already started.
       </p>
       <h2>What’s in the file?</h2>
+      <p>
+        Completed Deep Research reports are included with their Markdown and
+        numbered source links. When needed, choose
+        <strong>Allow Deep Research and export</strong> and approve Chrome’s
+        request to read the report’s embedded site. Unfinished or unsupported
+        reports stop the export.
+      </p>
       <p>
         The transcript contains the rendered messages in their displayed order.
         The metadata header holds the title, original conversation link, message
@@ -72,6 +86,18 @@
         <strong>Downloads:</strong> saves your export and checks whether that
         download finished or was interrupted. The browser permission is broader
         than this use; the extension queries only the download it starts.
+      </p>
+      <p>
+        <strong>Selected folder:</strong> the native picker grants access to the
+        folder you choose. The exporter checks candidate export names and writes
+        the requested file without reading other files or listing the directory.
+        The folder handle is kept only in this window’s memory.
+      </p>
+      <p>
+        <strong>Optional Deep Research access:</strong> reads report text and
+        citations already loaded in the chosen chat’s embedded sandbox page.
+        Chrome keeps this site permission until you remove it in extension
+        settings. Cited source pages and research activity are not retrieved.
       </p>
       <h2>If something goes wrong</h2>
       <p>

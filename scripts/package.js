@@ -4,6 +4,9 @@ import { createHash } from "node:crypto";
 import { archiveBytes } from "./archive.js";
 
 const root = new URL("../", import.meta.url);
+const project = JSON.parse(
+  await readFile(new URL("package.json", root), "utf8"),
+);
 const inventory = [
   "core.js",
   "help.html",
@@ -18,6 +21,7 @@ const inventory = [
   "popup.html",
   "popup.js",
   "retrieval.js",
+  "research.js",
   "page-reader.js",
   "save.js",
 ];
@@ -43,14 +47,16 @@ const dirty =
     encoding: "utf8",
   }).trim().length > 0;
 await mkdir(new URL("dist/", root), { recursive: true });
-const name = "simple-chatgpt-export-0.1.0-prototype.zip";
+const name = `${project.name}-${project.version}.zip`;
 await writeFile(new URL(`dist/${name}`, root), zip);
 await writeFile(new URL(`dist/${name}.sha256`, root), `${sha256}  ${name}\n`);
 await writeFile(
   new URL("dist/inventory.json", root),
   JSON.stringify(
     {
-      kind: "private prototype, not release-approved",
+      kind: "private development prerelease, not Chrome Web Store approved",
+      artifact: name,
+      version: project.version,
       commit,
       dirty,
       sha256,
@@ -61,5 +67,5 @@ await writeFile(
   ) + "\n",
 );
 console.log(
-  `Packaged ${inventory.length} files. SHA-256 ${sha256}. Source ${commit}${dirty ? " (working tree has changes)" : ""}. Not approved for release.`,
+  `Packaged ${inventory.length} files. SHA-256 ${sha256}. Source ${commit}${dirty ? " (working tree has changes)" : ""}. Not approved for Chrome Web Store release.`,
 );

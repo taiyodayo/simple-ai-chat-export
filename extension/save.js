@@ -3,8 +3,18 @@ import { ExportError } from "./core.js";
 export async function saveFile(
   blob,
   filename,
-  { signal, timeout = 120000, downloads = chrome.downloads } = {},
+  {
+    signal,
+    timeout = 120000,
+    directoryHandle,
+    downloads = globalThis.chrome?.downloads,
+  } = {},
 ) {
+  if (directoryHandle)
+    return saveToDirectory(blob, filename, directoryHandle, {
+      signal,
+      timeout,
+    });
   signal?.throwIfAborted();
   const url = URL.createObjectURL(blob);
   let id,
@@ -82,5 +92,72 @@ export async function saveFile(
     signal?.removeEventListener("abort", abort);
     events.clear();
     URL.revokeObjectURL(url);
+  }
+}
+
+async function saveToDirectory(blob, filename, directory, { signal, timeout }) {
+  signal?.throwIfAborted();
+  if (
+    !filename ||
+    /[/\\\u0000-\u001f]/.test(filename) ||
+    [".", ".."].includes(filename)
+  )
+    throw new ExportError("save-interrupted");
+  let writer, stopped;
+  let rejectStopped;
+  const interrupted = new Promise((_, reject) => {
+    rejectStopped = reject;
+  });
+  interrupted.catch(() => {});
+  const stop = (code) => {
+    if (stopped) return;
+    stopped = new ExportError(code);
+    rejectStopped(stopped);
+    writer?.abort().catch(() => {});
+  };
+  const abort = () => stop("cancelled");
+  signal?.addEventListener("abort", abort, { once: true });
+  const timer = setTimeout(() => stop("save-timeout"), timeout);
+  const wait = (operation) => Promise.race([operation, interrupted]);
+  try {
+    const dot = filename.lastIndexOf(".");
+    const stem = dot > 0 ? filename.slice(0, dot) : filename;
+    const suffix = dot > 0 ? filename.slice(dot) : "";
+    let handle, name;
+    for (let i = 0; i < 1000; i++) {
+      if (stopped) throw stopped;
+      name = i ? `${stem} (${i})${suffix}` : filename;
+      try {
+        // Check only candidate names. Do not read or enumerate folder contents.
+        await wait(directory.getFileHandle(name));
+      } catch (error) {
+        if (error.name === "TypeMismatchError") continue;
+        if (error.name !== "NotFoundError") throw error;
+        handle = await wait(directory.getFileHandle(name, { create: true }));
+        break;
+      }
+    }
+    if (!handle) throw new ExportError("save-interrupted");
+    const opening = handle.createWritable({ mode: "exclusive" });
+    opening.then(
+      (lateWriter) => {
+        if (stopped) lateWriter.abort().catch(() => {});
+      },
+      () => {},
+    );
+    writer = await wait(opening);
+    await wait(writer.write(blob));
+    if (stopped) throw stopped;
+    await wait(writer.close());
+    signal?.throwIfAborted();
+    return name;
+  } catch (error) {
+    writer?.abort().catch(() => {});
+    if (stopped) throw stopped;
+    if (error instanceof ExportError) throw error;
+    throw new ExportError("save-interrupted");
+  } finally {
+    clearTimeout(timer);
+    signal?.removeEventListener("abort", abort);
   }
 }

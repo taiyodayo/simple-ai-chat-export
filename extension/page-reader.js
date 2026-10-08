@@ -1,5 +1,5 @@
 // Self-contained: Chrome serialises this function into the clicked tab's isolated world.
-export async function readConversationPage(expectedUrl) {
+export async function readConversationPage(expectedUrl, reports = []) {
   const fail = (code) => {
     throw new Error(code);
   };
@@ -27,6 +27,17 @@ export async function readConversationPage(expectedUrl) {
       first = elements()[0];
     }
     if (!first) fail("layout-unrecognized");
+    const researchFrames = () =>
+      elements().flatMap((e) =>
+        [
+          ...e.querySelectorAll(
+            '[data-mcp-app-frame] iframe[title="Deep research"]',
+          ),
+        ].map((frame) => ({ url: frame.src })),
+      );
+    const frames = researchFrames();
+    if (frames.some((frame) => !reports.some((r) => r.url === frame.url)))
+      return { error: "research-access", researchFrames: frames };
     scroller = first.parentElement;
     while (
       scroller &&
@@ -171,34 +182,51 @@ export async function readConversationPage(expectedUrl) {
       const messages = elements().map((e) => {
         const modern = e.hasAttribute("data-chatgpt-search-message-ids");
         const guest = e.hasAttribute("data-message-role");
+        const researchFrame = e.querySelector(
+          '[data-mcp-app-frame] iframe[title="Deep research"]',
+        );
         const role = modern
           ? e.querySelector("[data-user-message-bubble]")
             ? "user"
-            : e.querySelector('[data-conversation-role="assistant"]')
+            : researchFrame ||
+                e.querySelector('[data-conversation-role="assistant"]')
               ? "assistant"
               : null
           : e.getAttribute(
               guest ? "data-message-role" : "data-message-author-role",
             );
         if (!["user", "assistant"].includes(role)) fail("unsupported");
-        const selection =
-          modern && e.querySelector("[data-chatgpt-selection-message-id]");
+        const selection = modern
+          ? e.querySelector("[data-chatgpt-selection-conversation-id]")
+          : null;
         const ids = modern
           ? e
               .getAttribute("data-chatgpt-search-message-ids")
               .trim()
               .split(/\s+/)
           : [];
+        if (
+          modern &&
+          (!ids.length ||
+            ids.length > 1000 ||
+            ids.some((id) => !/^[a-zA-Z0-9_-]{1,100}$/.test(id)))
+        )
+          fail("unsupported");
+        const selectedId = selection?.getAttribute(
+          "data-chatgpt-selection-message-id",
+        );
+        const grouped =
+          modern && role === "assistant" && !selectedId && !researchFrame;
         const id = modern
-          ? role === "user" && ids.length === 1
+          ? (role === "user" || researchFrame) && ids.length === 1
             ? ids[0]
-            : selection?.getAttribute("data-chatgpt-selection-message-id")
+            : selectedId || (grouped && selection ? `rendered-${ids[0]}` : null)
           : guest
             ? e.id
             : e.getAttribute("data-message-id");
         if (
           modern &&
-          (!ids.includes(id) ||
+          ((!grouped && !ids.includes(id)) ||
             (selection &&
               selection.getAttribute(
                 "data-chatgpt-selection-conversation-id",
@@ -213,6 +241,17 @@ export async function readConversationPage(expectedUrl) {
         )
           fail("generating");
         if (!id || !/^[a-zA-Z0-9_-]{1,100}$/.test(id)) fail("unsupported");
+        if (researchFrame) {
+          const report = reports.find((r) => r.url === researchFrame.src);
+          if (!report) fail("changed");
+          return {
+            id,
+            role,
+            parts: report.parts,
+            sources: report.sources,
+            sourceMessageIds: [...new Set([id, report.messageId])],
+          };
+        }
         if (
           guest &&
           role === "assistant" &&
@@ -249,7 +288,13 @@ export async function readConversationPage(expectedUrl) {
         const sources = [...content.querySelectorAll("a[href]")]
           .map((a) => ({ title: a.textContent.trim(), url: safeLink(a.href) }))
           .filter((s) => s.url);
-        return { id, role, parts, sources };
+        return {
+          id,
+          role,
+          parts,
+          sources,
+          ...(grouped ? { sourceMessageIds: ids } : {}),
+        };
       });
       if (!messages.length) fail("incomplete");
       if (new Set(messages.map((m) => m.id)).size !== messages.length)

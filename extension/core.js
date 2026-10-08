@@ -131,7 +131,26 @@ export function validateConversation(data, expected) {
         if (size > 20_000_000) fail("too-large");
         return { title: source.title, url: url.href };
       });
-      branch.push({ id: node.id, role: node.role, parts, sources });
+      if (
+        node.sourceMessageIds !== undefined &&
+        (data.rendered !== true ||
+          !Array.isArray(node.sourceMessageIds) ||
+          !node.sourceMessageIds.length ||
+          node.sourceMessageIds.length > 1000 ||
+          node.sourceMessageIds.some(
+            (id) => typeof id !== "string" || !idPattern.test(id),
+          ))
+      )
+        fail();
+      branch.push({
+        id: node.id,
+        role: node.role,
+        parts,
+        sources,
+        ...(node.sourceMessageIds
+          ? { sourceMessageIds: node.sourceMessageIds }
+          : {}),
+      });
     }
     cursor = node.parent;
   }
@@ -189,7 +208,7 @@ export function createExport(conversation, format, now = new Date()) {
     schemaVersion: 1,
     exporter: {
       name: "Simple ChatGPT Export",
-      version: "0.1.0",
+      version: "0.1.1-beta.1",
       author: "@taiyodayo",
     },
     title: conversation.title,
@@ -202,6 +221,13 @@ export function createExport(conversation, format, now = new Date()) {
     format,
     messageCount: conversation.messages.length,
     messageIds: conversation.messages.map((m) => m.id),
+    ...(conversation.messages.some((m) => m.sourceMessageIds)
+      ? {
+          renderedSourceMessageIds: conversation.messages.map(
+            (m) => m.sourceMessageIds ?? [m.id],
+          ),
+        }
+      : {}),
     scope: conversation.rendered
       ? "displayed conversation (rendered messages)"
       : "selected branch",
@@ -214,7 +240,7 @@ export function createExport(conversation, format, now = new Date()) {
       ...(conversation.rendered
         ? [
             "The displayed transcript was checked for stability; server-side history completeness cannot be verified.",
-            "Citation labels are preserved. Source URLs are included only where present in message content.",
+            "Citation labels are preserved. Source URLs are included where present in message content or supported report citation data.",
           ]
         : []),
     ],

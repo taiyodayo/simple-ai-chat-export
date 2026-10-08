@@ -1,6 +1,6 @@
 # Privacy
 
-Applies to private prototype 0.1.0. Updated 8 October 2026.
+Applies to development prerelease 0.1.1-beta.1. Updated 8 October 2026.
 
 Simple ChatGPT Export is an independent project by @taiyodayo. The extension reads rendered messages from the selected ChatGPT tab after you choose Export. It makes no API requests and does not access authentication tokens. The browser preview uses synthetic conversations.
 
@@ -10,11 +10,15 @@ Your saved files and the browser’s download history remain under your control.
 
 The `downloads` permission permits more than this extension needs in practice. The implementation starts the requested export, checks only its download identifier, and cancels it if requested or interrupted. It does not enumerate other downloads.
 
+If you select a custom save folder, Chrome’s native directory picker grants file-system access to that folder. This browser grant is broader than the extension’s use: the exporter checks only candidate export filenames and writes the requested file without reading file contents or enumerating the directory. The directory handle stays in the export window’s memory and is not persisted. Custom-folder saves do not use the downloads API or add an entry to Chrome’s download history. A failed or cancelled save may leave an empty file created before writing completed.
+
 The fixed Buy Me a Coffee link opens only when you click it. No conversation text, title, identifier, query parameter or referrer is sent by the extension with the link. The destination then receives ordinary web connection information, such as your IP address, and applies its own privacy practices. No payment widget or payment credentials are embedded in the extension. Help in the extension is local.
 
 The public website is hosted by Cloudflare. It has no analytics scripts or remote fonts; automatic beacon injection is prevented for these pages. Cloudflare may process ordinary connection information and maintain hosting/security logs under its own policies. Disabling Worker observability does not eliminate provider network logs. If you choose to contact support, the email provider processes the message and the project owner receives what you send. Do not include private transcripts or credentials.
 
 The `activeTab` and `scripting` permissions allow an isolated script to read the chosen conversation after you click the extension and choose Export. The script briefly scrolls the page and restores its position. ChatGPT itself may load content in response to scrolling; the exporter does not make network requests. No credentials are read.
+
+Completed Deep Research reports live in separate embedded sandbox pages. The extension declares optional access to `https://*.web-sandbox.oaiusercontent.com/*` and requests only the detected report’s exact app origin after you choose **Allow Deep Research and export**. Chrome retains a granted permission until you remove it in extension settings. The permission is broader than one report; the implementation reads only matching report frames in the chosen tab during export. A script in the report’s main JavaScript world reads the displayed report component’s Markdown and citation fields. It does not inspect authentication/session state, research activity or other conversations, and does not fetch cited source pages. The result is validated locally and discarded after use.
 
 The extension does not upload your conversation data anywhere. Processing happens in-browser, and the implementation can be checked in the [source code on GitHub](https://github.com/taiyodayo/simple-chatgpt-export). The repository is currently private during security review; it will be publicly inspectable before the extension is released. Conversation data is not sold, used for advertising or used to build profiles. Our use of user data adheres to the Chrome Web Store User Data Policy, including its Limited Use requirements.
 

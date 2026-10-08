@@ -67,6 +67,8 @@ if (
   JSON.stringify(manifest.permissions) !==
     JSON.stringify(["activeTab", "scripting", "downloads"]) ||
   manifest.host_permissions ||
+  JSON.stringify(manifest.optional_host_permissions) !==
+    JSON.stringify(["https://*.web-sandbox.oaiusercontent.com/*"]) ||
   manifest.content_scripts ||
   manifest.web_accessible_resources
 ) {

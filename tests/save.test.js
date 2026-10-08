@@ -76,3 +76,100 @@ test("cancellation cancels a download that starts after the window closes", asyn
   assert(downloads.cancelled.includes(42));
   assert.equal(downloads.listeners.size, 0);
 });
+
+function folder(mode = "complete") {
+  const files = new Map([["Export.md", "Keep this original file"]]);
+  const events = [];
+  return {
+    files,
+    events,
+    kind: "directory",
+    name: "Chat exports",
+    getFileHandle: async (name, { create = false } = {}) => {
+      if (!files.has(name) && !create)
+        throw new DOMException("Missing", "NotFoundError");
+      return {
+        createWritable: async () => {
+          if (mode === "denied")
+            throw new DOMException("Private folder detail", "NotAllowedError");
+          if (mode === "late") await new Promise((r) => setTimeout(r, 25));
+          let content;
+          return {
+            write: async (blob) => {
+              events.push("write");
+              if (mode === "pending") return new Promise(() => {});
+              content = await blob.text();
+            },
+            close: async () => {
+              events.push("close");
+              if (mode === "close-failed")
+                throw new Error("Private disk detail");
+              files.set(name, content);
+            },
+            abort: async () => {
+              events.push("abort");
+            },
+          };
+        },
+      };
+    },
+  };
+}
+
+test("selected folders save Unicode content and preserve an existing file", async () => {
+  const directoryHandle = folder();
+  assert.equal(
+    await saveFile(new Blob(["日本語 ☕\n  code"]), "Export.md", {
+      directoryHandle,
+    }),
+    "Export (1).md",
+  );
+  assert.equal(
+    directoryHandle.files.get("Export.md"),
+    "Keep this original file",
+  );
+  assert.equal(directoryHandle.files.get("Export (1).md"), "日本語 ☕\n  code");
+});
+
+for (const mode of ["denied", "close-failed"])
+  test(`selected-folder ${mode} cannot report a completed save`, async () => {
+    const directoryHandle = folder(mode);
+    await assert.rejects(
+      saveFile(new Blob(["test"]), "Export.md", { directoryHandle }),
+      { code: "save-interrupted" },
+    );
+    assert.equal(directoryHandle.files.has("Export (1).md"), false);
+  });
+
+test("selected-folder timeout aborts the stream without committing", async () => {
+  const directoryHandle = folder("pending");
+  await assert.rejects(
+    saveFile(new Blob(["test"]), "Export.md", { directoryHandle, timeout: 5 }),
+    { code: "save-timeout" },
+  );
+  assert(directoryHandle.events.includes("abort"));
+  assert(!directoryHandle.events.includes("close"));
+});
+
+test("selected-folder cancellation aborts a late-opening stream", async () => {
+  const directoryHandle = folder("late"),
+    controller = new AbortController();
+  const saving = saveFile(new Blob(["test"]), "Export.md", {
+    directoryHandle,
+    signal: controller.signal,
+  });
+  setTimeout(() => controller.abort(), 5);
+  await assert.rejects(saving, { code: "cancelled" });
+  await new Promise((r) => setTimeout(r, 35));
+  assert(directoryHandle.events.includes("abort"));
+  assert(!directoryHandle.events.includes("write"));
+  assert(!directoryHandle.events.includes("close"));
+});
+
+test("selected folders reject filenames that escape their directory", async () => {
+  const directoryHandle = folder();
+  await assert.rejects(
+    saveFile(new Blob(["test"]), "../Export.md", { directoryHandle }),
+    { code: "save-interrupted" },
+  );
+});
