@@ -22,7 +22,7 @@ pnpm exec playwright install chromium
 pnpm preview
 ```
 
-Open the **Preview** URL printed in your terminal (normally <http://127.0.0.1:4173>). If that port is already in use, the preview automatically chooses the next available port. Press **Ctrl+C** when finished. Choose a scenario beneath the preview to try success, omissions, cancellation or failure. This preview **simulates saving**; it never accesses your chats. The support page is at `/simple-ai-chat-export` on the same preview address.
+Open the **Preview** URL printed in your terminal (normally <http://127.0.0.1:4173>). If that port is already in use, the preview automatically chooses the next available port. Restart it after changing source files: it serves a fixed snapshot of approved assets. Press **Ctrl+C** when finished. Choose a scenario beneath the preview to try success, omissions, cancellation or failure. This preview **simulates saving**; it never accesses your chats. The support page is at `/simple-ai-chat-export` on the same preview address.
 
 To inspect the actual extension, open `chrome://extensions`, turn on **Developer mode**, choose **Load unpacked**, and select this repository’s `extension` directory. No build is needed. Open a saved ChatGPT, Claude or Gemini conversation, then choose **Simple AI-Chat export for ChatGPT, Claude, Gemini** from the browser’s Extensions menu. If already installed, click Reload on its extension card after updating these files.
 

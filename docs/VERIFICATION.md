@@ -1,5 +1,9 @@
 # Verification
 
+## Preview serving boundary — 8 October 2026
+
+Issue #10 removes request-path-to-filesystem resolution and directory-wide serving. The loopback preview loads a fixed inventory into memory, rejects symlinked assets, validates the actual Host/port, and serves only GET/HEAD with explicit aliases. Restart after source edits. A disposable synthetic preview test verifies unapproved files, traversal/malformed targets, an outside-file symlink, hostile Host and write methods cannot return the private marker; HEAD and all current/legacy support routes still work. Preview code and fixtures remain excluded from the extension package.
+
 ## Clean-source packaging — 8 October 2026
 
 Issue #9 replaces the handwritten ZIP/CRC encoder and permissive JavaScript packager with Python’s standard `zipfile` writer. Packaging reads the fixed inventory directly from the committed Git tree, refuses dirty/missing Git source and release-version mismatches before writing artifacts, and uses fixed ZIP timestamps. Five isolated synthetic Git-checkout tests cover byte-for-byte reproducibility/source identity and refusals that preserve an existing artifact. The frozen 0.2.0/0.2.1 release artifacts are not replaced by this change. Future publication uses GitHub immutable draft releases and native release attestations; the next real release must still be verified after publication.
