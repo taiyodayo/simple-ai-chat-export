@@ -22,4 +22,6 @@ Completed Deep Research reports live in separate embedded sandbox pages. The ext
 
 The extension does not upload your conversation data anywhere. Processing happens in-browser, and the implementation can be checked in the [source code on GitHub](https://github.com/taiyodayo/simple-ai-chat-export). The source is available for security inspection under MIT + Commons Clause v1.0; availability is not a claim of an external security audit. Conversation data is not sold, used for advertising or used to build profiles. Our use of user data adheres to the Chrome Web Store User Data Policy, including its Limited Use requirements.
 
-Contact: [support page](https://ongaku.co.uk/simple-ai-chat-export#help) or [GitHub issues](https://github.com/taiyodayo/simple-ai-chat-export/issues). Never include credentials or private transcripts.
+If you email the support address, Cloudflare Email Routing forwards your message to the project owner's mailbox. Cloudflare and the mailbox provider process your email address and message for delivery, and the owner receives what you choose to send. This is optional support; the extension does not send conversation data by email.
+
+Contact: [support page](https://ongaku.co.uk/simple-ai-chat-export#help), [GitHub issues](https://github.com/taiyodayo/simple-ai-chat-export/issues), or [chat-simple-export@ongaku.co.uk](mailto:chat-simple-export@ongaku.co.uk). Never include credentials or private transcripts.

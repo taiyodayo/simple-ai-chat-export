@@ -1,6 +1,6 @@
 # Chrome Web Store submission — 0.2.0
 
-The owner authorised production release and store publication. The app is a production release; Google review and store availability are separate statuses. Google accepted the upload and created item `hnolfghceldfcghkcfnfafainiiodkhl`. Its status is draft; submission is blocked until the required public publisher contact email is supplied and verified. No approved store install URL is live yet.
+The owner authorised production release and store publication. The app is a production release; Google review and store availability are separate statuses. Google accepted the upload and created item `hnolfghceldfcghkcfnfafainiiodkhl`. Its status is **Pending review**, submitted on 8 October 2026 at 06:10 UTC with automatic publication after approval selected. No approved store install URL is live yet.
 
 ## Listing fields
 
@@ -91,7 +91,7 @@ Screenshots show the real extension UI. The success capture follows a real Chrom
 
 ## Account and publishing steps
 
-Use the dedicated app-publishing Google account, never the employer or Cloudflare account. The registered account is a personal hobby publisher; the owner selected Non-trader. The public display name is @taiyodayo. Google nevertheless requires a verified public contact email; do not use the owner's private login email for that field. Registration/payment, contact verification, two-step verification and any required declarations must be completed truthfully in Google's dashboard. Do not put login emails, private destinations, credentials or payment information in Git. Support uses the public help page and GitHub issues; no unverified forwarding alias is advertised.
+Use the dedicated app-publishing Google account, never the employer or Cloudflare account. The registered account is a personal hobby publisher; the owner selected Non-trader. The owner set the public publisher display name to @taiyo32; source copyright and author credit remain @taiyodayo. Google nevertheless requires a verified public contact email; do not use the owner's private login email for that field. Registration/payment, contact verification, two-step verification and any required declarations must be completed truthfully in Google's dashboard. Do not put login emails, private destinations, credentials or payment information in Git. The verified Google contact is `chat-simple-export@ongaku.co.uk`. Google contact verification confirmed inbound delivery through the domain’s existing catch-all. That catch-all is preserved. An exact alias route to the privately authorised publishing mailbox awaits separate Cloudflare destination verification. Support also uses the public help page and GitHub issues.
 
 Upload the ZIP through **Add new item**, enter the fields above, add images, fill Privacy and Test instructions, select public/free distribution, and submit for review. The owner authorised publication; automatic publication after approval is the intended setting. Record the actual store item ID and review status in docs/RELEASE.md, then add the approved listing URL to the website and README once available. Google approval is not implied by merging this release.
 

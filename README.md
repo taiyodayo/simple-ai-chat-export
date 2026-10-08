@@ -4,7 +4,7 @@
 
 Save the ChatGPT, Claude or Gemini conversation you’re viewing as Markdown or plain text, ready for archiving or a quick edit. Made by **@taiyodayo**. Not affiliated with OpenAI, Anthropic or Google.
 
-**Production release: 0.2.0.** Chrome Web Store submission is being prepared; a store install link will be added after approval. ChatGPT, Claude and Gemini use the same UI and save flow. Live saved-conversation reads have been checked in Chrome on macOS; other operating systems have not been independently verified. Export reads rendered messages, checks stability and preserves displayed order. It cannot prove server-side history completeness; virtualised content that disappears during checking is rejected. The preview uses synthetic conversations.
+**Production release: 0.2.0.** Chrome Web Store review is pending; the extension will publish automatically after approval, and a store install link will be added then. ChatGPT, Claude and Gemini use the same UI and save flow. Live saved-conversation reads have been checked in Chrome on macOS; other operating systems have not been independently verified. Export reads rendered messages, checks stability and preserves displayed order. It cannot prove server-side history completeness; virtualised content that disappears during checking is rejected. The preview uses synthetic conversations.
 
 Source is available for security inspection and local builds under **MIT + Commons Clause v1.0**, with credit to **@taiyodayo**. The earlier ChatGPT baseline remains archived as [v0.1.1-beta.1](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v0.1.1-beta.1).
 
@@ -74,7 +74,7 @@ The source and Chrome Web Store release must correspond to the same tag. Store i
 
 ## Contact and licence
 
-[Website and help](https://ongaku.co.uk/simple-ai-chat-export) · [Privacy policy](https://ongaku.co.uk/simple-ai-chat-export/privacy). The production support and privacy pages are live; the legacy `/simple-chatgpt-exporter` URLs remain working aliases. Report bugs through [GitHub issues](https://github.com/taiyodayo/simple-ai-chat-export/issues). Never send tokens, passwords or private transcripts in an issue.
+[Website and help](https://ongaku.co.uk/simple-ai-chat-export) · [Privacy policy](https://ongaku.co.uk/simple-ai-chat-export/privacy). The production support and privacy pages are live; the legacy `/simple-chatgpt-exporter` URLs remain working aliases. Report bugs through [GitHub issues](https://github.com/taiyodayo/simple-ai-chat-export/issues) or email [chat-simple-export@ongaku.co.uk](mailto:chat-simple-export@ongaku.co.uk). Never send tokens, passwords or private transcripts.
 
 Copyright © 2026 **@taiyodayo**. Licensed under [MIT + Commons Clause v1.0](LICENSE).
 

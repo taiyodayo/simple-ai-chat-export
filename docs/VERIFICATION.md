@@ -1,5 +1,13 @@
 # Verification
 
+## Chrome Web Store submission — 8 October 2026, 06:10 UTC
+
+Google accepted submission of version 0.2.0 for item `hnolfghceldfcghkcfnfafainiiodkhl`. The dashboard confirms **Pending review**; automatic publication after approval was selected in the submission confirmation. No approved store install URL is live yet. The owner selected public publisher name @taiyo32 and verified the contact `chat-simple-export@ongaku.co.uk`; source copyright remains @taiyodayo. Non-trader remains selected and no physical address is entered. Private login and delivery addresses remain outside Git.
+
+Google contact verification confirmed inbound delivery through the domain’s existing forwarding. Cloudflare’s existing catch-all and rules were preserved. A destination was added for the authorised publishing mailbox; its separate Cloudflare verification is still pending, so no dedicated alias rule has been created. No mail DNS change or separate test message was sent.
+
+The support/privacy website now records pending review and the public contact, and explains optional email processing separately from the extension. Worker version: `7417a890-d05e-470f-8a4b-499c7c27b607`. The local site browser test, formatting and 68-file source check passed. Live Chromium checks confirmed HTTP 200, zero scripts or third-party requests, and no overflow at 320 pixels. Eight new/legacy page, privacy and CSS URLs matched source with security headers; the existing homepage, /seatdesigner and other Worker routes were preserved. The submitted ZIP and release tag remain the already verified 0.2.0 artifact recorded below.
+
 ## Production publication and store draft — 8 October 2026
 
 PR #3 is merged at `8063de11afaa37f893216d74e0087e7e922505ce`; annotated tag v0.2.0 points to that clean source. The public GitHub release contains the 17-file ZIP, SHA-256, inventory and store images. Package SHA-256: `6e94c42230dd8e97cecb1a00a66329e2e1a74836f3e165625258c04d78c9a5cf`. Its inventory, CRC, manifest, full licence and every source byte were verified; the extracted package’s real-download test passed. The repository is public and private vulnerability reporting is enabled.
