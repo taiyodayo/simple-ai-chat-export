@@ -110,6 +110,9 @@ test("the folder selected in the UI receives the export and repeated saves keep 
     expect(result.content).toContain("日本語 ☕");
     expect(result.content.startsWith("Export metadata\n\n")).toBe(true);
     expect(result.name.endsWith(".txt")).toBe(true);
+    await expect(page.locator("#status-body")).toContainText(
+      `${result.name} in 日本語 Chat exports`,
+    );
     filenames.push(result.name);
     await page.getByRole("button", { name: "Export another copy" }).click();
     await expect(page.locator("#destination-name")).toHaveText(
@@ -144,6 +147,46 @@ test("a long folder name stays within a narrow window and supports keyboard sele
     ),
   ).toBe(true);
   await expect(page.locator("#choose-directory")).toBeFocused();
+});
+
+test("export result text wraps and cannot turn hostile names into markup", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto("/extension/popup.html");
+  const requests = [];
+  page.on("request", (request) => requests.push(request.url()));
+  const name =
+    '<img src="https://invalid.example/result">' + "日本語".repeat(30);
+  await page.evaluate(async (name) => {
+    const { mount } = await import("/extension/popup.js");
+    const { fixture, identity } = await import("/tests/fixtures.js");
+    mount({
+      selectDirectory: async () => ({ kind: "directory", name }),
+      retrieve: async () => {
+        const data = fixture();
+        return { data, identity: identity(data) };
+      },
+      confirmUnchanged: async () => {},
+      save: async () => ({
+        status: "saved",
+        filename: "日本語".repeat(35) + ".txt",
+      }),
+    });
+  }, name);
+  await page.getByRole("button", { name: "Save location Downloads" }).click();
+  await page.getByRole("button", { name: /Export conversation/ }).click();
+  await expect(
+    page.getByRole("heading", { name: "Export saved." }),
+  ).toBeFocused();
+  await expect(page.locator("#status-body")).toContainText(name);
+  expect(await page.locator("main img").count()).toBe(0);
+  expect(requests.some((url) => url.includes("invalid.example"))).toBe(false);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
 });
 
 test("two same-origin windows serialize real folder saves before probing names", async ({

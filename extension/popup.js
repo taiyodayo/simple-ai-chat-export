@@ -227,9 +227,20 @@ export function mount(adapter) {
       );
       if (!["download-started", "saved"].includes(outcome?.status))
         throw new ExportError("save-interrupted");
+      const saved = outcome.status === "saved";
       status(
-        outcome.status === "saved" ? "Export saved." : "Download started",
-        `${result.metadata.messageCount} messages${result.omissions.length ? " · text-only copy" : ""}. ${outcome.status === "saved" ? "Ready to read or edit." : "Open Chrome’s Downloads (Ctrl+J, or ⌘⇧J on Mac) to check the file. Completion isn’t confirmed here."}`,
+        saved ? "Export saved." : "Download started",
+        [
+          saved
+            ? `${outcome.filename} in ${directoryHandle.name}`
+            : `Requested: ${outcome.filename}`,
+          `${result.metadata.messageCount} messages${result.omissions.length ? " · text-only copy" : ""}.`,
+          ...(saved
+            ? []
+            : [
+                "Open Chrome’s Downloads (Ctrl+J, or ⌘⇧J on Mac) to check the file. Completion isn’t confirmed here.",
+              ]),
+        ].join("\n"),
       );
       $("success").hidden = false;
       $("export-form").hidden = true;

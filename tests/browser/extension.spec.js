@@ -140,7 +140,11 @@ test("the extracted package loads with its CSP and saves readable TXT and Markdo
     await expect(
       page.getByRole("link", { name: "Buy me a coffee" }),
     ).toBeVisible();
-    await (await uiDownload).delete();
+    const downloaded = await uiDownload;
+    await expect(page.locator("#status-body")).toContainText(
+      `Requested: ${downloaded.suggestedFilename()}`,
+    );
+    await downloaded.delete();
     expect(errors).toEqual([]);
     await page.getByRole("link", { name: "Help & privacy" }).click();
     await expect(

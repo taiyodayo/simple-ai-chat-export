@@ -1,5 +1,9 @@
 # Verification
 
+## Export result identity — 8 October 2026
+
+Issue #12 uses the existing save outcome to show the actual filename and selected folder after writer close. Native downloads show the requested filename and retain the unconfirmed-completion/Chrome Downloads guidance. Redundant generic success prose is removed; status text wraps safely without HTML insertion. Repeated real directory writes check the displayed collision-suffixed names against the actual files; the extracted-package native-download test compares the displayed requested name with the browser-observed download. No new permission, storage or polling is introduced.
+
 ## Literal export default — 8 October 2026
 
 Issue #11 makes Plain text the initial native radio choice; Markdown remains one click away with a short note that viewer settings control HTML and remote images. No sanitiser, renderer, stored preference or extra confirmation is added. The next extension version is 0.2.2; manifest, package and export metadata agree, and the extracted-package test checks that agreement. Existing provider/research/fidelity tests remain applicable to both formats. Original raw Markdown is still untrusted data for external viewers.
