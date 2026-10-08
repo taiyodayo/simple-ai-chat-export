@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Simple ChatGPT Export",
   "version": "0.1.0",
-  "description": "Private prototype. Live ChatGPT export is awaiting verification.",
+  "description": "Save the displayed ChatGPT conversation as plain text or Markdown. Local processing. No analytics.",
   "minimum_chrome_version": "120",
   "icons": {
     "16": "icon-16.png",
@@ -10,11 +10,13 @@
     "48": "icon-48.png",
     "128": "icon-128.png"
   },
-  "permissions": ["activeTab", "downloads"],
+  "permissions": ["activeTab", "scripting", "downloads"],
   "action": {
     "default_title": "Simple ChatGPT Export"
   },
-  "background": { "service_worker": "launch.js" },
+  "background": {
+    "service_worker": "launch.js"
+  },
   "content_security_policy": {
     "extension_pages": "default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
   }

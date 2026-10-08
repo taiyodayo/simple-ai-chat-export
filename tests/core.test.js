@@ -9,7 +9,7 @@ import {
 import { retrieveCurrentConversation } from "../extension/retrieval.js";
 import { fixture, identity, conversationId } from "./fixtures.js";
 
-test("only the exact saved-conversation origin/path is accepted", () => {
+test("only exact saved or guest conversation routes are accepted", () => {
   assert.equal(
     conversationLocation(`https://chatgpt.com/c/${conversationId}?ignored=yes`)
       .id,
@@ -22,10 +22,36 @@ test("only the exact saved-conversation origin/path is accepted", () => {
     "https://chatgpt.com/share/" + conversationId,
     "https://chatgpt.com/",
     "https://chatgpt.com/c/not-an-id",
+    "https://chatgpt.com/uc/not-an-id",
+    "https://chatgpt.com/uc/" + conversationId + "/extra",
+    "https://chatgpt.com.evil.test/uc/" + conversationId,
     "javascript:alert(1)",
   ]) {
     assert.throws(() => conversationLocation(url), { code: "wrong-page" });
   }
+});
+test("guest URLs are canonicalised and retained in TXT and Markdown metadata", () => {
+  const url = `https://chatgpt.com/uc/${conversationId}`;
+  assert.deepEqual(conversationLocation(`${url}/?ignored=yes#fragment`), {
+    id: conversationId,
+    url,
+  });
+  const data = { ...fixture(), url };
+  const conversation = validateConversation(data, { ...identity(data), url });
+  for (const format of ["txt", "md"]) {
+    assert.equal(
+      createExport(conversation, format).metadata.conversationUrl,
+      url,
+    );
+  }
+  assert.throws(
+    () =>
+      validateConversation(data, {
+        ...identity(data),
+        url: `https://chatgpt.com/c/${conversationId}`,
+      }),
+    { code: "changed" },
+  );
 });
 test("long branch is complete and independent of visible DOM, excluding siblings", () => {
   const data = fixture({ count: 10000 });
@@ -169,11 +195,12 @@ test("one UTF-8 file starts with complete metadata and preserves the transcript"
     );
   }
 });
-test("live retrieval is explicitly gated, never a partial DOM fallback", async () => {
-  await assert.rejects(
-    retrieveCurrentConversation({
-      url: `https://chatgpt.com/c/${conversationId}`,
-    }),
-    { code: "verification-pending" },
+test("rendered transcript metadata does not claim server-side completeness", () => {
+  const data = { ...fixture(), rendered: true };
+  const result = createExport(
+    validateConversation(data, identity(data)),
+    "txt",
   );
+  assert.equal(result.metadata.textComplete, false);
+  assert.match(result.metadata.scope, /rendered/);
 });

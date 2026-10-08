@@ -5,11 +5,11 @@ The prototype is ready for owner review. Live retrieval is intentionally disable
 ## Owner setup
 
 1. Run `pnpm inspect:live` from the project directory. It opens a separate browser with the prototype loaded.
-2. Sign in to ChatGPT yourself. Do not paste credentials or tokens into chat or a terminal.
+2. Start with a guest conversation; no sign-in is required. For the separate signed-in cases, sign in to ChatGPT yourself. Do not paste credentials or tokens into chat or a terminal.
 3. Create a synthetic conversation with Japanese text, emoji, paragraphs, a code block, a small table and a cited link. Add a harmless test attachment if available.
 4. Edit an earlier prompt and regenerate an answer to create alternate branches. Keep a second saved conversation available for navigation tests.
 5. Keep one sufficiently long synthetic conversation available to exercise loading/virtualisation. Existing private conversations should not become fixtures or screenshots.
-6. Tell the implementer when the profile is ready. The next step is the observed retrieval investigation, not publishing.
+6. Tell the implementer when the conversation is ready and leave the browser open. Guest conversations may not survive closing the browser. The next step is the observed retrieval investigation, not publishing.
 
 Profile location: `~/.local/share/simple-chatgpt-export/live-browser-profile`, outside Git. Browser authentication persists there under the browser's normal behaviour. The launcher records no HAR, traces, screenshots, network bodies or tokens. A separate profile does not limit which chats exist in the signed-in account. If sign-in rejects an automated browser, stop and arrange a normal dedicated Chrome profile; do not bypass authentication checks.
 

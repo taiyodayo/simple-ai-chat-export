@@ -49,7 +49,7 @@ export async function saveFile(
     const starting = downloads.download({
       url,
       filename,
-      saveAs: true,
+      saveAs: false,
       conflictAction: "uniquify",
     });
     // A closed window/timeout must still cancel a late-starting download.

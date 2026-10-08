@@ -160,16 +160,6 @@ h2 {
   margin: 0;
   color: #59675c;
 }
-#notice {
-  border-left: 3px solid #b78b32;
-  padding: 10px 13px;
-  background: #f7efdc;
-  margin-bottom: 18px;
-}
-#notice p {
-  font-size: 12px;
-  margin: 0;
-}
 #success {
   border-top: 1px solid #dce2d8;
   margin-top: 20px;

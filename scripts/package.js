@@ -18,6 +18,7 @@ const inventory = [
   "popup.html",
   "popup.js",
   "retrieval.js",
+  "page-reader.js",
   "save.js",
 ];
 const entries = await Promise.all(

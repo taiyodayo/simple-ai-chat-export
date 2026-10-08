@@ -15,7 +15,8 @@ function api(mode) {
       addListener: (l) => listeners.add(l),
       removeListener: (l) => listeners.delete(l),
     },
-    download: async () => {
+    download: async (options) => {
+      assert.equal(options.saveAs, false);
       if (mode === "reject") throw new Error("private browser detail");
       if (mode === "early") emit("complete");
       if (mode === "late") await new Promise((r) => setTimeout(r, 30));

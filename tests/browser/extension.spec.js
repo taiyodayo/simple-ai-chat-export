@@ -39,7 +39,7 @@ test("the extracted package loads with its CSP and saves readable TXT and Markdo
     await page.goto(`chrome-extension://${extensionId}/popup.html`);
     await page.getByRole("button", { name: /Export conversation/ }).click();
     await expect(
-      page.getByRole("heading", { name: "Open a saved ChatGPT conversation" }),
+      page.getByRole("heading", { name: "Open a ChatGPT conversation" }),
     ).toBeVisible();
     await expect(
       page.getByRole("link", { name: "Buy me a coffee" }),

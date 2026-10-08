@@ -4,7 +4,7 @@
 
 Save the ChatGPT conversation you’re viewing as Markdown or plain text, ready for archiving or a quick edit. Made by **@taiyodayo**. Not affiliated with OpenAI.
 
-**Private prototype — not ready for live exports or public installation.** The interface, formatting and save flow are implemented. ChatGPT retrieval is deliberately disabled until a live investigation can establish complete, selected-branch extraction. The browser preview uses synthetic conversations only.
+**Development build — not approved for store release.** Real page extraction and saving are implemented for guest and signed-in page layouts. Export reads rendered messages, checks stability and preserves their displayed order. It cannot prove server-side history completeness; virtualised content that disappears during checking is rejected. The preview still uses synthetic conversations.
 
 [![Buy me a coffee](docs/coffee.svg)](https://buymeacoffee.com/taiyodayo)
 
@@ -22,7 +22,7 @@ pnpm preview
 
 Open the **Preview** URL printed in your terminal (normally <http://127.0.0.1:4173>). If that port is already in use, the preview automatically chooses the next available port. Press **Ctrl+C** when finished. Choose a scenario beneath the preview to try success, omissions, cancellation or failure. This preview **simulates saving**; it never accesses your chats. The support-page draft is at `/simple-chatgpt-exporter` on the same preview address.
 
-To inspect the actual extension, open `chrome://extensions`, turn on **Developer mode**, choose **Load unpacked**, and select this repository’s `extension` directory. No build is needed. Open a saved ChatGPT conversation, then choose **Simple ChatGPT Export** from the browser’s Extensions menu. The prototype clearly explains that live export is not ready.
+To inspect the actual extension, open `chrome://extensions`, turn on **Developer mode**, choose **Load unpacked**, and select this repository’s `extension` directory. No build is needed. Open a ChatGPT conversation, then choose **Simple ChatGPT Export** from the browser’s Extensions menu. If already installed, click Reload on its extension card after updating these files.
 
 ## Intended everyday use
 
@@ -36,15 +36,15 @@ One editable file keeps the metadata and transcript together. No ZIP or companio
 
 ## Scope and limits
 
-- One currently displayed, saved conversation and its selected branch. No bulk export, alternate branches, PDF, cloud sync or account signup.
+- One currently displayed conversation, including guest chats, and its selected branch. No bulk export, alternate branches, PDF, cloud sync or account signup.
 - Non-text files are not downloaded. Known omissions require an explicit **Export text only** action and are recorded in the transcript and metadata. Unknown content or uncertain completeness blocks export.
-- Current URL recognition is deliberately limited to `https://chatgpt.com/c/<conversation-id>`. Projects, custom GPT routes, shared links and temporary chats are unverified, not promised.
+- Current URL recognition accepts `https://chatgpt.com/c/<conversation-id>` and guest chats at `https://chatgpt.com/uc/<conversation-id>`. Both routes use the page reader. Projects, custom GPT routes, shared links and temporary chats are unverified, not promised.
 - Desktop Chrome on macOS, Windows and Linux is the target. Edge, Brave and other Chromium browsers are candidates for verification, not yet certified. There is no mobile support claim.
 - The exported file is not encrypted. Conversation text is untrusted; a Markdown editor’s handling of embedded links, images or HTML is outside the extension’s control.
 
 ## Permissions and privacy
 
-`activeTab` allows a tab-address check after you click the extension. It does not technically enforce a single-conversation boundary. `downloads` allows saving and checking the outcome of the download the extension starts; this browser permission is broader than the extension’s use of it. No host permissions, automatic content scripts, cookies access, telemetry, remote libraries or storage permission. `scripting` will only be added if the live investigation establishes a need.
+`activeTab` and `scripting` allow reading the clicked tab after you choose Export. It does not technically enforce a single-conversation boundary. `downloads` allows saving and checking the outcome of the download the extension starts; this browser permission is broader than the extension’s use of it. No host permissions, automatic content scripts, cookies access, telemetry, remote libraries or storage permission.
 
 The small service worker only opens the export window in response to your toolbar click. It does not poll or retrieve chats. Export data is held in the window’s memory and released after use; no secure-memory-erasure guarantee is made. Read [privacy](PRIVACY.md), [security and verification limits](SECURITY.md), and the [retrieval decision gate](docs/RETRIEVAL.md).
 

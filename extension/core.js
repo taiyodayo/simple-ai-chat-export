@@ -21,12 +21,21 @@ export function conversationLocation(value) {
   }
   if (url.origin !== "https://chatgpt.com" || url.username || url.password)
     fail("wrong-page");
-  const match = /^\/c\/([^/]+)\/?$/.exec(url.pathname);
-  if (!match || !uuidPattern.test(match[1])) fail("wrong-page");
-  return { id: match[1], url: `https://chatgpt.com/c/${match[1]}` };
+  const match = /^\/(c|uc)\/([^/]+)\/?$/.exec(url.pathname);
+  if (!match || !uuidPattern.test(match[2])) fail("wrong-page");
+  return { id: match[2], url: `https://chatgpt.com/${match[1]}/${match[2]}` };
 }
 
 export function validateConversation(data, expected) {
+  const location = conversationLocation(
+    expected.url ?? `https://chatgpt.com/c/${expected.id}`,
+  );
+  if (location.id !== expected.id) fail("changed");
+  if (
+    data?.url !== undefined &&
+    conversationLocation(data.url).url !== location.url
+  )
+    fail("changed");
   if (
     !data ||
     data.id !== expected.id ||
@@ -130,6 +139,8 @@ export function validateConversation(data, expected) {
   branch.reverse();
   return {
     id: data.id,
+    url: location.url,
+    rendered: data.rendered === true,
     title: data.title,
     selectedNode: data.selectedNode,
     messages: branch,
@@ -183,19 +194,29 @@ export function createExport(conversation, format, now = new Date()) {
     },
     title: conversation.title,
     conversationId: conversation.id,
-    conversationUrl: `https://chatgpt.com/c/${conversation.id}`,
+    conversationUrl: conversationLocation(
+      conversation.url ?? `https://chatgpt.com/c/${conversation.id}`,
+    ).url,
     selectedNodeId: conversation.selectedNode,
     exportedAt: now.toISOString(),
     format,
     messageCount: conversation.messages.length,
     messageIds: conversation.messages.map((m) => m.id),
-    scope: "selected branch",
-    textComplete: true,
+    scope: conversation.rendered
+      ? "displayed conversation (rendered messages)"
+      : "selected branch",
+    textComplete: !conversation.rendered,
     omissions,
     // Never imply attachments were archived or that timestamps were available when they were not.
     notes: [
       "Non-text files are not downloaded.",
-      "Original message timestamps are not available in this prototype.",
+      "Original message timestamps are not available.",
+      ...(conversation.rendered
+        ? [
+            "The displayed transcript was checked for stability; server-side history completeness cannot be verified.",
+            "Citation labels are preserved. Source URLs are included only where present in message content.",
+          ]
+        : []),
     ],
   };
   const metadataText = JSON.stringify(metadata, null, 2);
