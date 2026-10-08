@@ -51,3 +51,5 @@ The visible installation action is implemented; showing the actual filename/dest
 ## Store operation
 
 The owner operates the dashboard. Upload 0.2.1 to the existing item and follow [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md). The three local-processing data categories remain appropriate; no downloads justification should remain after the replacement upload. There is no approved store install link yet.
+
+Full independent findings, reproductions and 36 screenshots are archived in [ADVERSARIAL_REVIEWS_2026-10-08.md](ADVERSARIAL_REVIEWS_2026-10-08.md).
