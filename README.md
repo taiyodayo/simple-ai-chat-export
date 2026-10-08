@@ -1,6 +1,6 @@
 # Simple AI-Chat export for ChatGPT, Claude, Gemini
 
-**Save this conversation.**
+**Save a conversation with minimum effort, because OpenAI won't let you.**
 
 Save the ChatGPT, Claude or Gemini conversation you’re viewing as Markdown or plain text, ready for archiving or a quick edit. Made by **@taiyodayo**. Not affiliated with OpenAI, Anthropic or Google.
 
