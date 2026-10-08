@@ -20,7 +20,9 @@ test("support page is honest about production status, licence and store availabi
   await page.getByRole("link", { name: "Install", exact: true }).click();
   await expect(page.locator("#install")).toHaveAttribute("open", "");
   await expect(
-    page.getByText("No store listing is live yet.", { exact: false }),
+    page.getByText("No approved install link is recorded here yet.", {
+      exact: false,
+    }),
   ).toBeVisible();
   expect(
     requests.every((url) => url.startsWith(new URL(page.url()).origin + "/")),

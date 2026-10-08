@@ -1,6 +1,6 @@
 # Privacy
 
-Applies to production release 0.2.1. Updated 8 October 2026.
+Applies to production version 0.2.2. Updated 8 October 2026.
 
 Simple AI-Chat export for ChatGPT, Claude, Gemini is an independent project by @taiyodayo. The extension reads rendered messages from the selected ChatGPT, Claude or Gemini tab after you choose Export. It makes no chat API requests and does not read session cookies or authentication state. Secrets typed into a message remain part of its exported text. The browser preview uses synthetic conversations.
 

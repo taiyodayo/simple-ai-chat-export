@@ -1,5 +1,7 @@
 # Owner decisions
 
+Dated account/submission entries below are historical records, not current dashboard observations. The owner operates the store. Current upload instructions are in [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md).
+
 - Primary task: quick local archiving and editing for ChatGPT, Claude and Gemini users.
 - Simple, elegant, welcoming interface. British English with restrained charm; factual errors and privacy copy.
 - Target macOS, Windows, Linux and Chromium browsers. Claim support only after testing.
@@ -9,7 +11,7 @@
 - Personal GitHub `taiyodayo/simple-ai-chat-export`; source is to be public primarily for security inspection. Commit identity `taiyodayo`, GitHub no-reply email only.
 - Never publish the owner's private Gmail or forwarding destination. Support uses GitHub issues, the verified public alias `chat-simple-export@ongaku.co.uk` and private vulnerability reporting; support page at `https://ongaku.co.uk/simple-ai-chat-export`.
 - Chrome Web Store must use the owner's dedicated app-publishing account, supplied privately in the conversation. It is distinct from the personal Cloudflare account that owns the domain. Do not put either login email in public files.
-- Coffee: visible on GitHub, support page and store listing; in the extension only after confirmed success. Fixed URL: `https://buymeacoffee.com/taiyodayo`.
+- Coffee: visible on GitHub, support page and store listing; in the extension after native Download started or confirmed selected-folder Export saved. Fixed URL: `https://buymeacoffee.com/taiyodayo`.
 - Owner selected **MIT + Commons Clause v1.0**. Copyright and visible author credit: **@taiyodayo**. Keep the full notices with copies. Users may inspect, modify, build and install locally. The Commons Clause restricts selling software-based products/services as defined in LICENSE; it is not a blanket non-compete.
 - Cloudflare: personal identity and access to `ongaku.co.uk` are verified through the separate `taiyodayo-personal` Wrangler profile. The owner has authorised publishing the pre-release website. Deployment completed after refreshed consent. The website and dedicated privacy policy are live; source publication and Chrome Web Store submission are now authorised. No DNS changes have been made. The authorised email destination was separately verified, and the exact alias forwarding rule is enabled.
 

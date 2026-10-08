@@ -1,13 +1,13 @@
-# Chrome Web Store submission — 0.2.1
+# Chrome Web Store submission — 0.2.2
 
-Replacement version **0.2.1** is prepared for existing item `hnolfghceldfcghkcfnfafainiiodkhl` after the 0.2.0 Purple Potassium rejection. The replacement removes `downloads` entirely. The owner operates the store dashboard and resubmission. No approved install URL is live yet.
+Replacement version **0.2.2** is prepared for existing item `hnolfghceldfcghkcfnfafainiiodkhl` after the 0.2.0 Purple Potassium rejection. The downloads permission/API remain absent. Plain text is now the default; outcomes show filenames. The owner operates the store dashboard and resubmission. No approved install URL is recorded here.
 
 ## Listing fields
 
 | Field                | Value                                                                                                                |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | Name                 | Simple AI-Chat export for ChatGPT, Claude, Gemini                                                                    |
-| Version              | 0.2.1                                                                                                                |
+| Version              | 0.2.2                                                                                                                |
 | Short description    | Save the displayed ChatGPT, Claude or Gemini conversation as plain text or Markdown. Local processing. No analytics. |
 | Detailed description | Paste [store/description.txt](../store/description.txt).                                                             |
 | Language             | English (United Kingdom), if that locale is offered; otherwise English.                                              |
@@ -42,7 +42,7 @@ Inject the packaged DOM reader into the selected tab to read the displayed conve
 
 The manifest no longer requests downloads. Standard exports use a local Blob and normal browser download link; Chrome manages its Downloads list. The UI reports Download started without claiming completion. Selected folders use the native File System Access picker and confirm only after writer close. Remove the old downloads justification from the dashboard if it remains after upload.
 
-**Optional host permission: https://_.web-sandbox.oaiusercontent.com/_**
+**Optional host permission:** `https://*.web-sandbox.oaiusercontent.com/*`
 
 ChatGPT Deep Research reports are displayed in cross-origin sandbox frames which ordinary activeTab access cannot read. The wildcard declares potential sandbox access, but the user-triggered permission request is limited to the detected exact HTTPS mcp-app sandbox origin. The exporter reads matching report text/citation data in the chosen tab only; it does not fetch cited sources, inspect research activity or read authentication state. Users can revoke the persistent site grant in Chrome's extension settings. No additional required host access is requested for ordinary conversations.
 
@@ -74,15 +74,15 @@ Google’s Additional instructions field currently allows 500 characters. Paste 
 2. For a test without signing in, open https://chatgpt.com, send a harmless prompt and wait for its completed guest conversation URL at /uc/<UUID>. Guest availability is controlled by ChatGPT; if unavailable, use your own ChatGPT account and a saved /c/<UUID> chat.
 3. For Claude or Gemini, sign in using your own test account, create a harmless saved conversation and wait for a completed reply. Supported routes are claude.ai/chat/<UUID>, gemini.google.com/app/<hex-id>, and the account-prefixed Gemini /u/<number>/app/<hex-id> route.
 4. Suggested prompt: “Give me a short explanation, a two-row Markdown table and a JavaScript code block that prints hello.” Synthetic content only.
-5. Click the extension on that conversation. Choose Markdown, leave Save location at Downloads and select Export conversation. Confirm the .md file begins with metadata, uses the correct provider speaker label and contains the displayed text. Repeat with Plain text.
+5. Click the extension on that conversation. Keep the default Plain text, leave Save location at Downloads and select Export conversation. Confirm the .txt file begins with metadata, uses the correct provider speaker label and contains the displayed text. Repeat with Markdown.
 6. Choose Change above Export, select a writable directory and export. Confirm the file exists in that directory. Repeated exports keep both files with numbered names. Use Downloads resets the destination. Cancelling the folder dialog retains the previous destination.
 7. Try while a reply is still generating, or switch chats during reading. The app must show a clear error and must not claim a completed save. The source includes synthetic automated cases for these conditions.
 8. Optional Deep Research: use a completed supported ChatGPT report in a saved conversation. After detection, choose Allow Deep Research and export, then grant the exact sandbox-site request. The report text and citation URLs should be included. This scenario may require a ChatGPT subscription; ordinary export does not.
-9. No developer login credentials are supplied or needed. No donation is required; the coffee link appears only after a successful save.
+9. No developer login credentials or donation are needed. The coffee link follows Download started or a confirmed selected-folder save.
 
 ## Upload files
 
-- ZIP: `dist/simple-ai-chat-export-0.2.1.zip` (manifest at ZIP root, full LICENSE included).
+- ZIP: `dist/simple-ai-chat-export-0.2.2.zip` (manifest at ZIP root, full LICENSE included).
 - Store icon: `store/assets/icon-128.png` (128 × 128 PNG, transparent outer padding).
 - Screenshots: `store/assets/01-export.png` and `02-saved.png` (1280 × 800 PNG).
 - Required small promotional tile: `store/assets/promo-440x280.png`.
@@ -91,9 +91,9 @@ Screenshots show the real extension UI. The success capture follows a real Chrom
 
 ## Account and publishing steps
 
-Use the dedicated app-publishing Google account, never the employer or Cloudflare account. The registered account is a personal hobby publisher; the owner selected Non-trader. The owner set the public publisher display name to @taiyo32; source copyright and author credit remain @taiyodayo. Google nevertheless requires a verified public contact email; do not use the owner's private login email for that field. Registration/payment, contact verification, two-step verification and any required declarations must be completed truthfully in Google's dashboard. Do not put login emails, private destinations, credentials or payment information in Git. The verified Google contact is `chat-simple-export@ongaku.co.uk`. Google contact verification confirmed inbound delivery through the domain’s existing catch-all. That catch-all is preserved. The separately verified Cloudflare destination now has an enabled exact alias route to the privately authorised publishing mailbox. Existing rules, catch-all and DNS were preserved. Support also uses the public help page and GitHub issues.
+The owner operates the existing item and retains control of account details and declarations. Keep the verified public contact `chat-simple-export@ongaku.co.uk`; never commit private login addresses, credentials or payment information. Recorded account/submission history is in [RELEASE.md](RELEASE.md).
 
-Upload the ZIP through **Add new item**, enter the fields above, add images, fill Privacy and Test instructions, select public/free distribution, and submit for review. The owner authorised publication; automatic publication after approval is the intended setting. Record the actual store item ID and review status in docs/RELEASE.md, then add the approved listing URL to the website and README once available. Google approval is not implied by merging this release.
+Upload the ZIP to the existing item’s **Package** tab, enter the fields above, add images, fill Privacy and Test instructions, select public/free distribution, and submit for review. The owner authorised publication; automatic publication after approval is the intended setting. Record the actual store item ID and review status in docs/RELEASE.md, then add the approved listing URL to the website and README once available. Google approval is not implied by merging this release.
 
 ## Primary references checked 8 October 2026
 
