@@ -2,7 +2,7 @@
 
 ## Literal Markdown table cells — 8 October 2026
 
-Issue #16 replaces recursive Markdown conversion inside table cells with literal inline-code fences. Backslashes retain their code-span meaning and GFM table pipes use one literal escape. A character loop chooses fences longer than every input backtick run; no regex-based fence detection or table-cell substitution is used. Table row/column/size limits and source-link collection remain. Inline styling inside cells becomes literal text; displayed values, Unicode, backslashes and pipes are preserved. Browser regressions exercise code-like/HTML-like cells and the original large-backtick/deep/ragged cases. This does not sanitise arbitrary non-table Markdown for external viewers.
+Issue #16 replaces recursive Markdown conversion inside table cells with literal inline-code fences. Backslashes retain their code-span meaning and GFM table pipes use one literal escape. A character loop chooses fences longer than every input backtick run; no regex-based fence detection or table-cell substitution is used. Table row/column/size limits and source-link collection remain. Inline styling inside cells becomes literal text; displayed values, Unicode, backslashes and pipes are preserved. Browser regressions exercise code-like/HTML-like cells and the original large-backtick/deep/ragged cases. GitHub’s GFM renderer and Python’s standard HTMLParser independently confirmed the production reader’s two synthetic cell values and column count survive exactly. This does not sanitise arbitrary non-table Markdown for external viewers.
 
 ## Export result identity — 8 October 2026
 
