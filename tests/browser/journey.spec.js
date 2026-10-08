@@ -17,7 +17,7 @@ test("welcoming first use, format choice, success and a deliberate coffee click"
   await expect(
     page.getByRole("link", { name: "Buy me a coffee" }),
   ).toBeHidden();
-  await page.getByRole("radio", { name: /Plain text/ }).check();
+  await expect(page.getByRole("radio", { name: /Plain text/ })).toBeChecked();
   await page.getByRole("button", { name: /Export conversation/ }).click();
   await expect(
     page.getByRole("heading", { name: "Download started" }),
@@ -135,9 +135,9 @@ test("narrow viewport, keyboard navigation and help remain usable", async ({
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
-  await page.getByRole("radio", { name: /Markdown/ }).focus();
+  await page.getByRole("radio", { name: /Plain text/ }).focus();
   await page.keyboard.press("ArrowDown");
-  await expect(page.getByRole("radio", { name: /Plain text/ })).toBeChecked();
+  await expect(page.getByRole("radio", { name: /Markdown/ })).toBeChecked();
   await page.getByRole("link", { name: "Help & privacy" }).click();
   await expect(
     page.getByRole("heading", { name: "Your privacy" }),
