@@ -221,7 +221,7 @@ test("saved Claude and Gemini URLs retain their provider and canonical identity"
       const result = createExport(conversation, format);
       assert.equal(result.metadata.provider, provider);
       assert.equal(result.metadata.conversationUrl, url);
-      assert.match(result.transcript, new RegExp(`${provider}\\n\\n`));
+      assert.ok(result.transcript.includes(`${provider}\n\n`));
       assert.equal(result.metadata.exporter.name, "simple-ai-chat-export");
     }
   }
