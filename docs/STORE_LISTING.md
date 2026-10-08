@@ -1,6 +1,6 @@
 # Chrome Web Store submission — 0.2.0
 
-The owner authorised production release and store publication. The app is a production release; Google review and store availability are separate statuses. No store item ID or approved install URL has been obtained yet.
+The owner authorised production release and store publication. The app is a production release; Google review and store availability are separate statuses. Google accepted the upload and created item `hnolfghceldfcghkcfnfafainiiodkhl`. Its status is draft; submission is blocked until the required public publisher contact email is supplied and verified. No approved store install URL is live yet.
 
 ## Listing fields
 
@@ -64,7 +64,11 @@ Other data categories are not independently extracted: the extension does not re
 
 Certify the three Limited Use declarations: data is not sold/transferred to third parties, is used only for the single purpose, and is not used to assess creditworthiness or for lending. The public website and optional support/coffee links have their own ordinary connection processing; clicking them sends no conversation data or referrer from the extension.
 
-## Reviewer test instructions — paste into Test instructions
+## Reviewer test instructions
+
+Google’s Additional instructions field currently allows 500 characters. Paste [store/reviewer-instructions.txt](../store/reviewer-instructions.txt) (490 characters); leave username and password blank. The full scenarios below are linked from that text.
+
+### Full test scenarios
 
 1. Use desktop Chrome. No extension account, subscription, payment or developer credential is required.
 2. For a test without signing in, open https://chatgpt.com, send a harmless prompt and wait for its completed guest conversation URL at /uc/<UUID>. Guest availability is controlled by ChatGPT; if unavailable, use your own ChatGPT account and a saved /c/<UUID> chat.
@@ -87,7 +91,7 @@ Screenshots show the real extension UI. The success capture follows a real Chrom
 
 ## Account and publishing steps
 
-Use the dedicated app-publishing Google account, never the employer or Cloudflare account. Registration/payment, verified publisher contact email, two-step verification and any required trader/business declarations must be completed truthfully in Google's dashboard. Do not put login emails, private destinations, credentials or payment information in Git. Support uses the public help page and GitHub issues; no unverified forwarding alias is advertised.
+Use the dedicated app-publishing Google account, never the employer or Cloudflare account. The registered account is a personal hobby publisher; the owner selected Non-trader. The public display name is @taiyodayo. Google nevertheless requires a verified public contact email; do not use the owner's private login email for that field. Registration/payment, contact verification, two-step verification and any required declarations must be completed truthfully in Google's dashboard. Do not put login emails, private destinations, credentials or payment information in Git. Support uses the public help page and GitHub issues; no unverified forwarding alias is advertised.
 
 Upload the ZIP through **Add new item**, enter the fields above, add images, fill Privacy and Test instructions, select public/free distribution, and submit for review. The owner authorised publication; automatic publication after approval is the intended setting. Record the actual store item ID and review status in docs/RELEASE.md, then add the approved listing URL to the website and README once available. Google approval is not implied by merging this release.
 

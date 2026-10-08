@@ -1,6 +1,6 @@
 # Production release and Chrome Web Store publication
 
-**Version: 0.2.0.** The owner authorised production status, public source for security inspection, MIT + Commons Clause v1.0 and Chrome Web Store publication. Store status: **submission materials prepared; Google review/publication not yet completed**. No approved store URL or item ID is recorded yet.
+**Version: 0.2.0.** The owner authorised production status, public source for security inspection, MIT + Commons Clause v1.0 and Chrome Web Store publication. Store status: **draft uploaded and completed; submission blocked only by missing verified public contact email**. Item ID: `hnolfghceldfcghkcfnfafainiiodkhl`. Google review/publication is not yet completed; no approved store install URL is live.
 
 ## Release preparation
 
@@ -11,13 +11,14 @@
 - [x] Support uses the public website and GitHub issues. Security reports use private vulnerability reporting; no unverified email address is advertised.
 - [x] Website/privacy and new/legacy URLs verified. Existing homepage and /seatdesigner preserved.
 - [x] Final release tests, package/inventory checks and repository-history review completed and recorded in [VERIFICATION.md](VERIFICATION.md).
-- [ ] Merge release PR, tag v0.2.0 and publish the clean-source ZIP/checksum/inventory.
-- [ ] Publish source and enable GitHub private vulnerability reporting.
+- [x] Merge [PR #3](https://github.com/taiyodayo/simple-ai-chat-export/pull/3), tag v0.2.0 and publish the clean-source ZIP/checksum/inventory in the [production release](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v0.2.0).
+- [x] Publish source and enable GitHub private vulnerability reporting.
 
 ## Google dashboard tasks
 
-- [ ] Dedicated app-publishing account registered and authenticated, publisher email verified, two-step verification and any required legal/business declarations completed.
-- [ ] ZIP, description, icon, screenshots and promotional tile uploaded; privacy, permission and test fields completed.
+- [x] Dedicated app-publishing account registered/authenticated. The owner selected Non-trader for a personal hobby; public publisher name is @taiyodayo.
+- [ ] Required public contact email supplied and verified. Google blocks submission until this is complete; the private login address must not be used.
+- [x] ZIP, description, icon, screenshots and promotional tile uploaded; privacy, permission and test fields completed. Public/free distribution selected.
 - [ ] Submitted for review with automatic publication after approval. Record item ID, submission time and review status here.
 - [ ] Google approval confirmed; add the actual store installation URL to README and website.
 
