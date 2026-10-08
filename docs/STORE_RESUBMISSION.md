@@ -6,9 +6,10 @@ Use existing item `hnolfghceldfcghkcfnfafainiiodkhl`. Version 0.2.0 was rejected
 2. Confirm version **0.2.1** and permissions **activeTab** and **scripting**. Optional Deep Research sandbox access remains unchanged. There must be no downloads permission.
 3. In **Privacy practices**, remove any obsolete downloads justification left after upload. Keep the single purpose, activeTab/scripting justifications and privacy URL. Select **No remote code**.
 4. Keep **Personal communications**, **Web history** and **Website content** selected: local processing still requires disclosure. Keep all three Limited Use certifications checked.
-5. Replace the listing screenshots with `store/assets/01-export.png` and `store/assets/02-saved.png`; these show version 0.2.1 and truthful Download started status.
-6. Replace reviewer instructions with [store/reviewer-instructions.txt](../store/reviewer-instructions.txt), which fits the 500-character field. It explicitly explains the permission removal and test flow.
-7. Save the draft and submit for review. Choose automatic publication after approval if desired. Keep the existing verified public contact; no physical address is required for this free Non-trader extension.
+5. In **Store listing**, paste the updated detailed description from [store/description.txt](../store/description.txt).
+6. Replace the listing screenshots with `store/assets/01-export.png` and `store/assets/02-saved.png`; these show version 0.2.1 and truthful Download started status.
+7. Replace reviewer instructions with [store/reviewer-instructions.txt](../store/reviewer-instructions.txt), which fits the 500-character field. It explicitly explains the permission removal and test flow.
+8. Save the draft and submit for review. Choose automatic publication after approval if desired. Keep the existing verified public contact; no physical address is required for this free Non-trader extension.
 
 If a response/appeal text field is offered, use:
 

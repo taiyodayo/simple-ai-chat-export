@@ -29,7 +29,7 @@ No privileged popup XSS, arbitrary-path write, authentication-state reader or cu
 
 ## UX walkthrough
 
-The independent audit captured and inspected 29 screenshots, including original and prospective outcome states. Export success in those screenshots was simulated; real download and directory behavior were checked separately by browser tests. Screenshots do not establish screen-reader compliance or donation conversion.
+The independent audit captured and inspected 29 initial screenshots plus seven follow-up views, including original and prospective outcome states. Export success in those screenshots was simulated; real download and directory behavior were checked separately by browser tests. Screenshots do not establish screen-reader compliance or donation conversion.
 
 | Step                   | Health / finding                                                                                          |
 | ---------------------- | --------------------------------------------------------------------------------------------------------- |
