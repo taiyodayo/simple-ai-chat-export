@@ -22,7 +22,8 @@ test("welcoming first use, format choice, success and a deliberate coffee click"
   await expect(
     page.getByRole("heading", { name: "Download started" }),
   ).toBeVisible();
-  await expect(page.getByText("2 messages. Open Chrome")).toBeVisible();
+  await expect(page.locator("#status-body")).toContainText("2 messages.");
+  await expect(page.locator("#status-body")).toContainText("Requested:");
   const coffee = page.getByRole("link", { name: "Buy me a coffee" });
   await expect(coffee).toHaveAttribute(
     "href",
@@ -94,7 +95,7 @@ test("long conversation count comes from the validated branch", async ({
 }) => {
   await page.getByLabel("Preview scenario").selectOption("long");
   await page.getByRole("button", { name: /Export conversation/ }).click();
-  await expect(page.getByText("2000 messages. Open Chrome")).toBeVisible();
+  await expect(page.locator("#status-body")).toContainText("2000 messages.");
 });
 test("success fits the export window and another copy restores the format choice", async ({
   page,
