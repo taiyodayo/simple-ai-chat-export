@@ -50,3 +50,7 @@ pnpm store:assets
 ```
 
 Package only the explicit extension file inventory and LICENSE. Do not include fixtures, profiles, traces, private captures, credentials, support destinations or store marketing assets in the extension ZIP. The store screenshots use synthetic data. The release tag, ZIP inventory and checksum identify the exact upload source; checksums do not establish security.
+
+Packaging requires Python 3 and a clean Git checkout; it reads only the fixed inventory from the committed Git tree and refuses version mismatches. Commit changes before running `pnpm package` or the extracted-package browser tests. Development preview does not require packaging.
+
+For future releases, use GitHub release immutability: create a draft at the tested commit, attach the final verified ZIP/checksum/inventory and store assets, then publish once. Test that exact ZIP before attaching it; do not rebuild after verification. Run `gh release verify TAG` and `gh release verify-asset TAG PATH_TO_ZIP` against the published release. GitHub’s release attestation binds the published tag/commit/assets; it does not certify the build as secure. Historical v0.2.0 and v0.2.1 releases remain unchanged and mutable.

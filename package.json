@@ -9,12 +9,12 @@
   },
   "scripts": {
     "test": "node --test tests/*.test.js",
-    "test:browser": "node scripts/package.js && playwright test",
+    "test:browser": "python3 scripts/package.py && playwright test",
     "preview": "node scripts/preview.js",
     "inspect:live": "node scripts/live-profile.js",
     "check": "node scripts/check.js",
     "format:check": "prettier --check .",
-    "package": "node scripts/package.js",
+    "package": "python3 scripts/package.py",
     "store:assets": "node scripts/store-assets.js"
   },
   "devDependencies": {
