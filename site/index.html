@@ -46,7 +46,7 @@
             it for later, make a quick edit, or carry on somewhere else.
           </p>
           <p class="release-note">
-            <strong>Production release.</strong> Version 0.2.1 supports ChatGPT,
+            <strong>Production release.</strong> Version 0.2.2 supports ChatGPT,
             Claude and Gemini. The Chrome Web Store install link will appear
             after approval.
           </p>
@@ -58,7 +58,7 @@
           class="paper"
           aria-label="Illustration of an exported conversation"
         >
-          <span class="file-label">conversation.md</span>
+          <span class="file-label">conversation.txt</span>
           <p class="speaker">You</p>
           <p>Let’s keep this for later.</p>
           <hr />
@@ -85,7 +85,7 @@
             <span class="number">02</span>
             <h3>Choose a format</h3>
             <p>
-              Markdown for formatted editing. Plain text for any text editor.
+              Plain text by default, for any text editor. Markdown is optional.
             </p>
           </article>
           <article>
@@ -146,8 +146,8 @@
           <summary>How do I install it?</summary>
           <p>
             The Chrome Web Store install link will appear after approval. No
-            store listing is live yet. Until approval, download the release ZIP
-            from
+            approved install link is recorded here yet. Until then, download the
+            release ZIP from
             <a
               href="https://github.com/taiyodayo/simple-ai-chat-export/releases"
               target="_blank"
@@ -207,10 +207,11 @@
         <details>
           <summary>What if an export cannot be completed?</summary>
           <p>
-            The extension will explain the problem and avoid claiming success.
-            Wait for the app to finish replying, check your connection, and try
-            again on the branch you want. If saving was interrupted, check
-            Downloads before retrying.
+            Wait for the app to finish replying, then retry on the branch you
+            want. Download started means Chrome received the file; check its
+            Downloads list for completion. Export saved confirms a
+            selected-folder write and shows the filename and folder.
+            Cancellation cannot undo a file already saved or handed to Chrome.
           </p>
         </details>
         <details>
@@ -276,11 +277,8 @@
         <h2>Privacy, plainly.</h2>
         <p>
           Conversation processing happens in your browser. No analytics,
-          conversation cache or developer backend. ChatGPT export, including
-          supported Deep Research reports, is included in version 0.2.1. Claude
-          and Gemini readers use the same export flow; ordinary saved
-          conversations have been checked in Chrome. The browser preview uses
-          sample conversations.
+          conversation cache or developer backend. Your saved files and browser
+          download records remain under your control.
         </p>
         <p>
           This website has no tracking scripts or remote fonts. Cloudflare

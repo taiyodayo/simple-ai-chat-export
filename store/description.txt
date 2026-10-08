@@ -1,8 +1,8 @@
-Save a conversation from ChatGPT, Claude or Gemini as Markdown or plain text.
+Save a conversation from ChatGPT, Claude or Gemini as plain text or Markdown.
 
-Open the chat you want to keep, click the extension, choose a format and export. The same simple interface works on all three apps. Downloads is the default destination; the native folder picker lets you choose another folder.
+Open the chat you want to keep, click the extension, keep the default plain text or choose Markdown, then export. The same simple interface works on all three apps. Downloads is the default destination; the native folder picker lets you choose another folder.
 
-Your copy includes the displayed messages, speaker labels, readable formatting, code blocks, tables and available source links. A metadata header records the conversation title, original URL, export date, provider, message count and any marked omissions.
+Your copy includes the displayed messages, speaker labels, readable formatting, code blocks, literal table values and available source links. A metadata header records the conversation title, original URL, export date, provider, message count and any marked omissions.
 
 Completed ChatGPT Deep Research reports in the supported embedded layout include their Markdown and citation links. When needed, Chrome asks for optional access to that report's embedded site.
 
