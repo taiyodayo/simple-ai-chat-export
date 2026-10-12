@@ -6,7 +6,7 @@
 
 The downloads permission/API removed in 0.2.1 remain absent. Plain text is now the default, save outcomes show filenames, and literal table cells preserve backslashes/pipes. Packaging uses Python's standard ZIP writer and refuses dirty/mismatched Git source. Preview serving and enforced GitHub checks are hardened; see [VERIFICATION.md](VERIFICATION.md).
 
-The owner operates existing store item `hnolfghceldfcghkcfnfafainiiodkhl`. Follow [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md). No approved install URL is recorded here. Store text is prepared in [STORE_LISTING.md](STORE_LISTING.md); repository merge/release publication does not submit or approve the store item. Website deployment is separate.
+The owner operates existing store item `hnolfghceldfcghkcfnfafainiiodkhl`. Version 0.2.2 is approved and publicly listed as of 12 October 2026: [https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl](https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl). The listing ZIP must be the byte-identical `simple-ai-chat-export-0.2.2.zip` from the v0.2.2 release (SHA-256 `4974edbdf7f6101a9791844f2fd7df576c72c1ddba6d2c33f3a241b42de99381`). Resubmission steps for future versions are in [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md). Store text is prepared in [STORE_LISTING.md](STORE_LISTING.md); repository merge/release publication does not submit or approve the store item. Website deployment is separate.
 
 ## Documented verification limits
 
@@ -57,6 +57,6 @@ The record below predates the reported Purple Potassium rejection. It does not d
 - [x] Cloudflare destination verified and dedicated exact alias route enabled to the authorised publishing mailbox. API read-back confirmed the destination; existing rules, catch-all and DNS were preserved.
 - [x] ZIP, description, icon, screenshots and promotional tile uploaded; privacy, permission and test fields completed. Public/free distribution selected.
 - [x] Submitted on **8 October 2026 at 06:10 UTC** (**15:10 JST**) with automatic publication after approval selected. Dashboard confirms **Pending review** for item `hnolfghceldfcghkcfnfafainiiodkhl`.
-- [ ] Google approval confirmed; add the actual store installation URL to README and website.
+- [x] Google approval confirmed for 0.2.2; public listing https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl recorded in README and website on 12 October 2026.
 
 These are status records, not an additional approval requirement. The owner has already authorised the release and submission. Google account access or review cannot be replaced by changing repository wording.

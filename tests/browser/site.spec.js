@@ -17,10 +17,17 @@ test("support page is honest about production status, licence and store availabi
   expect(
     await page.getByRole("link", { name: /Buy me a coffee/ }).count(),
   ).toBe(2);
-  await page.getByRole("link", { name: "Install", exact: true }).click();
+  const store =
+    "https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl";
+  const install = page.getByRole("link", { name: "Install ↗", exact: true });
+  await expect(install).toHaveAttribute("href", store);
+  await expect(install).toHaveAttribute("target", "_blank");
   await expect(page.locator("#install")).toHaveAttribute("open", "");
   await expect(
-    page.getByText("No approved install link is recorded here yet.", {
+    page.locator("#install").getByRole("link", { name: "Chrome Web Store" }),
+  ).toHaveAttribute("href", store);
+  await expect(
+    page.getByText("Store installations update automatically.", {
       exact: false,
     }),
   ).toBeVisible();

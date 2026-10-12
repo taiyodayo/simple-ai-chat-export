@@ -1,6 +1,6 @@
 # Chrome Web Store submission — 0.2.2
 
-Replacement version **0.2.2** is prepared for existing item `hnolfghceldfcghkcfnfafainiiodkhl` after the 0.2.0 Purple Potassium rejection. The downloads permission/API remain absent. Plain text is now the default; outcomes show filenames. The owner operates the store dashboard and resubmission. No approved install URL is recorded here.
+Replacement version **0.2.2** is prepared for existing item `hnolfghceldfcghkcfnfafainiiodkhl` after the 0.2.0 Purple Potassium rejection. The downloads permission/API remain absent. Plain text is now the default; outcomes show filenames. The owner operates the store dashboard. The 0.2.2 listing is public: https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl.
 
 ## Listing fields
 
