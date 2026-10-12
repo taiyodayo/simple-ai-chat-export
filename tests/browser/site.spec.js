@@ -8,7 +8,7 @@ test("support page is honest about production status, licence and store availabi
   await page.goto("/simple-ai-chat-export");
   await expect(
     page.getByRole("heading", {
-      name: "A good conversation. A copy of your own.",
+      name: "Your conversation, yours to keep.",
     }),
   ).toBeVisible();
   await expect(
