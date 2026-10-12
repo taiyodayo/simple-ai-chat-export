@@ -68,6 +68,52 @@ export async function readConversationPage(expectedUrl, reports = []) {
         return null;
       }
     };
+    // Gemini renders Maps places as <button> chips and cards without hrefs. The
+    // card's tracking metadata carries the Google Place ID, the only identifier
+    // the page exposes; chips borrow the ID from the card with the same name.
+    const placeId = (card) => {
+      try {
+        const encoded = /BardVeMetadataKey:([A-Za-z0-9+/=]+)/.exec(
+          card.querySelector("button")?.getAttribute("jslog") ?? "",
+        )[1];
+        const entry = JSON.parse(atob(encoded))
+          .flat(Infinity)
+          .find((value) => /^map_location_rich_list_card_/.test(value));
+        const id = /^map_location_rich_list_card_([A-Za-z0-9_-]{10,200})$/.exec(
+          entry,
+        )?.[1];
+        return id
+          ? `https://www.google.com/maps/place/?q=place_id:${id}`
+          : null;
+      } catch {
+        return null;
+      }
+    };
+    const placeCards = (node) =>
+      [
+        ...(node.closest("message-content") ?? node).querySelectorAll(
+          "rich-list-card",
+        ),
+      ].map((card) => ({
+        title: shownText(card.querySelector(".title")),
+        url: placeId(card),
+      }));
+    const placeUrl = (node, title) =>
+      placeCards(node).find((card) => card.title === title && card.url)?.url ??
+      null;
+    // Visible text only: Angular CDK screen-reader text is excluded, while
+    // aria-hidden text that is drawn on screen (e.g. a rating) is kept.
+    function shownText(node) {
+      if (!node) return "";
+      if (node.nodeType === Node.TEXT_NODE) return node.textContent;
+      if (node.nodeType !== Node.ELEMENT_NODE) return "";
+      if (node.matches(".cdk-visually-hidden,[hidden],script,style,svg"))
+        return "";
+      if (node.tagName === "IMG")
+        return /\/star\.png$/.test(node.getAttribute("src") ?? "") ? " ★" : "";
+      return [...node.childNodes].map(shownText).join("");
+    }
+    const placeLine = (title, url) => (url ? `${title} (${url})` : title);
     let textSize = 0,
       treeSize = 0;
     function boundedText(text) {
@@ -100,10 +146,30 @@ export async function readConversationPage(expectedUrl, reports = []) {
       const tag = node.tagName;
       if (
         node.matches(
-          '[hidden],[aria-hidden="true"],[data-markdown-copy="exclude"],script,style,svg',
+          '[hidden],[aria-hidden="true"],[data-markdown-copy="exclude"],.cdk-visually-hidden,script,style,svg',
         )
       )
         return "";
+      if (tag === "RICH-LIST-CARD") {
+        const title = boundedText(shownText(node.querySelector(".title")))
+          .replace(/\s+/g, " ")
+          .trim();
+        if (!title) return "";
+        const rows = [...node.querySelectorAll("rich-list-row")]
+          .map((row) => boundedText(shownText(row)).replace(/\s+/g, " ").trim())
+          .filter(Boolean);
+        return (
+          "\n\n" +
+          [placeLine(title, placeUrl(node, title)), rows.join(" · ")]
+            .filter(Boolean)
+            .join(" — ") +
+          "\n\n"
+        );
+      }
+      if (tag === "BUTTON" && node.getAttribute("role") === "link") {
+        const title = boundedText(shownText(node)).replace(/\s+/g, " ").trim();
+        return placeLine(title, placeUrl(node, title));
+      }
       if (tag === "BUTTON")
         return node.hasAttribute("aria-haspopup")
           ? `[${node.getAttribute("aria-label") || node.textContent.trim()}]`
@@ -224,10 +290,19 @@ export async function readConversationPage(expectedUrl, reports = []) {
           parts.push({ type: "omission", kind });
       if (e.querySelector('[data-testid*="attachment"],a[download]'))
         parts.push({ type: "omission", kind: "attachment" });
+      const seen = new Set();
       const sources = content
-        .flatMap((node) => [...node.querySelectorAll("a[href]")])
-        .map((a) => ({ title: a.textContent.trim(), url: safeLink(a.href) }))
-        .filter((source) => source.url);
+        .flatMap((node) => [
+          ...[...node.querySelectorAll("a[href]")].map((a) => ({
+            title: a.textContent.trim(),
+            url: safeLink(a.href),
+          })),
+          ...placeCards(node),
+        ])
+        .filter(
+          (source) =>
+            source.url && !seen.has(source.url) && seen.add(source.url),
+        );
       if (sources.length > 1000) fail("too-large");
       for (const source of sources) {
         if (source.title.length > 2000) fail("too-large");
