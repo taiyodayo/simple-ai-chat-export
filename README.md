@@ -4,13 +4,17 @@
 
 Save the ChatGPT, Claude or Gemini conversation you’re viewing as plain text or Markdown, ready for archiving or a quick edit. Made by **@taiyodayo**. Not affiliated with OpenAI, Anthropic or Google.
 
-**Production version: 0.2.2.** ChatGPT, Claude and Gemini share the same export flow. Chrome Web Store submission is handled by the owner; an approved install link has not been recorded here. Live saved-conversation reads were checked in Chrome on macOS; other platforms remain unverified. Export checks rendered stability, not server-side history completeness. The preview uses synthetic conversations.
+**Production version: 0.2.2.** ChatGPT, Claude and Gemini share the same export flow. Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl). Live saved-conversation reads were checked in Chrome on macOS; other platforms remain unverified. Export checks rendered stability, not server-side history completeness. The preview uses synthetic conversations.
 
 Source is available for security inspection and local builds under **MIT + Commons Clause v1.0**, with credit to **@taiyodayo**. The earlier ChatGPT baseline remains archived as [v0.1.1-beta.1](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v0.1.1-beta.1).
 
 [![Buy me a coffee](docs/coffee.svg)](https://buymeacoffee.com/taiyodayo)
 
 Support the project, entirely optionally.
+
+## Install
+
+Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl) (item `hnolfghceldfcghkcfnfafainiiodkhl`). Store installations update automatically. The listing corresponds to the [v0.2.2](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v0.2.2) tag.
 
 ## Build and install locally
 
@@ -64,7 +68,7 @@ pnpm check
 pnpm package
 ```
 
-The release package is built from an explicit file inventory. `dist/` contains the ZIP, SHA-256, inventory and source commit record. Chrome Web Store approval is a separate status. The ZIP includes the complete licence. Store submission fields and reviewer instructions are in [STORE_LISTING.md](docs/STORE_LISTING.md); publishing steps and remaining account tasks are in [RELEASE.md](docs/RELEASE.md).
+The release package is built from an explicit file inventory. `dist/` contains the ZIP, SHA-256, inventory and source commit record. The public [Chrome Web Store listing](https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl) was published on 12 October 2026. The ZIP includes the complete licence. Store submission fields and reviewer instructions are in [STORE_LISTING.md](docs/STORE_LISTING.md); publishing steps and remaining account tasks are in [RELEASE.md](docs/RELEASE.md).
 
 When ready for the live investigation, run `pnpm inspect:live`. It opens a dedicated browser profile outside the repository. Sign in manually and use synthetic test conversations. It does not record network traffic, screenshots or tokens. Close the browser to end the session. See the [live-test guide](docs/LIVE_TESTING.md).
 
