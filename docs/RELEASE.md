@@ -6,7 +6,7 @@ Numbering moved to 1.x on 13 October 2026 because the extension is a proper publ
 
 ## Current version 1.0.2
 
-Version 1.0.2 keeps Gemini Maps place chips and cards with Google Maps links; see the changelog. Its ZIP is built from the merged release commit and attached to the [v1.0.2 release](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v1.0.2). Upload steps for the store are in [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md).
+Version 1.0.2 keeps Gemini Maps place chips and cards with Google Maps links; see the changelog. [GitHub release v1.0.2](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v1.0.2) was published on 13 October 2026 from commit `3cdf54309d4d28fbfc1641f35767eba203646b7f` and is immutable; `gh release verify` and `gh release verify-asset` passed. ZIP SHA-256 `ad40f7c2fe93d9795130e89fbeb5e53a28591734500e64a0fe67605fa0f45b42`, identical to the package the browser suite tested on the release branch. The release carries the ZIP, checksum, inventory and the two store screenshots. Upload steps for the store are in [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md); store submission of 1.0.2 is pending the owner's upload.
 
 ## Previous version 0.2.2 (1.0.1)
 
