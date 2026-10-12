@@ -97,11 +97,40 @@ h1 {
   font-size: 12px;
   color: #647060;
 }
-.release-note {
+.cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 34px 0 18px;
+}
+.install-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #263c30;
+  color: #faf9f5;
+  font-size: 17px;
+  font-weight: 600;
+  padding: 16px 28px;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0 10px 28px #263c3033;
+  transition:
+    background 0.15s,
+    transform 0.15s;
+}
+.install-button:hover {
+  background: #1b2c23;
+  transform: translateY(-1px);
+}
+.install-button:focus-visible {
+  outline: 3px solid #d4bc75;
+  outline-offset: 3px;
+}
+.cta-note {
   font-size: 13px;
-  border-left: 2px solid #b49c5e;
-  padding-left: 14px;
-  margin: 27px 0 17px;
+  color: #627060;
 }
 .paper {
   background: #fff;
@@ -337,6 +366,11 @@ footer {
     max-width: 390px;
     width: 90%;
     justify-self: center;
+  }
+  .install-button {
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
   }
   .release {
     grid-template-columns: 1fr;
