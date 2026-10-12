@@ -29,18 +29,15 @@ export default {
       new Request(url, { method: request.method }),
     );
     const response = new Response(asset.body, asset);
-    // The pages carry an explicit Cloudflare Web Analytics snippet; no-transform
-    // stops Cloudflare from injecting a second automatic beacon. This applies
-    // only to this Worker's responses, not the rest of the domain.
-    response.headers.set(
-      "Cache-Control",
-      "public, max-age=0, must-revalidate, no-transform",
-    );
+    // Cloudflare Web Analytics is set up automatically for the zone, so the
+    // edge injects its beacon into these HTML responses. Adding no-transform
+    // would opt these pages out again; the CSP below allows only that beacon.
+    response.headers.set("Cache-Control", "public, max-age=0, must-revalidate");
     response.headers.set("Referrer-Policy", "no-referrer");
     response.headers.set("X-Content-Type-Options", "nosniff");
     response.headers.set(
       "Content-Security-Policy",
-      "default-src 'none'; script-src https://static.cloudflareinsights.com; connect-src https://cloudflareinsights.com; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+      "default-src 'none'; script-src https://static.cloudflareinsights.com; connect-src 'self' https://cloudflareinsights.com; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
     );
     response.headers.set(
       "Permissions-Policy",
