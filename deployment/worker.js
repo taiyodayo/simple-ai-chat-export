@@ -29,8 +29,9 @@ export default {
       new Request(url, { method: request.method }),
     );
     const response = new Response(asset.body, asset);
-    // Prevent Cloudflare from adding its automatic analytics beacon here.
-    // This applies only to this Worker's responses, not the rest of the domain.
+    // The pages carry an explicit Cloudflare Web Analytics snippet; no-transform
+    // stops Cloudflare from injecting a second automatic beacon. This applies
+    // only to this Worker's responses, not the rest of the domain.
     response.headers.set(
       "Cache-Control",
       "public, max-age=0, must-revalidate, no-transform",
@@ -39,7 +40,7 @@ export default {
     response.headers.set("X-Content-Type-Options", "nosniff");
     response.headers.set(
       "Content-Security-Policy",
-      "default-src 'none'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+      "default-src 'none'; script-src https://static.cloudflareinsights.com; connect-src https://cloudflareinsights.com; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
     );
     response.headers.set(
       "Permissions-Policy",
