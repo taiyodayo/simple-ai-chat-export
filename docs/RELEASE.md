@@ -1,12 +1,20 @@
 # Production release and Chrome Web Store publication
 
-## Current version 0.2.2
+## Version numbering
+
+Numbering moved to 1.x on 13 October 2026 because the extension is a proper public release. Existing tags and immutable GitHub releases keep their original numbers: **v0.2.1 is 1.0.0** and **v0.2.2 is 1.0.1**. The next release after 0.2.2 is **1.0.2**. Per-version changes are listed in [CHANGELOG.md](../CHANGELOG.md).
+
+## Current version 1.0.2
+
+Version 1.0.2 keeps Gemini Maps place chips and cards with Google Maps links; see the changelog. Its ZIP is built from the merged release commit and attached to the [v1.0.2 release](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v1.0.2). Upload steps for the store are in [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md).
+
+## Previous version 0.2.2 (1.0.1)
 
 [GitHub release v0.2.2](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v0.2.2) is published and immutable. Native release and exact-ZIP attestation checks passed; source commit, digest and test evidence are recorded in [VERIFICATION.md](VERIFICATION.md).
 
 The downloads permission/API removed in 0.2.1 remain absent. Plain text is now the default, save outcomes show filenames, and literal table cells preserve backslashes/pipes. Packaging uses Python's standard ZIP writer and refuses dirty/mismatched Git source. Preview serving and enforced GitHub checks are hardened; see [VERIFICATION.md](VERIFICATION.md).
 
-The owner operates existing store item `hnolfghceldfcghkcfnfafainiiodkhl`. Version 0.2.2 is approved and publicly listed as of 12 October 2026: [https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl](https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl). The listing ZIP must be the byte-identical `simple-ai-chat-export-0.2.2.zip` from the v0.2.2 release (SHA-256 `4974edbdf7f6101a9791844f2fd7df576c72c1ddba6d2c33f3a241b42de99381`). Resubmission steps for future versions are in [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md). Store text is prepared in [STORE_LISTING.md](STORE_LISTING.md); repository merge/release publication does not submit or approve the store item. Website deployment is separate.
+The owner operates existing store item `hnolfghceldfcghkcfnfafainiiodkhl`. Version 0.2.2 (1.0.1) is approved and publicly listed as of 12 October 2026: [https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl](https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl). The listing ZIP must be the byte-identical `simple-ai-chat-export-0.2.2.zip` from the v0.2.2 release (SHA-256 `4974edbdf7f6101a9791844f2fd7df576c72c1ddba6d2c33f3a241b42de99381`). Store text is prepared in [STORE_LISTING.md](STORE_LISTING.md); repository merge/release publication does not submit or approve the store item. Website deployment is separate.
 
 ## Documented verification limits
 

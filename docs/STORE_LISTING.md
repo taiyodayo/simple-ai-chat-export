@@ -1,13 +1,13 @@
-# Chrome Web Store submission — 0.2.2
+# Chrome Web Store submission — 1.0.2
 
-Replacement version **0.2.2** is prepared for existing item `hnolfghceldfcghkcfnfafainiiodkhl` after the 0.2.0 Purple Potassium rejection. The downloads permission/API remain absent. Plain text is now the default; outcomes show filenames. The owner operates the store dashboard. The 0.2.2 listing is public: https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl.
+Version **1.0.2** (the first release under 1.x numbering; the approved 0.2.2 listing is 1.0.1) is prepared for existing item `hnolfghceldfcghkcfnfafainiiodkhl`. It adds Gemini Maps place chips and cards with Google Maps links. The downloads permission/API remain absent. Plain text is now the default; outcomes show filenames. The owner operates the store dashboard. The 0.2.2 listing is public: https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl.
 
 ## Listing fields
 
 | Field                | Value                                                                                                                |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | Name                 | Simple AI-Chat export for ChatGPT, Claude, Gemini                                                                    |
-| Version              | 0.2.2                                                                                                                |
+| Version              | 1.0.2                                                                                                                |
 | Short description    | Save the displayed ChatGPT, Claude or Gemini conversation as plain text or Markdown. Local processing. No analytics. |
 | Detailed description | Paste [store/description.txt](../store/description.txt).                                                             |
 | Language             | English (United Kingdom), if that locale is offered; otherwise English.                                              |
@@ -82,7 +82,7 @@ Google’s Additional instructions field currently allows 500 characters. Paste 
 
 ## Upload files
 
-- ZIP: `dist/simple-ai-chat-export-0.2.2.zip` (manifest at ZIP root, full LICENSE included).
+- ZIP: `dist/simple-ai-chat-export-1.0.2.zip` (manifest at ZIP root, full LICENSE included).
 - Store icon: `store/assets/icon-128.png` (128 × 128 PNG, transparent outer padding).
 - Screenshots: `store/assets/01-export.png` and `02-saved.png` (1280 × 800 PNG).
 - Required small promotional tile: `store/assets/promo-440x280.png`.
