@@ -4,7 +4,7 @@
 
 Save the ChatGPT, Claude or Gemini conversation you’re viewing as plain text or Markdown, ready for archiving or a quick edit. Made by **@taiyodayo**. Not affiliated with OpenAI, Anthropic or Google.
 
-**Production version: 0.2.2.** ChatGPT, Claude and Gemini share the same export flow. Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl). Live saved-conversation reads were checked in Chrome on macOS; other platforms remain unverified. Export checks rendered stability, not server-side history completeness. The preview uses synthetic conversations.
+**Production version: 1.0.2.** ChatGPT, Claude and Gemini share the same export flow. Install it from the [Chrome Web Store](https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl). Live saved-conversation reads were checked in Chrome on macOS; other platforms remain unverified. Export checks rendered stability, not server-side history completeness. The preview uses synthetic conversations.
 
 Source is available for security inspection and local builds under **MIT + Commons Clause v1.0**, with credit to **@taiyodayo**. The earlier ChatGPT baseline remains archived as [v0.1.1-beta.1](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v0.1.1-beta.1).
 
@@ -14,7 +14,7 @@ Support the project, entirely optionally.
 
 ## Install
 
-Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl) (item `hnolfghceldfcghkcfnfafainiiodkhl`). Store installations update automatically. The listing corresponds to the [v0.2.2](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v0.2.2) tag.
+Install from the [Chrome Web Store](https://chromewebstore.google.com/detail/simple-ai-chat-export-for/hnolfghceldfcghkcfnfafainiiodkhl) (item `hnolfghceldfcghkcfnfafainiiodkhl`). Store installations update automatically. The listing corresponds to the [v1.0.2](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v1.0.2) tag. Release history and ZIPs are on [GitHub releases](https://github.com/taiyodayo/simple-ai-chat-export/releases); changes per version are in [CHANGELOG.md](CHANGELOG.md). Version numbering moved to 1.x on 13 October 2026: the 0.2.1 and 0.2.2 releases are 1.0.0 and 1.0.1 respectively, and keep their original tags.
 
 ## Build and install locally
 

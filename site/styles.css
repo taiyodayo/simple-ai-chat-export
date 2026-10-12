@@ -190,6 +190,27 @@ h3 {
     monospace;
   color: #79856d;
 }
+.release {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 48px;
+  padding: 40px 0 10px;
+}
+.release h2 {
+  margin: 6px 0 4px;
+}
+.release ul {
+  margin: 0 0 14px;
+  padding-left: 20px;
+}
+.release li,
+.release p {
+  font-size: 14px;
+  color: #627060;
+}
+.release li + li {
+  margin-top: 6px;
+}
 .principles {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -316,6 +337,10 @@ footer {
     max-width: 390px;
     width: 90%;
     justify-self: center;
+  }
+  .release {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
   .steps {
     grid-template-columns: 1fr;
