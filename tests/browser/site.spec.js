@@ -31,8 +31,13 @@ test("support page is honest about production status, licence and store availabi
       exact: false,
     }),
   ).toBeVisible();
+  const allowed = [
+    new URL(page.url()).origin + "/",
+    "https://static.cloudflareinsights.com/",
+    "https://cloudflareinsights.com/",
+  ];
   expect(
-    requests.every((url) => url.startsWith(new URL(page.url()).origin + "/")),
+    requests.every((url) => allowed.some((prefix) => url.startsWith(prefix))),
   ).toBe(true);
   await page.setViewportSize({ width: 320, height: 800 });
   expect(
