@@ -122,3 +122,36 @@ test("Gemini requires completed Markdown, including when no stop button is visib
     "generating",
   );
 });
+
+test("Gemini keeps Maps place chips and cards with their place URLs", async ({
+  page,
+}) => {
+  const url = "https://gemini.google.com/app/0123456789abcdef";
+  const placeId = "ChIJqX7xv2HKHmARAEZ81K-FMnQ";
+  const mapsUrl = `https://www.google.com/maps/place/?q=place_id:${placeId}`;
+  const chip = (name) =>
+    `<response-element><map-location-reference-link-block><button role="link" class="link-button"><span>${name}</span><span class="cdk-visually-hidden non-selectable">Click to open side panel for more information</span></button></map-location-reference-link-block></response-element>`;
+  const card =
+    '<div class="attachment-container"><response-element><rich-list-card><div class="entity-heading"><button class="card-data clickable" jslog="350005;track:generic_click,impression;BardVeMetadataKey:W251bGwsbnVsbCxbIm1hcF9sb2NhdGlvbl9yaWNoX2xpc3RfY2FyZF9DaElKcVg3eHYySEtIbUFSQUVaODFLLUZNblEiXV0=;index:2"><div class="thumbnail-wrapper"><img role="presentation" class="thumbnail" src="https://example.invalid/thumb.jpg"></div><div class="details"><div class="card-info"><div class="title">浦山ダム</div><rich-list-row><div class="row"><span class="row-text"><span class="cdk-visually-hidden">4.1 stars rating</span><span aria-hidden="true">4.1</span></span><span class="row-icon-wrapper"><img alt="" role="presentation" class="row-icon" src="https://www.gstatic.com/gemini/maps/star.png"></span></div></rich-list-row><rich-list-row><div class="row"><span class="row-text"> Open </span><span class="row-text"> · Closes 5:00 PM Sun </span></div></rich-list-row></div></div></button><selection-button><label><input type="checkbox" aria-label="Select 浦山ダム"></label></selection-button></div></rich-list-card></response-element></div>';
+  await page.route(new URL(url).origin + "/**", (route) =>
+    route.fulfill({
+      contentType: "text/html; charset=utf-8",
+      body: `<title>Places - Gemini</title><main><user-query><div class="query-text">Where?</div></user-query><model-response><message-content><div class="markdown" aria-busy="false"><h3>Spots</h3>${card}<p>${chip("浦山ダム")}は、巨大なダムです。</p><p>${chip("未知の場所")}は、カードがありません。</p></div></message-content></model-response></main>`,
+    }),
+  );
+  await page.goto(url);
+  const result = await page.evaluate(readConversationPage, url);
+  expect(result.error).toBeUndefined();
+  const text = result.messages[1].parts[0].text;
+  expect(text).toContain(
+    `浦山ダム (${mapsUrl}) — 4.1 ★ · Open · Closes 5:00 PM Sun`,
+  );
+  expect(text).toContain(`浦山ダム (${mapsUrl})は、巨大なダムです。`);
+  expect(text).toContain("未知の場所は、カードがありません。");
+  expect(text).not.toContain("Click to open");
+  expect(text).not.toContain("stars rating");
+  expect(text).not.toContain("Select ");
+  expect(result.messages[1].sources).toEqual([
+    { title: "浦山ダム", url: mapsUrl },
+  ]);
+});
