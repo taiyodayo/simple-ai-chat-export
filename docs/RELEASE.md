@@ -6,7 +6,7 @@ Numbering moved to 1.x on 13 October 2026 because the extension is a proper publ
 
 ## Current version 1.0.3
 
-Version 1.0.3 makes Claude exports work again on Claude's windowed transcript layout, which keeps only the messages near the viewport mounted; see the changelog. The extension change is confined to `extension/page-reader.js` plus the version strings; permissions are unchanged. The upload package is `dist/simple-ai-chat-export-1.0.3.zip`, built with `pnpm package` from the merged release commit; `dist/inventory.json` records that commit and the ZIP SHA-256. Upload steps for the store are in [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md); the GitHub release and store submission of 1.0.3 are pending the owner.
+Version 1.0.3 makes Claude exports work again on Claude's windowed transcript layout, which keeps only the messages near the viewport mounted; see the changelog. The extension change is confined to `extension/page-reader.js` plus the version strings; permissions are unchanged. [GitHub release v1.0.3](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v1.0.3) was published on 13 October 2026 from commit `791af358e08fa299a7ac74ad1eeb2cf240cace76` and is immutable; `gh release verify` and `gh release verify-asset` passed. ZIP SHA-256 `9f7fd28d85badc7ddd32fb47d44642ea77d3a0525a0f3970c995aa13de678d7b`, identical to the package the browser suite tested on the release branch. The release carries the ZIP, checksum, inventory and the two store screenshots. Upload steps for the store are in [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md); store submission of 1.0.3 is pending the owner's upload.
 
 ## Previous version 1.0.2
 
