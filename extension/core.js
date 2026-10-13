@@ -227,7 +227,7 @@ export function createExport(conversation, format, now = new Date()) {
     schemaVersion: 1,
     exporter: {
       name: "simple-ai-chat-export",
-      version: "1.0.2",
+      version: "1.0.3",
       author: "@taiyodayo",
     },
     provider: location.provider,

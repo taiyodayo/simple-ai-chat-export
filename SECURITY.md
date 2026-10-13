@@ -2,7 +2,7 @@
 
 ## Scope
 
-Version 1.0.2 uses deliberate, tested security controls. The source is public for inspection under [MIT + Commons Clause v1.0](LICENSE). This internal review does not establish maximum safety, absence of all vulnerabilities or honesty of future updates. See the [historical local assessment](security_local_audit.md) and [dated verification evidence](docs/VERIFICATION.md). Chrome Web Store publication is handled separately by the owner.
+Version 1.0.3 uses deliberate, tested security controls. The source is public for inspection under [MIT + Commons Clause v1.0](LICENSE). This internal review does not establish maximum safety, absence of all vulnerabilities or honesty of future updates. See the [historical local assessment](security_local_audit.md) and [dated verification evidence](docs/VERIFICATION.md). Chrome Web Store publication is handled separately by the owner.
 
 ## Controls and limits
 

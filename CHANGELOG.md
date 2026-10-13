@@ -2,7 +2,7 @@
 
 Version numbering moved to 1.x on 13 October 2026. Earlier tags and immutable GitHub releases keep their original numbers: v0.2.1 is 1.0.0 and v0.2.2 is 1.0.1. Release ZIPs and checksums are on [GitHub releases](https://github.com/taiyodayo/simple-ai-chat-export/releases).
 
-## Unreleased
+## 1.0.3 — 13 October 2026
 
 - Claude: exports work again on the current transcript layout, which keeps only the messages near the viewport mounted. Every export failed with "We couldn't verify the rendered conversation" because older messages left the page while scrolling. The reader now walks the transcript and merges the mounted windows.
 - Claude: user messages use the page's turn key as their ID, like replies.
