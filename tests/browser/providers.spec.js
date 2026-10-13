@@ -101,6 +101,71 @@ test("Claude requires an explicit completed reply and handles duplicate user mes
   expect(new Set(result.messages.map((m) => m.id)).size).toBe(3);
 });
 
+test("Claude reads a windowed transcript whose far rows are unmounted", async ({
+  page,
+}) => {
+  const url = "https://claude.ai/chat/11111111-1111-4111-8111-111111111111";
+  const rowHeight = 400;
+  const turns = 5;
+  await page.route(new URL(url).origin + "/**", (route) =>
+    route.fulfill({
+      contentType: "text/html; charset=utf-8",
+      body: `<title>Windowed chat - Claude</title><div id="scroller" style="height:300px;overflow-y:auto"><div id="sizer" style="position:relative"></div></div><script>
+const rows = [];
+for (let turn = 0; turn < ${turns}; turn++) {
+  rows.push('<div data-cds="UserMessage" data-turn-key="turn-' + turn + '"><div data-testid="user-message"><div style="display:contents"><p style="white-space:pre-wrap">Same question again</p></div></div></div>');
+  rows.push('<div data-testid="assistant-message" data-turn-key="turn-' + turn + '-reply" data-is-streaming="false"><div class="standard-markdown"><p>Reply number ' + turn + '</p></div></div>');
+}
+const scroller = document.getElementById("scroller");
+const sizer = document.getElementById("sizer");
+function render() {
+  const from = scroller.scrollTop - 100, to = scroller.scrollTop + 300 + 100;
+  const mounted = rows.map((_, i) => i).filter((i) => i * ${rowHeight} < to && (i + 1) * ${rowHeight} > from);
+  const first = mounted[0], last = mounted[mounted.length - 1];
+  sizer.innerHTML = '<div data-testid="transcript-spacer" style="height:' + first * ${rowHeight} + 'px"></div>' +
+    mounted.map((i) => '<div data-testid="transcript-row" style="height:${rowHeight}px;box-sizing:border-box">' + rows[i] + '</div>').join("") +
+    '<div data-testid="transcript-spacer" style="height:' + (rows.length - last - 1) * ${rowHeight} + 'px"></div>';
+}
+scroller.addEventListener("scroll", render);
+render();
+scroller.scrollTop = scroller.scrollHeight;
+</script>`,
+    }),
+  );
+  await page.goto(url);
+  const mountedAtBottom = await page.evaluate(
+    () =>
+      document.querySelectorAll(
+        '[data-testid="user-message"],[data-testid="assistant-message"]',
+      ).length,
+  );
+  expect(mountedAtBottom).toBeLessThan(turns * 2);
+  const before = await page.evaluate(
+    () => document.getElementById("scroller").scrollTop,
+  );
+  expect(before).toBeGreaterThan(0);
+  const result = await page.evaluate(readConversationPage, url);
+  expect(result.error).toBeUndefined();
+  expect(result.messages.map((m) => m.id)).toEqual(
+    Array.from({ length: turns }, (_, turn) => [
+      `turn-${turn}`,
+      `turn-${turn}-reply`,
+    ]).flat(),
+  );
+  expect(result.messages.map((m) => m.parts[0].text)).toEqual(
+    Array.from({ length: turns }, (_, turn) => [
+      "Same question again",
+      `Reply number ${turn}`,
+    ]).flat(),
+  );
+  // The original position is restored after the walk.
+  expect(
+    await page.evaluate(() => document.getElementById("scroller").scrollTop),
+  ).toBe(before);
+  const again = await page.evaluate(readConversationPage, url);
+  expect(again.messages).toEqual(result.messages);
+});
+
 test("Gemini requires completed Markdown, including when no stop button is visible", async ({
   page,
 }) => {
