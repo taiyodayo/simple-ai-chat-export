@@ -392,8 +392,10 @@ export async function readConversationPage(expectedUrl, reports = []) {
             ]
               .map((b) => b.toString(16).padStart(2, "0"))
               .join("");
+            // Claude keys both roles: the reply element carries its turn key and
+            // the user bubble sits inside a keyed wrapper.
             const sourceId = claude
-              ? e.getAttribute("data-turn-key")
+              ? e.closest("[data-turn-key]")?.getAttribute("data-turn-key")
               : e.getAttribute("data-message-id");
             const id =
               sourceId && /^[a-zA-Z0-9_-]{1,100}$/.test(sourceId)
@@ -514,9 +516,36 @@ export async function readConversationPage(expectedUrl, reports = []) {
       if (JSON.stringify(messages).length > 20_000_000) fail("too-large");
       return messages;
     };
+    // Transcripts may be windowed: only rows near the viewport stay mounted
+    // (Claude's transcript list replaces older rows with spacers). Each
+    // snapshot is a contiguous slice of the conversation, so slices are merged
+    // through their overlap. Known neighbours must agree with every slice;
+    // nothing is dropped or reordered quietly.
+    const merge = (known, slice) => {
+      const at = new Map(known.map((m, index) => [m.id, index]));
+      const hits = slice.map((m) => at.get(m.id));
+      const first = hits.findIndex((index) => index !== undefined);
+      if (first < 0) return known.length ? fail("incomplete") : slice;
+      if (first > 0 && hits[first] !== 0) fail("changed");
+      let cursor = hits[first];
+      const appended = [];
+      for (let w = first; w < slice.length; w++) {
+        if (hits[w] === undefined) {
+          if (cursor !== known.length) fail("changed");
+          appended.push(slice[w]);
+          continue;
+        }
+        if (hits[w] !== cursor) fail("changed");
+        if (JSON.stringify(slice[w]) !== JSON.stringify(known[cursor]))
+          fail("changed");
+        cursor++;
+      }
+      return [...slice.slice(0, first), ...known, ...appended];
+    };
+    // The pre-scroll snapshot may not overlap the top slice, so it is checked
+    // against the merged transcript at the end instead of merged itself.
     const initial = await snapshot();
-    let previous = initial;
-    // Require retained, overlapping messages; never quietly lose virtualised history.
+    let known = [];
     const retains = (before, after) => {
       const indices = new Map(after.map((m, index) => [m.id, index]));
       let index = -1;
@@ -529,38 +558,60 @@ export async function readConversationPage(expectedUrl, reports = []) {
     };
     const reversed =
       getComputedStyle(scroller).flexDirection === "column-reverse";
-    for (const end of [false, true]) {
-      let stable = 0;
-      for (let attempt = 0; attempt < 20; attempt++) {
-        const edge = reversed
-          ? end
-            ? 0
-            : scroller.clientHeight - scroller.scrollHeight
-          : end
-            ? scroller.scrollHeight - scroller.clientHeight
-            : 0;
-        scroller.scrollTo({ top: edge, behavior: "instant" });
+    const edge = (end) =>
+      reversed
+        ? end
+          ? 0
+          : scroller.clientHeight - scroller.scrollHeight
+        : end
+          ? scroller.scrollHeight - scroller.clientHeight
+          : 0;
+    const atEdge = (end) => Math.abs(scroller.scrollTop - edge(end)) <= 2;
+    // Scroll to an end until three identical snapshots are taken there.
+    const settle = async (end) => {
+      let previous,
+        stable = 0;
+      for (let attempt = 0; ; attempt++) {
+        if (attempt === 20) fail("incomplete");
+        scroller.scrollTo({ top: edge(end), behavior: "instant" });
         await pause();
-        const next = await snapshot();
-        retains(previous, next);
+        const slice = await snapshot();
         stable =
-          JSON.stringify(previous) === JSON.stringify(next) ? stable + 1 : 0;
-        previous = next;
-        const currentEdge = reversed
-          ? end
-            ? 0
-            : scroller.clientHeight - scroller.scrollHeight
-          : end
-            ? scroller.scrollHeight - scroller.clientHeight
+          previous && JSON.stringify(previous) === JSON.stringify(slice)
+            ? stable + 1
             : 0;
-        const atEdge = Math.abs(scroller.scrollTop - currentEdge) <= 2;
-        if (stable >= 2 && atEdge) break;
-        if (attempt === 19) fail("incomplete");
+        previous = slice;
+        if (stable >= 2 && atEdge(end)) return slice;
       }
+    };
+    const top = await settle(false);
+    known = merge(known, top);
+    let bottom = await settle(true);
+    if (top.at(-1).id !== bottom.at(-1).id) {
+      // The top slice did not reach the last message, so rows unmount with
+      // distance. Walk half a viewport at a time so consecutive slices overlap
+      // and every row is read at least once.
+      const step = Math.max(1, scroller.clientHeight / 2);
+      scroller.scrollTo({ top: edge(false), behavior: "instant" });
+      for (let attempt = 0; ; attempt++) {
+        if (attempt === 2000) fail("incomplete");
+        await new Promise((resolve) => setTimeout(resolve, 120));
+        known = merge(known, await snapshot());
+        if (scroller.scrollTop + 2 >= edge(true)) break;
+        scroller.scrollTo({
+          top: scroller.scrollTop + step,
+          behavior: "instant",
+        });
+      }
+      bottom = await settle(true);
     }
-    retains(initial, previous);
+    known = merge(known, bottom);
+    // The slice at the bottom must end the merged transcript, and nothing seen
+    // before scrolling may have vanished or moved.
+    if (bottom.at(-1).id !== known.at(-1).id) fail("incomplete");
+    retains(initial, known);
     return {
-      messages: previous,
+      messages: known,
       title:
         document.title
           .replace(/\s*[-–|]\s*(?:ChatGPT|Claude|Gemini)\s*$/, "")
