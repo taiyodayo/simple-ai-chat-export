@@ -59,7 +59,7 @@ test("the extracted package loads with its CSP and saves readable TXT and Markdo
       downloadApi: typeof chrome.downloads,
     }));
     expect(runtime.permissions).toEqual(["activeTab", "scripting"]);
-    expect(runtime.version).toBe("1.0.2");
+    expect(runtime.version).toBe("1.0.3");
     expect(runtime.downloadApi).toBe("undefined");
     expect(runtime.csp).toContain("connect-src 'none'");
     await expect(page.getByRole("radio", { name: /Plain text/ })).toBeChecked();

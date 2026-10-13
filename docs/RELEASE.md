@@ -2,11 +2,15 @@
 
 ## Version numbering
 
-Numbering moved to 1.x on 13 October 2026 because the extension is a proper public release. Existing tags and immutable GitHub releases keep their original numbers: **v0.2.1 is 1.0.0** and **v0.2.2 is 1.0.1**. The next release after 0.2.2 is **1.0.2**. Per-version changes are listed in [CHANGELOG.md](../CHANGELOG.md).
+Numbering moved to 1.x on 13 October 2026 because the extension is a proper public release. Existing tags and immutable GitHub releases keep their original numbers: **v0.2.1 is 1.0.0** and **v0.2.2 is 1.0.1**. The release after 0.2.2 is **1.0.2**. Per-version changes are listed in [CHANGELOG.md](../CHANGELOG.md).
 
-## Current version 1.0.2
+## Current version 1.0.3
 
-Version 1.0.2 keeps Gemini Maps place chips and cards with Google Maps links; see the changelog. [GitHub release v1.0.2](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v1.0.2) was published on 13 October 2026 from commit `3cdf54309d4d28fbfc1641f35767eba203646b7f` and is immutable; `gh release verify` and `gh release verify-asset` passed. ZIP SHA-256 `ad40f7c2fe93d9795130e89fbeb5e53a28591734500e64a0fe67605fa0f45b42`, identical to the package the browser suite tested on the release branch. The release carries the ZIP, checksum, inventory and the two store screenshots. Upload steps for the store are in [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md); store submission of 1.0.2 is pending the owner's upload.
+Version 1.0.3 makes Claude exports work again on Claude's windowed transcript layout, which keeps only the messages near the viewport mounted; see the changelog. The extension change is confined to `extension/page-reader.js` plus the version strings; permissions are unchanged. The upload package is `dist/simple-ai-chat-export-1.0.3.zip`, built with `pnpm package` from the merged release commit; `dist/inventory.json` records that commit and the ZIP SHA-256. Upload steps for the store are in [STORE_RESUBMISSION.md](STORE_RESUBMISSION.md); the GitHub release and store submission of 1.0.3 are pending the owner.
+
+## Previous version 1.0.2
+
+Version 1.0.2 keeps Gemini Maps place chips and cards with Google Maps links; see the changelog. [GitHub release v1.0.2](https://github.com/taiyodayo/simple-ai-chat-export/releases/tag/v1.0.2) was published on 13 October 2026 from commit `3cdf54309d4d28fbfc1641f35767eba203646b7f` and is immutable; `gh release verify` and `gh release verify-asset` passed. ZIP SHA-256 `ad40f7c2fe93d9795130e89fbeb5e53a28591734500e64a0fe67605fa0f45b42`, identical to the package the browser suite tested on the release branch. The release carries the ZIP, checksum, inventory and the two store screenshots. Version 1.0.3 supersedes it as the store upload.
 
 ## Previous version 0.2.2 (1.0.1)
 
